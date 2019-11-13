@@ -1,6 +1,8 @@
 package dad.test.projectrunner;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
@@ -48,8 +50,7 @@ public class Main {
 		try {
 			projectDir = GitUtils.clone(uri);
 		} catch (Exception e) {
-			System.err.println("Error cloning project");
-			e.printStackTrace();
+			System.out.println("Error cloning project");
 			return;
 		}
 
@@ -57,17 +58,16 @@ public class Main {
 		try {
 			MavenUtils.compile(projectDir);
 		} catch (MavenInvocationException e) {
-			System.err.println("Error compiling project");
-			e.printStackTrace();
+			System.out.println("Error compiling project");
 			return;
 		}
 
 		// execute project
 		try { 
-			MavenUtils.exec(projectDir);
+			InputStream in = new ByteArrayInputStream("abc\ndef\n18\n".getBytes());
+			MavenUtils.exec(projectDir, in);
 		} catch (MavenInvocationException e) {
-			System.err.println("Error executing project");
-			e.printStackTrace();
+			System.out.println("Error executing project");
 			return;
 		}
 		

@@ -8,7 +8,6 @@ import org.eclipse.jgit.api.Git;
 public class GitUtils {
 
 	public static File clone(String uri) throws Exception {
-		System.out.println("Cloning repository " + uri + "...");
 		String name = URLUtils.getFile(uri);
 		File outputDir = new File(System.getProperty("java.io.tmpdir"), name);
 		if (outputDir.exists()) {
@@ -18,7 +17,6 @@ public class GitUtils {
 			.setURI(uri)
 			.setDirectory(outputDir)
 			.call();
-		System.out.println("Repository cloned to " + outputDir);
 		repo.getRepository().close();
 		return outputDir;
 	}

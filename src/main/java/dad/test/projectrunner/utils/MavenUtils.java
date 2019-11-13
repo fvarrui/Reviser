@@ -1,36 +1,49 @@
 package dad.test.projectrunner.utils;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.Collections;
 
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.DefaultInvoker;
+import org.apache.maven.shared.invoker.InvocationOutputHandler;
 import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.Invoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
 
 public class MavenUtils {
 
-	public static void runGoal(File projectDir, String goal) throws MavenInvocationException {
+	public static void runGoal(File projectDir, String goal, InputStream in) throws MavenInvocationException {
+		
 		InvocationRequest request = new DefaultInvocationRequest();
 		request.setPomFile(new File(projectDir, "pom.xml"));
 		request.setGoals(Collections.singletonList(goal));
+
+		InvocationOutputHandler handler = line -> {
+			if (line.startsWith("[INFO]") || line.startsWith("[WARNING]") || line.startsWith("[WARN]")) return;
+			System.out.println(line);
+		};
+		
 		Invoker invoker = new DefaultInvoker();
-		invoker.setOutputHandler(line -> System.out.println(line));
-		invoker.setErrorHandler(line -> System.err.println(line));
+		if (in != null) invoker.setInputStream(in);
+		invoker.setOutputHandler(handler);
+		invoker.setErrorHandler(handler);
 		if (invoker.execute(request).getExitCode() != 0) {
 			throw new MavenInvocationException(goal + " failed");
 		}
+		
 	}
 
 	public static void compile(File projectDir) throws MavenInvocationException {
-		System.out.println("Compiling " + projectDir);
-		runGoal(projectDir, "compile");
+		runGoal(projectDir, "compile", null);
 	}
 
 	public static void exec(File projectDir) throws MavenInvocationException {
-		System.out.println("Executing " + projectDir);
-		runGoal(projectDir, "exec:java");
+		runGoal(projectDir, "exec:java", null);
+	}
+
+	public static void exec(File projectDir, InputStream in) throws MavenInvocationException {
+		runGoal(projectDir, "exec:java", in);
 	}
 	
 }
