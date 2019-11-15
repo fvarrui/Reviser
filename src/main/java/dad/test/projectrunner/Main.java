@@ -18,7 +18,10 @@ import dad.test.projectrunner.utils.URLUtils;
 
 public class Main {
 	
-	public static File configFile = new File("assets/GsonSample/config.json");
+	public static String filename = "assets/GsonSample/config.json";	
+//	public static String filename = "assets/AdivinApp/config.json";	
+	
+	public static File configFile = new File(filename);
 	
 	public static void main(String [] args) throws Exception {
  
