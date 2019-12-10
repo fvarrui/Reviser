@@ -1,6 +1,7 @@
 {
 	"projectName": "GsonSample",
-	"submissionsDir": "/Users/fvarrui/Downloads/DAD-GsonSample-90960",
+	"submissionsFile": "/Users/fvarrui/Downloads/DAD-GsonSample-90960.zip",
 	"input": "input.txt",
-	"output": "results.csv"
+	"students": "../students.csv",	
+	"git": true
 }

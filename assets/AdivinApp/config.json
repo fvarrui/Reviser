@@ -1,6 +1,6 @@
 {
 	"projectName": "AdivinApp",
-	"submissionsDir": "/Users/fvarrui/Downloads/DAD-AdivinApp-214196",
-	"input": null,
-	"output": "results.csv"
+	"submissionsFile": "/Users/fvarrui/Downloads/DAD-AdivinApp-214196.zip",
+	"students": "../students.csv",
+	"git": true
 }

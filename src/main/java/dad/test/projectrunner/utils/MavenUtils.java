@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.Collections;
 
+import org.apache.commons.io.input.NullInputStream;
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.DefaultInvoker;
 import org.apache.maven.shared.invoker.InvocationOutputHandler;
@@ -35,11 +36,11 @@ public class MavenUtils {
 	}
 
 	public static void compile(File projectDir) throws MavenInvocationException {
-		runGoal(projectDir, "compile", null);
+		runGoal(projectDir, "compile", new NullInputStream(0));
 	}
 
 	public static void exec(File projectDir) throws MavenInvocationException {
-		runGoal(projectDir, "exec:java", null);
+		runGoal(projectDir, "exec:java", new NullInputStream(0));
 	}
 
 	public static void exec(File projectDir, InputStream in) throws MavenInvocationException {

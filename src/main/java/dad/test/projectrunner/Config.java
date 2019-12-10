@@ -2,9 +2,10 @@ package dad.test.projectrunner;
 
 public class Config {
 	private String projectName;
-	private String submissionsDir;
+	private String submissionsFile;
 	private String input;
-	private String output;
+	private String students;
+	private Boolean git;
 
 	public String getProjectName() {
 		return projectName;
@@ -14,12 +15,12 @@ public class Config {
 		this.projectName = projectName;
 	}
 
-	public String getSubmissionsDir() {
-		return submissionsDir;
+	public String getSubmissionsFile() {
+		return submissionsFile;
 	}
 
-	public void setSubmissionsDir(String submissionsDir) {
-		this.submissionsDir = submissionsDir;
+	public void setSubmissionsFile(String submissionsFile) {
+		this.submissionsFile = submissionsFile;
 	}
 
 	public String getInput() {
@@ -30,12 +31,20 @@ public class Config {
 		this.input = input;
 	}
 
-	public String getOutput() {
-		return output;
+	public String getStudents() {
+		return students;
 	}
 
-	public void setOutput(String output) {
-		this.output = output;
+	public void setStudents(String students) {
+		this.students = students;
+	}
+
+	public Boolean isGit() {
+		return git;
+	}
+
+	public void setGit(Boolean git) {
+		this.git = git;
 	}
 
 }

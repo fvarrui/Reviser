@@ -1,7 +1,12 @@
 package dad.test.projectrunner.utils;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.commons.io.FileUtils;
 
 public class URLUtils {
 	
@@ -18,6 +23,16 @@ public class URLUtils {
 			return m.group();
 		}
 		return null;
+	}
+	
+	public static String extractUrl(File submittedFile) {
+		try {
+			String content = FileUtils.readFileToString(submittedFile, Charset.defaultCharset());
+			return findUrl(content);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;		
 	}
 
 }
