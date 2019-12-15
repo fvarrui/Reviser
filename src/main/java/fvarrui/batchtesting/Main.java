@@ -3,6 +3,7 @@ package fvarrui.batchtesting;
 public class Main {
 
 	// IDP: submissions files
+	public static String PAGINACION_BAJO_DEMANDA	= "IDP-Actividad Paginación bajo demanda-195352.zip";
 	
 	// DAD: submissions files
 	public static String GSON_SAMPLE 			= "DAD-GsonSample-90960.zip";	
@@ -19,7 +20,7 @@ public class Main {
 	public static String CONTACTOS 				= "DAD-Examen Contactos (10122019)-181078.zip";
 
 	// project path
-	public static String PROYECTO 				= "C:\\Users\\fvarrui\\Downloads\\" + GSON_SAMPLE;	
+	public static String PROYECTO 				= "C:\\Users\\fvarrui\\Downloads\\" + PAGINACION_BAJO_DEMANDA;	
 
 	// output path
 	public static String OUTPUT 				= "C:\\Users\\fvarrui\\Downloads";	
@@ -30,7 +31,7 @@ public class Main {
 	
 	public static void main(String [] args) throws Exception {
 		
-		BatchTesting.testSubmissions(PROYECTO, DAD_STUDENTS, GsonSampleInput());
+		BatchTesting.testSubmissions(PROYECTO, IDP_STUDENTS, GsonSampleInput());
 		
 	}
 	

@@ -179,7 +179,13 @@ public class BatchTesting {
 			
 		} else {
 
-			Desktop.getDesktop().open(submittedFile);
+			Arrays.asList(submittedFile.getParentFile().listFiles()).stream().forEach(f -> {
+				try {
+					Desktop.getDesktop().open(f);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			});
 			
 		}		
 
