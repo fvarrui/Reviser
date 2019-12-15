@@ -1,4 +1,4 @@
-package dad.test.projectrunner.utils;
+package fvarrui.batchtesting.utils;
 
 import java.util.Scanner;
 

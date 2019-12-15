@@ -1,4 +1,4 @@
-package dad.test.projectrunner.utils;
+package fvarrui.batchtesting.utils;
 
 import java.io.File;
 import java.io.InputStream;
@@ -40,11 +40,11 @@ public class MavenUtils {
 	}
 
 	public static void exec(File projectDir) throws MavenInvocationException {
-		runGoal(projectDir, "exec:java", new NullInputStream(0));
+		exec(projectDir, null);
 	}
 
 	public static void exec(File projectDir, InputStream in) throws MavenInvocationException {
-		runGoal(projectDir, "exec:java", in);
+		runGoal(projectDir, "exec:java", in != null ? in : new NullInputStream(0));
 	}
 	
 }

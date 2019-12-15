@@ -1,4 +1,4 @@
-package dad.test.projectrunner;
+package fvarrui.batchtesting.model;
 
 public class Student {
 	private String name;

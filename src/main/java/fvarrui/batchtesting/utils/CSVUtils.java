@@ -1,4 +1,4 @@
-package dad.test.projectrunner.utils;
+package fvarrui.batchtesting.utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,15 +8,15 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
 
-import dad.test.projectrunner.Results;
-import dad.test.projectrunner.Student;
+import fvarrui.batchtesting.model.Results;
+import fvarrui.batchtesting.model.Student;
 
 public class CSVUtils {
 
 	public static void resultsToCsv(Results results, File csvFile) throws IOException {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("email,name,score,feedback\n");
-		results.getResults().stream().forEach(r -> buffer.append(r.getEmail() + "," + r.getName() + "," + r.getScore() + "," + r.getFeedback() + "\n"));
+		results.getResults().stream().forEach(r -> buffer.append(r.getEmail() + "," + r.getName() + "," + r.getScore() + ",\"" + r.getFeedback() + "\"\n"));
 		FileUtils.writeStringToFile(csvFile, buffer.toString(), Charset.forName("UTF-8"));
 	}
 
