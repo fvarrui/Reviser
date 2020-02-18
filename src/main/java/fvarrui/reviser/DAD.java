@@ -1,11 +1,8 @@
-package fvarrui.batchtesting;
+package fvarrui.reviser;
 
-public class Main {
+public class DAD {
 
-	// IDP: submissions files
-	public static String PAGINACION_BAJO_DEMANDA	= "IDP-Actividad Paginación bajo demanda-195352.zip";
-	
-	// DAD: submissions files
+	// submissions files
 	public static String GSON_SAMPLE 			= "DAD-GsonSample-90960.zip";	
 	public static String ADIVINAPP 				= "DAD-AdivinApp-214196.zip";	
 	public static String CAMBIO_DIVISA 			= "DAD-CambioDivisa-170992.zip";	
@@ -20,18 +17,15 @@ public class Main {
 	public static String CONTACTOS 				= "DAD-Examen Contactos (10122019)-181078.zip";
 
 	// project path
-	public static String PROYECTO 				= "C:\\Users\\fvarrui\\Downloads\\" + PAGINACION_BAJO_DEMANDA;	
-
-	// output path
-	public static String OUTPUT 				= "C:\\Users\\fvarrui\\Downloads";	
+	public static String PROYECTO 				= "C:\\Users\\fvarrui\\Downloads\\" + CONTACTOS;	
 
 	// students files
-	public static String DAD_STUDENTS 			= "C:\\Users\\fvarrui\\Google Drive (fvarrui@iesdomingoperezminik.es)\\modulos\\dad\\students-2019-2020.csv";
-	public static String IDP_STUDENTS 			= "C:\\Users\\fvarrui\\Google Drive (fvarrui@iesdomingoperezminik.es)\\modulos\\idp\\students-2019-2020.csv";
+	public static String STUDENTS 				= "C:\\Users\\fvarrui\\Google Drive (fvarrui@iesdomingoperezminik.es)\\modulos\\dad\\students-2019-2020.csv";
 	
 	public static void main(String [] args) throws Exception {
-		
-		BatchTesting.testSubmissions(PROYECTO, IDP_STUDENTS, GsonSampleInput());
+
+		// DAD
+		BatchTesting.testSubmissions(PROYECTO, STUDENTS, GsonSampleInput());
 		
 	}
 	

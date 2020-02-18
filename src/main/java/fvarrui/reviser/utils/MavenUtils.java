@@ -1,5 +1,6 @@
-package fvarrui.batchtesting.utils;
+package fvarrui.reviser.utils;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.util.Collections;
@@ -14,6 +15,13 @@ import org.apache.maven.shared.invoker.MavenInvocationException;
 
 public class MavenUtils {
 
+	/**
+	 * Runs specified goal in a Maven project 
+	 * @param projectDir Maven project directory
+	 * @param goal Goal to execute
+	 * @param in Input  
+	 * @throws MavenInvocationException
+	 */
 	public static void runGoal(File projectDir, String goal, InputStream in) throws MavenInvocationException {
 		
 		InvocationRequest request = new DefaultInvocationRequest();
@@ -35,16 +43,49 @@ public class MavenUtils {
 		
 	}
 
+	/**
+	 * Runs "mvn compile"
+	 * @param projectDir Maven project directory
+	 * @throws MavenInvocationException
+	 */
 	public static void compile(File projectDir) throws MavenInvocationException {
 		runGoal(projectDir, "compile", new NullInputStream(0));
 	}
 
+	/**
+	 * Runs "mvn exec:java"
+	 * @param projectDir Maven project directory
+	 * @throws MavenInvocationException
+	 */
 	public static void exec(File projectDir) throws MavenInvocationException {
 		exec(projectDir, null);
 	}
 
+	/**
+	 * Runs "mvn exec:java"
+	 * @param projectDir Maven project directory
+	 * @param in Input
+	 * @throws MavenInvocationException
+	 */
 	public static void exec(File projectDir, InputStream in) throws MavenInvocationException {
 		runGoal(projectDir, "exec:java", in != null ? in : new NullInputStream(0));
+	}
+	
+	/**
+	 * Runs "mvn compile exec:java"
+	 * @param projectDir Maven project directory
+	 * @param input Input
+	 * @throws Exception
+	 */
+	public static void compileAndExec(File projectDir, String input) throws Exception {
+		
+		// compile project
+		compile(projectDir);
+
+		// execute project
+		InputStream in = input != null ? new ByteArrayInputStream(input.getBytes()) : null;
+		exec(projectDir, in);
+		
 	}
 	
 }

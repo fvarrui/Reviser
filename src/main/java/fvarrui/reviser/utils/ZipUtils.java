@@ -1,4 +1,4 @@
-package fvarrui.batchtesting.utils;
+package fvarrui.reviser.utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,12 +7,14 @@ import org.apache.commons.io.FilenameUtils;
 import org.codehaus.plexus.util.cli.CommandLineException;
 
 public class ZipUtils {
+	
+	private static String extract(File source, File destination) throws IOException, CommandLineException {
+		return CommandUtils.execute("7z", "x", "-aoa", "-o" + destination.getAbsolutePath(), source);		
+	}
 
 	public static File uncompress(File compressedFile, boolean createParentFolder) throws IOException, CommandLineException {
 		File destination = createParentFolder ? new File(compressedFile.getParentFile(), FilenameUtils.getBaseName(compressedFile.getName())) : compressedFile.getParentFile();
-		if (!destination.exists()) {
-			CommandUtils.execute("7z", "x", "-aoa", "-o" + destination.getAbsolutePath(), compressedFile);
-		}
+		extract(compressedFile, destination);
 		return destination;
 	}
 	

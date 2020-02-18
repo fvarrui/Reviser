@@ -1,4 +1,4 @@
-package fvarrui.batchtesting.utils;
+package fvarrui.reviser.utils;
 
 import java.io.BufferedReader;
 import java.io.File;

@@ -1,8 +1,16 @@
-package fvarrui.batchtesting.model;
+package fvarrui.reviser.csv;
 
-public class Student {
+import com.opencsv.bean.CsvBindByName;
+
+public class CsvStudent {
+
+	@CsvBindByName(column = "Nombre")
 	private String name;
+
+	@CsvBindByName(column = "Apellido(s)")
 	private String surname;
+
+	@CsvBindByName(column = "Dirección de correo")
 	private String email;
 
 	public String getName() {
@@ -35,13 +43,13 @@ public class Student {
 
 	@Override
 	public boolean equals(Object obj) {
-		Student student = (Student) obj;
+		CsvStudent student = (CsvStudent) obj;
 		return student.getFullname().equals(getFullname());
 	}
 
 	@Override
 	public String toString() {
-		return "Student [name=" + name + ", surname=" + surname + ", email=" + email + "]";
+		return "Student [name=" + getName() + ", surname=" + getSurname() + ", email=" + getEmail() + "]";
 	}
 
 }

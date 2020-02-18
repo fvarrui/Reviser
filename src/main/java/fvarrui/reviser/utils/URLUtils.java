@@ -1,4 +1,4 @@
-package fvarrui.batchtesting.utils;
+package fvarrui.reviser.utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +17,11 @@ public class URLUtils {
 		return fragments[fragments.length - 1];		
 	}
 	
+	/**
+	 * Finds first URL in a string
+	 * @param text String
+	 * @return URL
+	 */
 	public static String findUrl(String text) {
 		Matcher m = URL_PATTERN.matcher(text);
 		if (m.find()) {
@@ -25,9 +30,14 @@ public class URLUtils {
 		return null;
 	}
 	
-	public static String extractUrl(File submittedFile) {
+	/**
+	 * Extracts first URL in a file
+	 * @param file
+	 * @return URL
+	 */
+	public static String extractUrl(File file) {
 		try {
-			String content = FileUtils.readFileToString(submittedFile, Charset.defaultCharset());
+			String content = FileUtils.readFileToString(file, Charset.defaultCharset());
 			return findUrl(content);
 		} catch (IOException e) {
 			e.printStackTrace();
