@@ -6,4 +6,4 @@ Asistente para la corrección de actividades entregadas en un aula virtual Moodl
 - Permite definir los criterios de calificación así como calificar los proyectos de forma sencilla. 
 - Permite exportar las calificaciones en un fichero CSV con las notas que puede luego importarse a Moodle.
 
-:warning: Requiere [7-Zip](https://www.7-zip.org/).
+> :warning: Requiere [7-Zip](https://www.7-zip.org/).
