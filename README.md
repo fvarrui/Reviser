@@ -1,6 +1,6 @@
 # Reviser
 
-Asistente para la corrección de actividades entergadas en un aula virtual Moodle.
+Asistente para la corrección de actividades entregadas en un aula virtual Moodle.
 
 Permite ejecutar proyectos Maven o abrir otro tipo de entregas con la aplicación asociada disponible en nuestro equipo. Permite definir los criterios de calificación así como calificar los proyectos de forma sencilla. 
 
