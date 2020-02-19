@@ -13,7 +13,7 @@ public class GitUtils {
 	 * @throws Exception
 	 */
 	public static void pull(File repoDir) throws Exception {
-		
+				
 		Git repo = Git.open(repoDir);
 		repo.pull();
 		repo.getRepository().close();
@@ -28,7 +28,7 @@ public class GitUtils {
 	 * @throws Exception
 	 */
 	public static File clone(String uri, File outputDir) throws Exception {
-		
+				
 		String name = URLUtils.getFile(uri);
 		outputDir = new File(outputDir, name);
 		if (outputDir.exists()) {

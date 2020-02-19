@@ -1,0 +1,18 @@
+.console-text {
+	-fx-text-fill: white;
+	-fx-font-family: monospace;
+	-fx-font-size: 10pt;
+}
+.console-text .content {
+	-fx-background-color: black
+}
+
+.student-name {
+	-fx-font-size: 12pt;
+	-fx-font-weight: bold; 
+}
+
+.score {
+	-fx-font-size: 11pt;
+	-fx-font-weight: bold; 
+}

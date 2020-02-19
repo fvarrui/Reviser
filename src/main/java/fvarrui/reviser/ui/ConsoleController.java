@@ -17,7 +17,7 @@ import javafx.scene.layout.BorderPane;
 public class ConsoleController implements Initializable {
 
 	// model
-
+	
 	private StringProperty console = new SimpleStringProperty();
 
 	// view
@@ -39,6 +39,10 @@ public class ConsoleController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
+		App.console = new MessageConsumer(consoleText);
+		App.console.start();
+		
 		console.bindBidirectional(consoleText.textProperty());
 		clearButton.disableProperty().bind(console.isEmpty());
 	}
@@ -50,18 +54,6 @@ public class ConsoleController implements Initializable {
 	@FXML
 	private void onClear(ActionEvent e) {
 		consoleText.clear();
-	}
-
-	public final StringProperty consoleProperty() {
-		return this.console;
-	}
-
-	public final String getConsole() {
-		return this.consoleProperty().get();
-	}
-
-	public final void setConsole(final String console) {
-		this.consoleProperty().set(console);
 	}
 
 }

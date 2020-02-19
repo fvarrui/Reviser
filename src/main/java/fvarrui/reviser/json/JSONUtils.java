@@ -1,4 +1,4 @@
-package fvarrui.reviser.utils;
+package fvarrui.reviser.json;
 
 import java.io.File;
 import java.io.FileReader;
@@ -14,7 +14,12 @@ import com.google.gson.JsonSyntaxException;
 
 public class JSONUtils {
 	
-	private static final Gson gson = FxGson.fullBuilder().setPrettyPrinting().create();
+	private static final Gson gson = 
+			FxGson
+				.fullBuilder()
+				.addSerializationExclusionStrategy(new SerializationExclusionEstratregy())
+				.setPrettyPrinting()
+				.create();
 
 	/**
 	 * Unmarshall a class from a json file

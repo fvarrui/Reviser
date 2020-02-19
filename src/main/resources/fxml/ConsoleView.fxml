@@ -8,7 +8,7 @@
 
 <BorderPane fx:id="view" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-								<TextArea fx:id="consoleText" editable="false" promptText="Salida de las ejecuciones" />
+								<TextArea fx:id="consoleText" editable="false" promptText="Salida de las ejecuciones" styleClass="console-text" />
    </center>
    <padding>
       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

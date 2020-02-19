@@ -12,6 +12,8 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.Commandline;
 
+import fvarrui.reviser.ui.App;
+
 public class CommandUtils {
 
 	private static Object[] expandArray(Object[] array) {
@@ -43,7 +45,7 @@ public class CommandUtils {
 
 		arguments = expandArray(arguments);
 
-		System.out.println("Executing command: " + executable + " " + StringUtils.join(arguments, " "));
+		App.console.println("Executing command: " + executable + " " + StringUtils.join(arguments, " "));
 
 		Commandline command = new Commandline();
 		command.setWorkingDirectory(workingDirectory);

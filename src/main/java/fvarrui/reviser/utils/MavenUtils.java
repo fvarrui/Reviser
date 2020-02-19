@@ -13,6 +13,8 @@ import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.Invoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
 
+import fvarrui.reviser.ui.App;
+
 public class MavenUtils {
 
 	/**
@@ -29,8 +31,8 @@ public class MavenUtils {
 		request.setGoals(Collections.singletonList(goal));
 
 		InvocationOutputHandler handler = line -> {
-			if (line.startsWith("[INFO]") || line.startsWith("[WARNING]") || line.startsWith("[WARN]")) return;
-			System.out.println(line);
+//			if (line.startsWith("[INFO]") || line.startsWith("[WARNING]") || line.startsWith("[WARN]")) return;
+			App.console.println(line);
 		};
 		
 		Invoker invoker = new DefaultInvoker();

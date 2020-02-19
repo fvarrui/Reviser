@@ -6,7 +6,7 @@
 
 	<groupId>fvarrui.reviser</groupId>
 	<artifactId>Reviser</artifactId>
-	<version>0.0.1</version>
+	<version>0.1.0</version>
 
 	<properties>
 		<maven.compiler.target>11</maven.compiler.target>

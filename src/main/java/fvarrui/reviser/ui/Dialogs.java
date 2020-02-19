@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.controlsfx.dialog.CommandLinksDialog;
 import org.controlsfx.dialog.CommandLinksDialog.CommandLinksButtonType;
 
+import fvarrui.reviser.config.Config;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
@@ -35,7 +36,7 @@ public class Dialogs {
 
 	public static File chooseFolder(String title) {
 		DirectoryChooser chooser = new DirectoryChooser();
-		chooser.setInitialDirectory(new File("."));
+		chooser.setInitialDirectory(Config.configDir);
 		chooser.setTitle(title);
 		return chooser.showDialog(App.primaryStage);
 	}
@@ -43,7 +44,6 @@ public class Dialogs {
 	public static File chooseFile(String title, String filename, String description, String extension) {
 		FileChooser chooser = new FileChooser();
 		chooser.setInitialFileName(filename);
-		chooser.setInitialDirectory(new File("."));
 		chooser.setTitle(title);
 		chooser.getExtensionFilters().addAll(
 		    new ExtensionFilter(description, extension),
@@ -58,12 +58,13 @@ public class Dialogs {
 	
 	public static boolean confirm(String title, String header, String content) {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
 		alert.initOwner(App.primaryStage);
 		alert.setTitle(title);
 		alert.setHeaderText(header);
 		alert.setContentText(content);
 		Optional<ButtonType> response = alert.showAndWait();
-		return ButtonType.OK.equals(response.get());
+		return ButtonType.YES.equals(response.get());
 	}
 	
 	public static void error(String header, String content) {

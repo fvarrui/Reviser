@@ -11,6 +11,14 @@ public class Criterion {
 	private LongProperty id = new SimpleLongProperty();
 	private StringProperty name = new SimpleStringProperty();
 	private DoubleProperty weight = new SimpleDoubleProperty();
+	
+	public Criterion() {}
+	
+	public Criterion(Long id, String name, double weight) {
+		setId(id);
+		setName(name);
+		setWeight(weight);
+	}
 
 	public final LongProperty idProperty() {
 		return this.id;
@@ -48,4 +56,10 @@ public class Criterion {
 		this.weightProperty().set(weight);
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) return false;
+		return ((Criterion)obj).getId() == getId();
+	}
+	
 }

@@ -8,34 +8,22 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-
-<BorderPane fx:id="view"
-	xmlns="http://javafx.com/javafx/11.0.1"
-	xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="view" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
 	<center>
-		<TableView fx:id="formTable" editable="true"
-			BorderPane.alignment="CENTER">
+		<TableView fx:id="formTable" editable="true" BorderPane.alignment="CENTER">
 			<columns>
-				<TableColumn fx:id="idColumn" editable="false"
-					prefWidth="75.0" resizable="false" text="ID" />
-				<TableColumn fx:id="nameColumn" prefWidth="75.0"
-					resizable="false" text="Nombre" />
-				<TableColumn fx:id="weightColumn" prefWidth="75.0"
-					resizable="false" text="Peso" />
+				<TableColumn fx:id="nameColumn" prefWidth="75.0" resizable="false" text="Nombre" />
+				<TableColumn fx:id="weightColumn" prefWidth="75.0" resizable="false" text="Peso" />
 			</columns>
 		</TableView>
 	</center>
 	<top>
 		<HBox spacing="5.0" BorderPane.alignment="CENTER">
 			<children>
-				<TextField fx:id="nameText"
-					maxWidth="1.7976931348623157E308" promptText="Nombre"
-					HBox.hgrow="ALWAYS" />
+				<TextField fx:id="nameText" maxWidth="1.7976931348623157E308" promptText="Nombre" HBox.hgrow="ALWAYS" />
 				<TextField fx:id="weightText" promptText="Peso" />
-				<Button fx:id="addButton" defaultButton="true"
-					mnemonicParsing="false" onAction="#onAddCriterion" text="Añadir" />
-				<Button fx:id="removeButton" layoutX="775.0" layoutY="10.0"
-					mnemonicParsing="false" onAction="#onRemoveCriterion" text="Quitar" />
+				<Button fx:id="addButton" defaultButton="true" mnemonicParsing="false" onAction="#onAddCriterion" text="Añadir" />
+				<Button fx:id="removeButton" layoutX="775.0" layoutY="10.0" mnemonicParsing="false" onAction="#onRemoveCriterion" text="Quitar" />
 			</children>
 			<padding>
 				<Insets bottom="5.0" />

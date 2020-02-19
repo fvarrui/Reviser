@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import org.codehaus.plexus.util.cli.CommandLineException;
 
+import fvarrui.reviser.config.Config;
 import fvarrui.reviser.utils.ZipUtils;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -18,33 +19,44 @@ public class App extends Application {
 	
 	public static final String TITLE = "Reviser";
 
-	public static File configDir = new File(System.getProperty("user.home"), ".Reviser"); 
+	public static MessageConsumer console;
 	public static Stage primaryStage;
 	
 	private ObjectProperty<File> submissionsDir = new SimpleObjectProperty<>();
 	
-	private MainController controller;
+	public static MainController mainController;
 	
 	@Override
 	public void init() throws Exception {
-		if (!configDir.exists()) configDir.mkdir();
+		Config.load();
 		super.init();
+	}
+	
+	@Override
+	public void stop() throws Exception {
+		Config.save();
+		super.stop();
 	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		App.primaryStage = primaryStage;
 
-		controller = new MainController();
-		controller.submissionsDirProperty().bind(submissionsDir);
+		mainController = new MainController();
+		mainController.submissionsDirProperty().bind(submissionsDir);
 		
-		Scene scene = new Scene(controller.getView(), 900, 700);
+		Scene scene = new Scene(mainController.getView(), 900, 700);
 
 		primaryStage.getIcons().add(new Image("/images/logo-16x16.png"));
 		primaryStage.getIcons().add(new Image("/images/logo-24x24.png"));
 		primaryStage.getIcons().add(new Image("/images/logo-32x32.png"));
 		primaryStage.getIcons().add(new Image("/images/logo-64x64.png"));
 		primaryStage.setScene(scene);
+		primaryStage.setOnCloseRequest(e -> {
+			if (Dialogs.confirm(TITLE, "Saliendo de la aplicación", "¿Desea guardar los cambios antes de salir?")) {
+				mainController.saveResults();
+			}
+		});
 		primaryStage.show();
 
 		openSubmissions();
@@ -56,7 +68,7 @@ public class App extends Application {
 		if (file == null) {
 			Platform.exit();
 		} else if (file.isFile()) {
-			submissionsDir.set(ZipUtils.uncompress(file, true));
+			submissionsDir.set(ZipUtils.uncompress(file, Config.configDir));
 			if (Dialogs.confirm(
 					TITLE, 
 					"Eliminar fichero original", 
@@ -68,7 +80,6 @@ public class App extends Application {
 			submissionsDir.set(file);
 		}
 	}
-	
 
 	public static void main(String[] args) {
 		launch(args);

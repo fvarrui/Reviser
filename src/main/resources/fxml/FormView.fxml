@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+
+<BorderPane fx:id="view" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+	<top>
+		<HBox alignment="BASELINE_LEFT" spacing="5.0" BorderPane.alignment="CENTER">
+			<children>
+            <Label fx:id="nameLabel" maxWidth="1.7976931348623157E308" styleClass="student-name" text="Nombre y Apellidos" HBox.hgrow="ALWAYS" />
+            <CheckBox fx:id="evaluatedCheck" mnemonicParsing="false" text="Evaluado" />
+            <Button fx:id="clearButton" mnemonicParsing="false" onAction="#onClearScore" text="Limpiar puntuación" />
+				<Button fx:id="runButton" defaultButton="true" mnemonicParsing="false" onAction="#onRun" text="Ejecutar" />
+			</children>
+			<padding>
+				<Insets bottom="5.0" />
+			</padding>
+		</HBox>
+	</top>
+	<padding>
+		<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+	</padding>
+   <bottom>
+      <HBox alignment="BASELINE_RIGHT" spacing="5.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label text="Puntuación:" />
+            <Label fx:id="gradeLabel" styleClass="score" text="0" />
+         </children>
+         <BorderPane.margin>
+            <Insets top="5.0" />
+         </BorderPane.margin>
+      </HBox>
+   </bottom>
+   <center>
+      <TableView fx:id="gradesTable" editable="true" prefHeight="480.0" prefWidth="640.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="nameColumn" editable="false" resizable="false" text="Criterio" />
+          <TableColumn fx:id="weightColumn" editable="false" resizable="false" text="Peso" />
+            <TableColumn fx:id="weightedColumn" prefWidth="75.0" text="Ponderada" />
+            <TableColumn fx:id="valueColumn" resizable="false" text="Puntuación" />
+            <TableColumn fx:id="feedbackColumn" resizable="false" text="Comentario" />
+        </columns>
+      </TableView>
+   </center>
+</BorderPane>
