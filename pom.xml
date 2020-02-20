@@ -7,6 +7,8 @@
 	<groupId>fvarrui.reviser</groupId>
 	<artifactId>Reviser</artifactId>
 	<version>0.1.0</version>
+	
+	<description>Asistente para la corrección de actividades entregadas en un aula virtual Moodle.</description>
 
 	<properties>
 		<maven.compiler.target>11</maven.compiler.target>
@@ -113,7 +115,51 @@
 			<id>bintray</id>
 			<url>http://jcenter.bintray.com</url>
 		</repository>
-
 	</repositories>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>fvarrui.maven</groupId>
+				<artifactId>javapackager</artifactId>
+				<version>0.8.9</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>package</goal>
+						</goals>
+						<configuration>
+							<bundleJre>true</bundleJre>
+							<organizationName>Francisco Vargas Ruiz</organizationName>
+							<organizationUrl>https://github.com/fvarrui</organizationUrl>
+							<modules>
+								<param>java.base</param>
+								<param>java.datatransfer</param>
+								<param>java.desktop</param>
+								<param>java.logging</param>
+								<param>java.naming</param>
+								<param>java.scripting</param>
+								<param>java.security.jgss</param>
+								<param>java.sql</param>
+								<param>java.xml</param>
+								<param>jdk.jsobject</param>
+								<param>jdk.unsupported</param>
+								<param>jdk.unsupported.desktop</param>
+								<param> jdk.xml.dom</param>
+							</modules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>javapackager</id>
+			<url>https://github.com/fvarrui/JavaPackager/raw/master/releases</url>
+		</pluginRepository>
+	</pluginRepositories>
 
 </project>
