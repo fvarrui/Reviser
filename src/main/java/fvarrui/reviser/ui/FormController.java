@@ -172,7 +172,7 @@ public class FormController implements Initializable {
 			App.console.println(event.getSource().getException());
 			result.get().fail(event.getSource().getException().getMessage());
 		});
-		App.mainController.showConsole();
+		SubmissionController.me.showConsole();
 		new Thread(task).start();
 	}
 

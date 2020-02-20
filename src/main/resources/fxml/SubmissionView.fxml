@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<BorderPane fx:id="view" stylesheets="@../css/styles.css"
+	xmlns="http://javafx.com/javafx/11.0.1"
+	xmlns:fx="http://javafx.com/fxml/1">
+	<center>
+		<TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0"
+			tabClosingPolicy="UNAVAILABLE">
+			<tabs>
+				<Tab fx:id="resultsTab" text="Resultados" />
+				<Tab fx:id="formDesignerTab" text="Diseñar formulario" />
+				<Tab fx:id="consoleTab" text="Consola" />
+			</tabs>
+		</TabPane>
+	</center>
+	<top>
+		<VBox BorderPane.alignment="CENTER">
+			<children>
+				<HBox alignment="CENTER" layoutX="10.0" layoutY="10.0"
+					spacing="5.0">
+					<padding>
+						<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+					</padding>
+					<children>
+						<Label fx:id="titleLabel" maxWidth="1.7976931348623157E308"
+							styleClass="submission-title" text="&lt;Título de la entrega&gt;"
+							HBox.hgrow="ALWAYS" />
+						<Button fx:id="saveResults" mnemonicParsing="false"
+							onAction="#onSaveResults" prefHeight="32.0" prefWidth="40.0">
+							<graphic>
+								<FontIcon iconLiteral="fas-save" iconSize="18" />
+							</graphic>
+							<tooltip>
+								<Tooltip text="Guardar resultados" />
+							</tooltip>
+						</Button>
+						<Button fx:id="exportResults" mnemonicParsing="false"
+							onAction="#onExportResults" prefHeight="32.0" prefWidth="40.0">
+							<graphic>
+								<FontIcon iconLiteral="fas-file-export" iconSize="18" />
+							</graphic>
+							<tooltip>
+								<Tooltip text="Exportar resultados a CSV" />
+							</tooltip>
+						</Button>
+						<Button fx:id="importEmails" mnemonicParsing="false"
+							onAction="#onImportEmails" prefHeight="32.0" prefWidth="40.0">
+							<graphic>
+								<FontIcon iconLiteral="fas-file-import" iconSize="18" />
+							</graphic>
+							<tooltip>
+								<Tooltip text="Importar e-mails desde CSV" />
+							</tooltip>
+						</Button>
+					</children>
+				</HBox>
+			</children>
+		</VBox>
+	</top>
+</BorderPane>

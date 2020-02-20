@@ -91,6 +91,17 @@
 			<artifactId>controlsfx</artifactId>
 			<version>11.0.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.kordamp.ikonli</groupId>
+			<artifactId>ikonli-javafx</artifactId>
+			<version>11.3.5</version>
+		</dependency>
+		<dependency>
+			<!-- available icons list: http://kordamp.org/ikonli/cheat-sheet-fontawesome5.html -->
+			<groupId>org.kordamp.ikonli</groupId>
+			<artifactId>ikonli-fontawesome5-pack</artifactId>
+			<version>11.3.5</version>
+		</dependency>
 	</dependencies>
 
 	<repositories>
@@ -98,6 +109,11 @@
 			<id>jgit</id>
 			<url>https://repo.eclipse.org/content/groups/releases</url>
 		</repository>
+		<repository>
+			<id>bintray</id>
+			<url>http://jcenter.bintray.com</url>
+		</repository>
+
 	</repositories>
 
 </project>

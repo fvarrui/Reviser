@@ -106,10 +106,14 @@ public class Results {
 			results = new Results();
 		}
 		results.createResultsFromSubmissionsDir(submissionsDir);
-		results.configListener();
 		results.initGradingForm();
+		results.configListener();
 		results.populateGrades();
 		return results;
+	}
+	
+	public void save(File resultsFile) throws JsonSyntaxException, JsonIOException, IOException {
+		JSONUtils.jsonToFile(this, resultsFile);
 	}
 	
 	public void createResultsFromSubmissionsDir(File submissionsDir) {

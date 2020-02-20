@@ -16,3 +16,16 @@
 	-fx-font-size: 11pt;
 	-fx-font-weight: bold; 
 }
+
+.submission-title {
+	-fx-font-size: 11pt;
+	-fx-font-weight: bold; 
+}
+
+.no-selection-pane {
+	-fx-background-color: #00000088;
+}
+
+.no-selection-label {
+	-fx-text-fill: white;
+}

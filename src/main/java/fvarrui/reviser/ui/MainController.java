@@ -3,59 +3,60 @@ package fvarrui.reviser.ui;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonSyntaxException;
-import com.opencsv.exceptions.CsvException;
+import org.codehaus.plexus.util.cli.CommandLineException;
 
-import fvarrui.reviser.csv.CsvResult;
-import fvarrui.reviser.csv.CsvStudent;
-import fvarrui.reviser.csv.CsvUtils;
-import fvarrui.reviser.json.JSONUtils;
-import fvarrui.reviser.model.Results;
-import javafx.beans.binding.Bindings;
+import fvarrui.reviser.config.Config;
+import fvarrui.reviser.model.Submission;
+import fvarrui.reviser.utils.ZipUtils;
+import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 
 public class MainController implements Initializable {
 	
 	// controllers
 	
-	private ResultsController resultsController;
-	private FormDesignerController formDesignerController;
-	private ConsoleController consoleController;
+	private SubmissionController submissionController;
 
 	// model
 	
-	private File resultsFile;
-
-	private StringProperty project = new SimpleStringProperty("");
-	private ObjectProperty<File> submissionsDir = new SimpleObjectProperty<>();
-	private ObjectProperty<Results> results = new SimpleObjectProperty<>(new Results());
+	private ListProperty<Submission> submissions = new SimpleListProperty<>(FXCollections.observableArrayList()); 
+	private ObjectProperty<Submission> selectedSubmission = new SimpleObjectProperty<>();
 
 	// view
 
 	@FXML
-	private BorderPane view;
-	    
+	private SplitPane view;
+
     @FXML
-    private TabPane tabPane;
+    private ListView<Submission> submissionsList;
+
+    @FXML
+    private Button importButton;
+
+    @FXML
+    private Button refreshButton;
     
     @FXML
-    private Tab resultsTab, formDesignerTab, consoleTab;
+    private BorderPane submissionPane;
+    
+    @FXML
+    private VBox noSelectionPane;
 
 	public MainController() throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainView.fxml"));
@@ -68,21 +69,21 @@ public class MainController implements Initializable {
 		
 		try {
 
-			// binds stage title
-			App.primaryStage.titleProperty().bind(Bindings.concat(App.TITLE + ": ").concat(project));
-
 			// creates controllers
-			resultsController = new ResultsController();
-			formDesignerController = new FormDesignerController();
-			consoleController = new ConsoleController();
+			submissionController = new SubmissionController();
 		
-			// set tabs content
-			resultsTab.setContent(resultsController.getView());
-			formDesignerTab.setContent(formDesignerController.getView());
-			consoleTab.setContent(consoleController.getView());
+			// set submission controller view
+			submissionPane.setCenter(submissionController.getView());
 	
-			// add listener when submissions dir changed
-			submissionsDir.addListener((o, ov, nv) -> onSubmissionsDirChanged(o, ov, nv));
+			// binds
+			selectedSubmission.bind(submissionsList.getSelectionModel().selectedItemProperty());
+			noSelectionPane.visibleProperty().bind(selectedSubmission.isNull());
+			submissionPane.visibleProperty().bind(selectedSubmission.isNotNull());
+			submissionsList.itemsProperty().bind(submissions);
+			submissionController.submissionProperty().bind(selectedSubmission);
+			
+			// refresh submissions
+			refreshSubmissions();
 			
 		} catch (IOException e) {
 			
@@ -93,89 +94,38 @@ public class MainController implements Initializable {
 			
 	}
 
-	private void onSubmissionsDirChanged(ObservableValue<? extends File> o, File ov, File nv) {
-		
-		// sets project name
-		project.set(submissionsDir.get().getName());
-		
-		// loads results from json if exists, or creates from scratch 
-		resultsFile = new File(submissionsDir.get(), "results.json");
-		results.set(Results.load(resultsFile, submissionsDir.get()));
-
-		// binds results view
-		resultsController.submissionsDirProperty().bind(submissionsDir);
-		resultsController.resultsProperty().bind(results);
-		
-		// binds form designer view
-		formDesignerController.resultsProperty().bind(results);
-		
+	public void refreshSubmissions() {
+		submissions.setAll(
+				Arrays.asList(Config.submissionsDir.listFiles())
+					.stream()
+					.filter(f -> f.isDirectory())
+					.map(f -> new Submission(f))
+					.collect(Collectors.toList())
+				);
 	}
 
     @FXML
-    private void onExportResults(ActionEvent e) {
-
-    	// export results to csv file for moodle
-		File resultsFile = Dialogs.chooseFile("Exportar resultados en CSV para Moodle", getSubmissionsDir().getName(), "Fichero CSV", "*.csv");
-		if (resultsFile != null)
+    private void onImportSubmission(ActionEvent event) {
+		File file = Dialogs.chooseFile("Importar entregas desde un fichero ZIP descargado de Moodle", "Fichero de entregas", "*.zip");
+		if (file != null) {
 			try {
-				List<CsvResult> results = this.results.get().getResults().stream()
-						.map(r -> new CsvResult(r.getScore(), r.getName(), r.getFeedback(), r.getEmail()))
-						.collect(Collectors.toList());
-				CsvUtils.resultsToCsv(results, resultsFile);
-			} catch (IOException | CsvException e1) {
-				Dialogs.error("El fichero CSV de resultados no ha podido exportarse", e1);
+				file = ZipUtils.uncompress(file, Config.submissionsDir);
+				Submission s = new Submission(file);
+				submissions.add(new Submission(file));
+				submissionsList.getSelectionModel().select(s);
+			} catch (IOException | CommandLineException e) {
+				Dialogs.error("Error al importar un fichero de entregas", e);
 			}
-    	
-    }
-
-    @FXML
-    private void onImportEmails(ActionEvent e) {
-
-    	// import emails from csv file
-		File studentsFile = Dialogs.chooseFile("Seleccione un fichero CSV de calificaciones exportado desde Moodle", "Fichero CSV", "*.csv");
-		if (studentsFile != null)
-			try {
-				List<CsvStudent> students = CsvUtils.csvToStudents(studentsFile);
-				results.get().updateFromStudents(students);
-			} catch (IOException | CsvException e1) {
-				Dialogs.error("El fichero CSV no se ha podido abrir", e1);
-			}
-				
-    }
-
-    @FXML
-    private void onSaveResults(ActionEvent e) {
-    	saveResults();
-    }
-
-	public void saveResults() {
-		// save results to json file in submissions directory
-    	try {
-			JSONUtils.jsonToFile(results.get(), resultsFile);
-			Dialogs.info("Resultados guardados", "Los resultados se han guardado correctamente en '" + resultsFile + "'.");
-		} catch (JsonSyntaxException | JsonIOException | IOException e1) {
-			Dialogs.error("Error guardando resultados en '" + resultsFile.getName() + "'", e1);
-		}
+		} 
 	}
-    
-    public void showConsole() {
-    	tabPane.getSelectionModel().select(consoleTab);
+
+    @FXML
+    private void onRefreshSubmissions(ActionEvent event) {
+    	refreshSubmissions();
     }
 
-	public BorderPane getView() {
+	public SplitPane getView() {
 		return view;
-	}
-
-	public final ObjectProperty<File> submissionsDirProperty() {
-		return this.submissionsDir;
-	}
-
-	public final File getSubmissionsDir() {
-		return this.submissionsDirProperty().get();
-	}
-
-	public final void setSubmissionsDir(final File submissionsDir) {
-		this.submissionsDirProperty().set(submissionsDir);
 	}
 
 }
