@@ -51,9 +51,13 @@ public class ConsoleController implements Initializable {
 		return view;
 	}
 
+	public void clearConsole() {
+		consoleText.clear();
+	}
+	
 	@FXML
 	private void onClear(ActionEvent e) {
-		consoleText.clear();
+		clearConsole();
 	}
 
 }

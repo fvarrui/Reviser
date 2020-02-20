@@ -110,10 +110,14 @@ public class ResultsController implements Initializable {
 	}
 
 	private void onResultsChanged(ObservableValue<? extends Results> o, Results ov, Results nv) {
-
-		resultsTable.itemsProperty().bind(nv.resultsProperty());
-		formController.formProperty().bind(nv.formProperty());
-
+		if (ov != null) {
+			resultsTable.itemsProperty().unbind();
+			formController.formProperty().unbind();
+		}
+		if (nv != null) {
+			resultsTable.itemsProperty().bind(nv.resultsProperty());
+			formController.formProperty().bind(nv.formProperty());
+		}
 	}
 
 	public BorderPane getView() {

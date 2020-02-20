@@ -106,7 +106,7 @@ public class MainController implements Initializable {
 
     @FXML
     private void onImportSubmission(ActionEvent event) {
-		File file = Dialogs.chooseFile("Importar entregas desde un fichero ZIP descargado de Moodle", "Fichero de entregas", "*.zip");
+		File file = Dialogs.openFile("Importar entregas desde un fichero ZIP descargado de Moodle", "Fichero de entregas", "*.zip");
 		if (file != null) {
 			try {
 				file = ZipUtils.uncompress(file, Config.submissionsDir);

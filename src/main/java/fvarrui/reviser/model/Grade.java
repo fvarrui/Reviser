@@ -108,7 +108,7 @@ public class Grade {
 
 	@Override
 	public String toString() {
-		return getCriterion().getName() + " [peso=" + getCriterion().getWeight() + ", nota=" + getValue() + ", notaPonderada=" + getWeightedValue() + ", comentario=" + getFeedback() + "]";
+		return getCriterion().getName() + " [Peso: " + getCriterion().getWeight() + ", Nota: " + getValue() + ", Nota ponderada:" + getWeightedValue() + ", Comentario: " + (getFeedback() != null ? getFeedback() : "") + "]";
 	}	
 
 }

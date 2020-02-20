@@ -89,6 +89,9 @@ public class FormDesignerController implements Initializable {
 	}
 
 	private void onResultsChanged(ObservableValue<? extends Results> o, Results ov, Results nv) {
+		if (ov != null) {
+			formTable.itemsProperty().unbind();
+		}
 		if (nv != null) {
 			formTable.itemsProperty().bind(nv.getForm().criteriaProperty());
 		}

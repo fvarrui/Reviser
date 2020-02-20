@@ -27,33 +27,52 @@ public class Dialogs {
 		dialog.setHeaderText("Seleccione desde donde quiere cargar las entregas a corregir");
 		Optional<ButtonType> result = dialog.showAndWait();
 		if (result.get().getButtonData() == ButtonData.OK_DONE) {
-			return chooseFolder("Abrir un directorio de entregas");
+			return openFolder("Abrir un directorio de entregas");
 		} else if (result.get().getButtonData() == ButtonData.OTHER)  { 
-			return chooseFile("Abrir un fichero ZIP con entregas descargado de Moodle", "Fichero de entregas", "*.zip");
+			return openFile("Abrir un fichero ZIP con entregas descargado de Moodle", "Fichero de entregas", "*.zip");
 		}
 		return null;
 	}
 
-	public static File chooseFolder(String title) {
+	public static File openFolder(String title) {
 		DirectoryChooser chooser = new DirectoryChooser();
-		chooser.setInitialDirectory(Config.configDir);
+		chooser.setInitialDirectory(new File(Config.getConfig().getLastDirectory()));
 		chooser.setTitle(title);
-		return chooser.showDialog(App.primaryStage);
+		File directory = chooser.showDialog(App.primaryStage);
+		if (directory != null) Config.getConfig().setLastDirectory(directory.getAbsolutePath());		
+		return directory;
 	}
 
-	public static File chooseFile(String title, String filename, String description, String extension) {
+	public static File openFile(String title, String filename, String description, String extension) {
 		FileChooser chooser = new FileChooser();
+		chooser.setInitialDirectory(new File(Config.getConfig().getLastDirectory()));
 		chooser.setInitialFileName(filename);
 		chooser.setTitle(title);
 		chooser.getExtensionFilters().addAll(
 		    new ExtensionFilter(description, extension),
 		    new ExtensionFilter("Todos los ficheros", "*.*")
 		    );
-		return chooser.showOpenDialog(App.primaryStage);		
+		File file = chooser.showOpenDialog(App.primaryStage);
+		if (file != null) Config.getConfig().setLastDirectory(file.getParentFile().getAbsolutePath());
+		return file;
 	}
 	
-	public static File chooseFile(String title, String description, String extension) {
-		return chooseFile(title, "", description, extension);
+	public static File saveFile(String title, String filename, String description, String extension) {
+		FileChooser chooser = new FileChooser();
+		chooser.setInitialDirectory(new File(Config.getConfig().getLastDirectory()));
+		chooser.setInitialFileName(filename);
+		chooser.setTitle(title);
+		chooser.getExtensionFilters().addAll(
+		    new ExtensionFilter(description, extension),
+		    new ExtensionFilter("Todos los ficheros", "*.*")
+		    );
+		File file = chooser.showSaveDialog(App.primaryStage);
+		if (file != null) Config.getConfig().setLastDirectory(file.getParentFile().getAbsolutePath());
+		return file;
+	}
+	
+	public static File openFile(String title, String description, String extension) {
+		return openFile(title, "", description, extension);
 	}
 	
 	public static boolean confirm(String title, String header, String content) {

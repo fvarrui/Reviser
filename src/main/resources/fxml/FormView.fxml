@@ -6,17 +6,36 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane fx:id="view" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="view" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
 	<top>
-		<HBox alignment="BASELINE_LEFT" spacing="5.0" BorderPane.alignment="CENTER">
+		<HBox alignment="CENTER" spacing="5.0" BorderPane.alignment="CENTER">
 			<children>
             <Label fx:id="nameLabel" maxWidth="1.7976931348623157E308" styleClass="student-name" text="Nombre y Apellidos" HBox.hgrow="ALWAYS" />
             <CheckBox fx:id="evaluatedCheck" mnemonicParsing="false" text="Evaluado" />
-            <Button fx:id="clearButton" mnemonicParsing="false" onAction="#onClearScore" text="Limpiar puntuación" />
-				<Button fx:id="runButton" defaultButton="true" mnemonicParsing="false" onAction="#onRun" text="Ejecutar" />
+            <Button fx:id="openButton" layoutX="468.0" layoutY="11.0" maxHeight="1.7976931348623157E308" mnemonicParsing="false" onAction="#onOpenExplorer" text="Abrir">
+               <graphic>
+                  <FontIcon iconLiteral="far-folder-open" text="" />
+               </graphic>
+               <tooltip>
+                  <Tooltip text="Abrir la carpeta de la entrega en el explorador de archivos del sistema" />
+               </tooltip>
+            </Button>
+            <Button fx:id="clearButton" maxHeight="1.7976931348623157E308" mnemonicParsing="false" onAction="#onClearScore" text="Limpiar">
+               <graphic>
+                  <FontIcon iconLiteral="fas-broom" />
+               </graphic>
+               <tooltip>
+                  <Tooltip text="Poner a cero las puntuaciones y eliminar los comentarios" />
+               </tooltip></Button>
+				<Button fx:id="runButton" defaultButton="true" maxHeight="1.7976931348623157E308" mnemonicParsing="false" onAction="#onRun" text="Ejecutar">
+               <graphic>
+                  <FontIcon iconLiteral="fas-play" />
+               </graphic></Button>
 			</children>
 			<padding>
 				<Insets bottom="5.0" />

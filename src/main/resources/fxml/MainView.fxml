@@ -8,14 +8,16 @@
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
 <SplitPane fx:id="view" dividerPositions="0.25" prefHeight="480.0" prefWidth="640.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
 	<items>
-		<BorderPane maxWidth="250.0">
+		<BorderPane maxWidth="300.0" minWidth="300.0">
 			<center>
 				<ListView fx:id="submissionsList" BorderPane.alignment="CENTER" />
 			</center>
@@ -23,29 +25,36 @@
 				<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 			</padding>
 			<top>
-				<HBox alignment="CENTER" spacing="5.0" BorderPane.alignment="CENTER">
-					<children>
-						<Button fx:id="importButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onImportSubmission" prefHeight="32.0" HBox.hgrow="ALWAYS">
+            <GridPane hgap="5.0" vgap="5.0" BorderPane.alignment="CENTER">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="50.0" />
+                  <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="50.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+						<Button fx:id="importButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onImportSubmission" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
 							<graphic>
-								<FontIcon iconLiteral="far-file-archive" iconSize="18" />
+								<FontIcon iconLiteral="far-file-archive" iconSize="24" />
 							</graphic>
 							<tooltip>
 								<Tooltip text="Importar una entrega" />
 							</tooltip>
 						</Button>
-						<Button fx:id="refreshButton" layoutX="52.0" layoutY="10.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onRefreshSubmissions" prefHeight="32.0" HBox.hgrow="ALWAYS">
+						<Button fx:id="refreshButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onRefreshSubmissions" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
 							<graphic>
-								<FontIcon iconLiteral="fas-retweet" iconSize="18" />
+      								<FontIcon iconLiteral="fas-retweet" iconSize="24" />
 							</graphic>
 							<tooltip>
 								<Tooltip text="Refrescar entregas" />
 							</tooltip>
 						</Button>
-					</children>
-					<padding>
-						<Insets bottom="5.0" />
-					</padding>
-				</HBox>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" />
+               </padding>
+            </GridPane>
 			</top>
 		</BorderPane>
 		<StackPane>
@@ -53,7 +62,7 @@
 				<BorderPane fx:id="submissionPane" />
 				<VBox fx:id="noSelectionPane" alignment="CENTER" spacing="5.0" styleClass="no-selection-pane">
 					<children>
-						<FontIcon iconColor="WHITE" iconLiteral="fas-mouse-pointer" iconSize="64">
+						<FontIcon iconColor="WHITE" iconLiteral="fas-skull-crossbones" iconSize="64">
 							<effect>
 								<DropShadow offsetX="5.0" offsetY="3.0" />
 							</effect>
@@ -64,6 +73,9 @@
 							</effect>
 						</Label>
 					</children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
 				</VBox>
 			</children>
 		</StackPane>

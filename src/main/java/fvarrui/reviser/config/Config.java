@@ -12,6 +12,8 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
 
@@ -24,6 +26,7 @@ public class Config {
 	private ObjectProperty<Dimension2D> stageSize = new SimpleObjectProperty<>();
 	private ObjectProperty<Point2D> stageCoords = new SimpleObjectProperty<>();
 	private BooleanProperty maximized = new SimpleBooleanProperty();
+	private StringProperty lastDirectory = new SimpleStringProperty(".");
 
 	private static Config config;
 
@@ -36,7 +39,7 @@ public class Config {
 			configDir.mkdir();
 		}
 		if (!submissionsDir.exists()) {
-			submissionsDir.mkdir();			
+			submissionsDir.mkdir();
 		}
 		if (configFile.exists()) {
 			try {
@@ -91,6 +94,18 @@ public class Config {
 
 	public final void setMaximized(final boolean maximized) {
 		this.maximizedProperty().set(maximized);
+	}
+
+	public final StringProperty lastDirectoryProperty() {
+		return this.lastDirectory;
+	}
+
+	public final String getLastDirectory() {
+		return this.lastDirectoryProperty().get();
+	}
+
+	public final void setLastDirectory(final String lastDirectory) {
+		this.lastDirectoryProperty().set(lastDirectory);
 	}
 
 }

@@ -1,5 +1,6 @@
 package fvarrui.reviser.ui;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -178,8 +179,18 @@ public class FormController implements Initializable {
 
 	@FXML
 	private void onClearScore(ActionEvent e) {
-		if (Dialogs.confirm(App.TITLE, "Vaciar las puntuaciones de '" + result.getName() + "'.", "¿Está seguro?")) {
+		if (Dialogs.confirm(App.TITLE, "Limpiar las puntuaciones y los comentarios de '" + result.getName() + "'.", "¿Está seguro?")) {
 			result.get().resetScore();
+		}
+	}
+	
+	@FXML
+	private void onOpenExplorer(ActionEvent e) {
+		File folder = new File(getSubmissionsDir(), getResult().getDirectory());
+		try {
+			Desktop.getDesktop().open(folder);
+		} catch (IOException e1) {
+			Dialogs.error("Error al abrir la carpeta '" + folder + "' en el explorador de archivos del sistema", e1);
 		}
 	}
 

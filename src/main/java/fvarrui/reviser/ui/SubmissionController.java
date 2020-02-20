@@ -1,5 +1,6 @@
 package fvarrui.reviser.ui;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -14,7 +15,6 @@ import com.opencsv.exceptions.CsvException;
 import fvarrui.reviser.csv.CsvResult;
 import fvarrui.reviser.csv.CsvStudent;
 import fvarrui.reviser.csv.CsvUtils;
-import fvarrui.reviser.json.JSONUtils;
 import fvarrui.reviser.model.Results;
 import fvarrui.reviser.model.Submission;
 import javafx.beans.property.ObjectProperty;
@@ -98,6 +98,15 @@ public class SubmissionController implements Initializable {
 			System.exit(1);
 
 		}
+		
+		App.primaryStage.setOnCloseRequest(e -> {
+			try {
+				if (this.resultsFile != null && this.results.get() != null)
+					this.results.get().save(resultsFile);
+			} catch (JsonSyntaxException | JsonIOException | IOException e1) {
+				Dialogs.error("Error al guardar los resultados", e1);
+			}
+		});
 
 	}
 
@@ -145,12 +154,21 @@ public class SubmissionController implements Initializable {
 	}
 
 	@FXML
+	private void onOpenExplorer(ActionEvent e) {
+		try {
+			Desktop.getDesktop().open(getSubmission().getDirectory());
+		} catch (IOException e1) {
+			Dialogs.error("Error al abrir la carpeta '" + getSubmission().getDirectory() + "' en el explorador de archivos del sistema", e1);
+		}
+	}
+
+	@FXML
 	private void onExportResults(ActionEvent e) {
-		File resultsFile = Dialogs.chooseFile("Exportar resultados en CSV para Moodle", getSubmission().getDirectory().getName(), "Fichero CSV", "*.csv");
+		File resultsFile = Dialogs.saveFile("Exportar resultados en CSV para Moodle", getSubmission().getDirectory().getName(), "Fichero CSV", "*.csv");
 		if (resultsFile != null)
 			try {
 				List<CsvResult> results = this.results.get().getResults().stream()
-						.map(r -> new CsvResult(r.getScore(), r.getName(), r.getFeedback(), r.getEmail()))
+						.map(r -> new CsvResult(r.getScore(), r.getName(), r.getFullFeedback(), r.getEmail()))
 						.collect(Collectors.toList());
 				CsvUtils.resultsToCsv(results, resultsFile);
 			} catch (IOException | CsvException e1) {
@@ -160,7 +178,7 @@ public class SubmissionController implements Initializable {
 
 	@FXML
 	private void onImportEmails(ActionEvent e) {
-		File studentsFile = Dialogs.chooseFile("Seleccione un fichero CSV de calificaciones exportado desde Moodle", "Fichero CSV", "*.csv");
+		File studentsFile = Dialogs.openFile("Seleccione un fichero CSV de calificaciones exportado desde Moodle", "Fichero CSV", "*.csv");
 		if (studentsFile != null)
 			try {
 				List<CsvStudent> students = CsvUtils.csvToStudents(studentsFile);
@@ -168,20 +186,6 @@ public class SubmissionController implements Initializable {
 			} catch (IOException | CsvException e1) {
 				Dialogs.error("El fichero CSV no se ha podido abrir", e1);
 			}
-	}
-
-	@FXML
-	private void onSaveResults(ActionEvent e) {
-		saveResults();
-	}
-
-	public void saveResults() {
-		try {
-			JSONUtils.jsonToFile(results.get(), resultsFile);
-			Dialogs.info("Resultados guardados", "Los resultados se han guardado correctamente en '" + resultsFile + "'.");
-		} catch (JsonSyntaxException | JsonIOException | IOException e1) {
-			Dialogs.error("Error guardando resultados en '" + resultsFile.getName() + "'", e1);
-		}
 	}
 
 	public void showConsole() {
