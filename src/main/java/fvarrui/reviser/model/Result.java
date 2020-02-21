@@ -127,8 +127,8 @@ public class Result {
 
 	@Override
 	public String toString() {
-		return "Result [score=" + getScore() + ", name=" + getName() + ", feedback=" + getFeedback() + ", email="
-				+ getEmail() + ", directory=" + getDirectory() + "]";
+		return "Result [score=" + getScore() + "; name=" + getName() + "; feedback=" + getFeedback() + "; email="
+				+ getEmail() + "; directory=" + getDirectory() + "]";
 	}
 
 	public Grade findGradeByCriterion(Long id) {
@@ -180,7 +180,7 @@ public class Result {
 				.stream()
 				.map(Grade::toString)
 				.collect(Collectors.toList());
-		return StringUtils.join(feedback, "\n");
+		return StringUtils.join(feedback, "<br>\n");
 	}
 
 }

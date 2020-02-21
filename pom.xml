@@ -7,7 +7,7 @@
 	<groupId>fvarrui.reviser</groupId>
 	<artifactId>Reviser</artifactId>
 	<version>0.1.0</version>
-	
+
 	<name>Reviser</name>
 	<description>Asistente para la corrección de actividades entregadas en un aula virtual Moodle.</description>
 
@@ -112,10 +112,6 @@
 			<id>jgit</id>
 			<url>https://repo.eclipse.org/content/groups/releases</url>
 		</repository>
-		<repository>
-			<id>bintray</id>
-			<url>http://jcenter.bintray.com</url>
-		</repository>
 	</repositories>
 
 	<build>
@@ -147,7 +143,7 @@
 								<param>jdk.jsobject</param>
 								<param>jdk.unsupported</param>
 								<param>jdk.unsupported.desktop</param>
-								<param> jdk.xml.dom</param>
+								<param>jdk.xml.dom</param>
 							</modules>
 						</configuration>
 					</execution>

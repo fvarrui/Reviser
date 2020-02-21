@@ -48,7 +48,7 @@
 						</Button>
 						<Button fx:id="importEmails" mnemonicParsing="false" onAction="#onImportEmails" prefHeight="32.0" prefWidth="40.0">
 							<graphic>
-								<FontIcon iconLiteral="fas-file-import" iconSize="18" />
+								<FontIcon iconLiteral="fas-at" iconSize="18" />
 							</graphic>
 							<tooltip>
 								<Tooltip text="Importar e-mails desde CSV" />
