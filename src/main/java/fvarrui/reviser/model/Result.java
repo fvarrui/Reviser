@@ -160,14 +160,21 @@ public class Result {
 	}
 	
 	public void fail(String feedback) {
-		resetScore();
 		setFeedback(feedback);
 		setEvaluated(true);
 	}
 	
+	public boolean gradesHasFeedback() {
+		return getGrades().stream().anyMatch(g -> g.getFeedback() != null && !g.getFeedback().isEmpty());
+	}
+	
+	public boolean gradesHasValue() {
+		return getGrades().stream().anyMatch(g -> g.getValue() > 0);		
+	}
+	
 	public String getFullFeedback() {
-		if (getFeedback() != null && !getFeedback().trim().isEmpty()) {
-			return "Comentario general: " + getFeedback();
+		if (!gradesHasFeedback() && !gradesHasValue()) {
+			return getFeedback();
 		}
 		List<String> feedback = getGrades()
 				.stream()

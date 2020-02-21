@@ -179,7 +179,7 @@ public class FormController implements Initializable {
 
 	@FXML
 	private void onClearScore(ActionEvent e) {
-		if (Dialogs.confirm(App.TITLE, "Limpiar las puntuaciones y los comentarios de '" + result.getName() + "'.", "¿Está seguro?")) {
+		if (Dialogs.confirm(App.TITLE, "Limpiar las puntuaciones y los comentarios de '" + result.get().getName() + "'.", "¿Está seguro?")) {
 			result.get().resetScore();
 		}
 	}

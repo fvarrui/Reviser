@@ -2,6 +2,7 @@ package fvarrui.reviser.model;
 
 import com.google.gson.annotations.Expose;
 
+import fvarrui.reviser.utils.StringUtils;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.ObjectProperty;
@@ -108,7 +109,7 @@ public class Grade {
 
 	@Override
 	public String toString() {
-		return getCriterion().getName() + " [Peso: " + getCriterion().getWeight() + ", Nota: " + getValue() + ", Nota ponderada:" + getWeightedValue() + ", Comentario: " + (getFeedback() != null ? getFeedback() : "") + "]";
+		return StringUtils.adjust(getCriterion().getName(), 30) + " [Peso: " + getCriterion().getWeight() + ", Nota: " + getValue() + ", Nota ponderada:" + getWeightedValue() + ", Comentario: " + (getFeedback() != null ? getFeedback() : "") + "]";
 	}	
 
 }
