@@ -130,21 +130,6 @@
 							<bundleJre>true</bundleJre>
 							<organizationName>Francisco Vargas Ruiz</organizationName>
 							<organizationUrl>https://github.com/fvarrui</organizationUrl>
-							<modules>
-								<param>java.base</param>
-								<param>java.datatransfer</param>
-								<param>java.desktop</param>
-								<param>java.logging</param>
-								<param>java.naming</param>
-								<param>java.scripting</param>
-								<param>java.security.jgss</param>
-								<param>java.sql</param>
-								<param>java.xml</param>
-								<param>jdk.jsobject</param>
-								<param>jdk.unsupported</param>
-								<param>jdk.unsupported.desktop</param>
-								<param>jdk.xml.dom</param>
-							</modules>
 						</configuration>
 					</execution>
 				</executions>
