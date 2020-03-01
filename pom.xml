@@ -6,7 +6,7 @@
 
 	<groupId>fvarrui.reviser</groupId>
 	<artifactId>Reviser</artifactId>
-	<version>0.1.0</version>
+	<version>0.2.0</version>
 
 	<name>Reviser</name>
 	<description>Asistente para la corrección de actividades entregadas en un aula virtual Moodle.</description>
