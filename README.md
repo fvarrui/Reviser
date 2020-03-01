@@ -5,7 +5,8 @@ Asistente para la corrección de actividades entregadas a través de un aula vir
 - Permite ejecutar proyectos Maven o abrir otro tipo de entregas con la aplicación asociada disponible en nuestro equipo. Funciona tanto si la entrega ha sido la URL del repositorio Git del proyecto como si se ha subido un fichero comprimido conteniendo la carpeta del proyecto.
 - Permite definir los criterios de calificación así como calificar los proyectos de forma sencilla. 
 - Permite exportar las calificaciones en un fichero CSV con las notas que puede luego importarse a Moodle.
-- *:warning: La aplicación requiere [7-Zip](https://www.7-zip.org/) para poder trabajar con ficheros comprimidos.*
+
+> *:warning: La aplicación requiere [7-Zip](https://www.7-zip.org/) para poder trabajar con ficheros comprimidos.*
 
 ## Descargas
 
