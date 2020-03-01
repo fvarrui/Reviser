@@ -16,6 +16,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.BorderPane;
 
 public class ResultsController implements Initializable {
@@ -83,6 +84,7 @@ public class ResultsController implements Initializable {
 			scoreColumn.setCellValueFactory(v -> v.getValue().scoreProperty());
 			evaluatedColumn.setCellValueFactory(v -> v.getValue().evaluatedProperty());
 			
+			feedbackColumn.setCellFactory(TextFieldTableCell.forTableColumn());
 			evaluatedColumn.setCellFactory(CheckBoxTableCell.forTableColumn(evaluatedColumn));
 
 			// divides table width between the columns

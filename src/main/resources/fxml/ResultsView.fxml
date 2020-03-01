@@ -18,8 +18,8 @@
 								<TableColumn fx:id="nameColumn" editable="false" resizable="false" text="Nombre" />
 								<TableColumn fx:id="emailColumn" editable="false" resizable="false" text="E-mail" />
 								<TableColumn fx:id="directoryColumn" editable="false" resizable="false" text="Directorio" />
-								<TableColumn fx:id="feedbackColumn" editable="false" text="Comentario" />
-								<TableColumn fx:id="evaluatedColumn" editable="false" resizable="false" text="Evaluado" />
+								<TableColumn fx:id="feedbackColumn" editable="true" text="Comentario" />
+								<TableColumn fx:id="evaluatedColumn" editable="true" resizable="false" text="Evaluado" />
 								<TableColumn fx:id="scoreColumn" editable="false" resizable="false" text="Puntuación" />
 							</columns>
 						</TableView>

@@ -1,4 +1,4 @@
-package fvarrui.reviser;
+package fvarrui.reviser.logic;
 
 import java.awt.Desktop;
 import java.io.File;

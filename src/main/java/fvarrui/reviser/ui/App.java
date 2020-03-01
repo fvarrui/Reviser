@@ -68,7 +68,7 @@ public class App extends Application {
 		}
 		primaryStage.setMaximized(Config.getConfig().isMaximized());
 	}
-
+	
 	public static void main(String[] args) {
 		launch(args);
 	}

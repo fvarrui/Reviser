@@ -25,7 +25,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.BorderPane;
 import javafx.util.converter.NumberStringConverter;
 
-public class FormDesignerController implements Initializable {
+public class DesignerController implements Initializable {
 
 	// model
 
@@ -59,8 +59,8 @@ public class FormDesignerController implements Initializable {
 	@FXML
 	private Button removeButton;
 
-	public FormDesignerController() throws IOException {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/FormDesignerView.fxml"));
+	public DesignerController() throws IOException {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DesignerView.fxml"));
 		loader.setController(this);
 		loader.load();
 	}

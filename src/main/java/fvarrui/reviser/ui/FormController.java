@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import fvarrui.reviser.Testing;
+import fvarrui.reviser.logic.Testing;
 import fvarrui.reviser.model.Grade;
 import fvarrui.reviser.model.GradingForm;
 import fvarrui.reviser.model.Result;

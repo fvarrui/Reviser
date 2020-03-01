@@ -38,7 +38,7 @@ public class SubmissionController implements Initializable {
 	// controllers
 
 	private ResultsController resultsController;
-	private FormDesignerController formDesignerController;
+	private DesignerController formDesignerController;
 	private ConsoleController consoleController;
 
 	// model
@@ -78,7 +78,7 @@ public class SubmissionController implements Initializable {
 
 			// creates controllers
 			resultsController = new ResultsController();
-			formDesignerController = new FormDesignerController();
+			formDesignerController = new DesignerController();
 			consoleController = new ConsoleController();
 
 			// set tabs content
@@ -186,6 +186,20 @@ public class SubmissionController implements Initializable {
 			} catch (IOException | CsvException e1) {
 				Dialogs.error("El fichero CSV no se ha podido abrir", e1);
 			}
+	}
+	
+	@FXML
+	private void onEvaluateAll(ActionEvent e) {
+		if (Dialogs.confirm("Evaluar todas las entregas", "Marcando todas las entregas como evaluadas.", "¿Desea continuar?")) {
+			results.get().evaluateAll(true);
+		}
+	}
+	
+	@FXML
+	private void onRemoveSubmission(ActionEvent e) {
+		if (Dialogs.confirm("Eliminar entregas", "Se van a eliminar todas las entregas de la tarea '" + title.get() + "'.", "¿Desea continuar?")) {
+			// TODO
+		}
 	}
 
 	public void showConsole() {

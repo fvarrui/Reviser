@@ -1,5 +1,8 @@
 package fvarrui.reviser.ui;
 
+import static org.apache.commons.io.FileUtils.copyDirectory;
+import static org.apache.commons.io.FileUtils.deleteDirectory;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -12,11 +15,13 @@ import org.codehaus.plexus.util.cli.CommandLineException;
 import fvarrui.reviser.config.Config;
 import fvarrui.reviser.model.Submission;
 import fvarrui.reviser.utils.ZipUtils;
+import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -35,7 +40,7 @@ public class MainController implements Initializable {
 
 	// model
 	
-	private ListProperty<Submission> submissions = new SimpleListProperty<>(FXCollections.observableArrayList()); 
+	private ListProperty<Submission> submissions = new SimpleListProperty<>(FXCollections.observableArrayList());
 	private ObjectProperty<Submission> selectedSubmission = new SimpleObjectProperty<>();
 
 	// view
@@ -69,18 +74,18 @@ public class MainController implements Initializable {
 		
 		try {
 
-			// creates controllers
+			// creates and binds controllers
 			submissionController = new SubmissionController();
+			submissionController.submissionProperty().bind(selectedSubmission);
 		
 			// set submission controller view
 			submissionPane.setCenter(submissionController.getView());
-	
+
 			// binds
 			selectedSubmission.bind(submissionsList.getSelectionModel().selectedItemProperty());
 			noSelectionPane.visibleProperty().bind(selectedSubmission.isNull());
 			submissionPane.visibleProperty().bind(selectedSubmission.isNotNull());
-			submissionsList.itemsProperty().bind(submissions);
-			submissionController.submissionProperty().bind(selectedSubmission);
+			submissionsList.setItems(new SortedList<>(submissions, Submission::compareTo));
 			
 			// refresh submissions
 			refreshSubmissions();
@@ -106,17 +111,39 @@ public class MainController implements Initializable {
 
     @FXML
     private void onImportSubmission(ActionEvent event) {
-		File file = Dialogs.openFile("Importar entregas desde un fichero ZIP descargado de Moodle", "Fichero de entregas", "*.zip");
+    	
+		File file = Dialogs.chooseFileOrFolder();
 		if (file != null) {
-			try {
-				file = ZipUtils.uncompress(file, Config.submissionsDir);
-				Submission s = new Submission(file);
-				submissions.add(new Submission(file));
-				submissionsList.getSelectionModel().select(s);
-			} catch (IOException | CommandLineException e) {
-				Dialogs.error("Error al importar un fichero de entregas", e);
+			
+			if (file.isFile()) {
+				try {
+					file = ZipUtils.uncompress(file, Config.submissionsDir);
+				} catch (IOException | CommandLineException e) {
+					Dialogs.error("Error al importar un fichero de entregas", e);
+					return;
+				}
+			} else if (file.isDirectory()) {
+				try {
+					File destination = new File(Config.submissionsDir, file.getName());
+					copyDirectory(file, destination);
+					if (Dialogs.confirm("Importar directorio de entregas", "Eliminar directorio original", "¿Desea eliminar el directorio '" + file.getAbsolutePath() + "'?")) {
+						deleteDirectory(file);
+					}
+					file = destination;
+				} catch (IOException e) {
+					Dialogs.error("Error al importar un directorio de entregas", e);
+					return;
+				}
 			}
-		} 
+			
+			Submission s = new Submission(file);
+			submissions.add(new Submission(file));
+			submissionsList.getSelectionModel().select(s);
+			
+			Platform.runLater(() -> submissionsList.requestFocus()); 
+			
+		}
+		
 	}
 
     @FXML

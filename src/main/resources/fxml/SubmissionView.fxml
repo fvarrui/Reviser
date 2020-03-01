@@ -13,7 +13,7 @@
 
 <BorderPane fx:id="view" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
 	<center>
-		<TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+		<TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE">
 			<tabs>
 				<Tab fx:id="resultsTab" text="Resultados" />
 				<Tab fx:id="formDesignerTab" text="Diseñar formulario" />
@@ -30,14 +30,30 @@
 					</padding>
 					<children>
 						<Label fx:id="titleLabel" maxWidth="1.7976931348623157E308" styleClass="submission-title" text="&lt;Título de la entrega&gt;" HBox.hgrow="ALWAYS" />
-                  <Button fx:id="openFolder" layoutX="176.0" layoutY="15.0" mnemonicParsing="false" onAction="#onOpenExplorer" prefHeight="32.0" prefWidth="40.0">
+                  <Button fx:id="removeButton" layoutX="176.0" layoutY="15.0" mnemonicParsing="false" onAction="#onRemoveSubmission" prefHeight="32.0" prefWidth="40.0">
                      <graphic>
-                        <FontIcon iconLiteral="far-folder-open" iconSize="18" />
+                        <FontIcon iconLiteral="far-trash-alt" iconSize="18" />
                      </graphic>
                      <tooltip>
-                        <Tooltip text="Abrir carpeta en el explorador del sistema" />
+                        <Tooltip text="Eliminar todas las entregas de esta tarea" />
                      </tooltip>
                   </Button>
+						<Button fx:id="evaluateAllButton" layoutX="176.0" layoutY="15.0" mnemonicParsing="false" onAction="#onEvaluateAll" prefHeight="32.0" prefWidth="40.0">
+							<graphic>
+								<FontIcon iconLiteral="far-check-square" iconSize="18" />
+							</graphic>
+							<tooltip>
+								<Tooltip text="Marcas todas las entregas como evaluadas" />
+							</tooltip>
+						</Button>
+						<Button fx:id="openFolder" layoutX="176.0" layoutY="15.0" mnemonicParsing="false" onAction="#onOpenExplorer" prefHeight="32.0" prefWidth="40.0">
+							<graphic>
+								<FontIcon iconLiteral="far-folder-open" iconSize="18" />
+							</graphic>
+							<tooltip>
+								<Tooltip text="Abrir carpeta en el explorador del sistema" />
+							</tooltip>
+						</Button>
 						<Button fx:id="exportResults" mnemonicParsing="false" onAction="#onExportResults" prefHeight="32.0" prefWidth="40.0">
 							<graphic>
 								<FontIcon iconLiteral="fas-file-export" iconSize="18" />

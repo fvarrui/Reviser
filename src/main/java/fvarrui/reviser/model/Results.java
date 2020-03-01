@@ -82,9 +82,21 @@ public class Results {
 	
 	public void initGradingForm() {
 		if (getForm() == null) {
+			
+			Criterion criterion = new Criterion(0L, "General", 100.0);
+			
 			GradingForm form = new GradingForm();
-			form.getCriteria().add(new Criterion(0L, "General", 100.0));
+			form.getCriteria().add(criterion);
 			setForm(form);
+			
+			// migrate data from old version to new version
+			getResults().stream().forEach(r -> {
+				Grade grade = new Grade(criterion);
+				grade.setValue(r.getScore());
+				grade.setFeedback(r.getFeedback());
+				r.getGrades().setAll(grade);
+			});
+			
 		}		
 	}
 	
@@ -97,11 +109,15 @@ public class Results {
 			this.updateScores();
 		}));
 	}
+
+	public static Results load(File resultsFile) throws JsonSyntaxException, JsonIOException, IOException {
+		return JSONUtils.loadFromJson(resultsFile, Results.class);
+	}
 	
 	public static Results load(File resultsFile, File submissionsDir) {
 		Results results = null;
 		try {
-			results = JSONUtils.loadFromJson(resultsFile, Results.class);
+			results = load(resultsFile);
 		} catch (JsonSyntaxException | JsonIOException | IOException e) {
 			results = new Results();
 		}
@@ -147,6 +163,10 @@ public class Results {
 	
 	public void updateScores() {
 		getResults().stream().forEach(Result::updateScore);
+	}
+	
+	public void evaluateAll(boolean newValue) {
+		getResults().stream().forEach(r -> r.setEvaluated(newValue));
 	}
 	
 }

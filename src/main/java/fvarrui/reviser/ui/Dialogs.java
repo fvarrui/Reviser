@@ -19,17 +19,17 @@ public class Dialogs {
 	
 	public static File chooseFileOrFolder() {
 		CommandLinksDialog dialog = new CommandLinksDialog(
-				new CommandLinksButtonType("Directorio de entregas", "Abrir directamente un directorio de entregas.", true),				
-				new CommandLinksButtonType("Fichero de entregas", "Abrir desde un fichero ZIP con las entregas descargadas de Moodle.", false)
+				new CommandLinksButtonType("Directorio de entregas", "Importar directamente un directorio de entregas.", true),				
+				new CommandLinksButtonType("Fichero de entregas", "Importar desde un fichero ZIP con las entregas descargadas de Moodle.", false)
 				);
 		dialog.initOwner(App.primaryStage);
 		dialog.setTitle(App.TITLE);
-		dialog.setHeaderText("Seleccione desde donde quiere cargar las entregas a corregir");
+		dialog.setHeaderText("Seleccione desde donde quiere importar las entregas");
 		Optional<ButtonType> result = dialog.showAndWait();
 		if (result.get().getButtonData() == ButtonData.OK_DONE) {
-			return openFolder("Abrir un directorio de entregas");
+			return openFolder("Importar un directorio de entregas");
 		} else if (result.get().getButtonData() == ButtonData.OTHER)  { 
-			return openFile("Abrir un fichero ZIP con entregas descargado de Moodle", "Fichero de entregas", "*.zip");
+			return openFile("Importar un fichero ZIP con entregas descargado de Moodle", "Fichero de entregas", "*.zip");
 		}
 		return null;
 	}
@@ -39,7 +39,7 @@ public class Dialogs {
 		chooser.setInitialDirectory(new File(Config.getConfig().getLastDirectory()));
 		chooser.setTitle(title);
 		File directory = chooser.showDialog(App.primaryStage);
-		if (directory != null) Config.getConfig().setLastDirectory(directory.getAbsolutePath());		
+		if (directory != null) Config.getConfig().setLastDirectory(directory.getParentFile().getAbsolutePath());		
 		return directory;
 	}
 
