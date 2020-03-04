@@ -180,7 +180,7 @@ public class Result {
 				.stream()
 				.map(Grade::toString)
 				.collect(Collectors.toList());
-		return StringUtils.join(feedback, "<br>\n");
+		return "<p>" + StringUtils.join(feedback, "</p><p>") + "</p>";
 	}
 
 }

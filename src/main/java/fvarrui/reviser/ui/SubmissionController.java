@@ -197,9 +197,7 @@ public class SubmissionController implements Initializable {
 	
 	@FXML
 	private void onRemoveSubmission(ActionEvent e) {
-		if (Dialogs.confirm("Eliminar entregas", "Se van a eliminar todas las entregas de la tarea '" + title.get() + "'.", "¿Desea continuar?")) {
-			// TODO
-		}
+		App.mainController.removeSubmission(getSubmission());
 	}
 
 	public void showConsole() {

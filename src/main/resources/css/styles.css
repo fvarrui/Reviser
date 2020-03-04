@@ -27,5 +27,6 @@
 }
 
 .no-selection-label {
-	-fx-text-fill: white;
+	-fx-font-weight: bold;
+	-fx-text-fill: orange;
 }

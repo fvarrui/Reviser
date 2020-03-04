@@ -60,21 +60,21 @@
 		<StackPane>
 			<children>
 				<BorderPane fx:id="submissionPane" />
-				<VBox fx:id="noSelectionPane" alignment="CENTER" spacing="5.0" styleClass="no-selection-pane">
+				<VBox fx:id="noSelectionPane" alignment="CENTER" spacing="15.0" styleClass="no-selection-pane">
 					<children>
-						<FontIcon iconColor="WHITE" iconLiteral="fas-skull-crossbones" iconSize="64">
+						<FontIcon iconColor="ORANGE" iconLiteral="fas-exclamation-circle" iconSize="64">
 							<effect>
 								<DropShadow offsetX="5.0" offsetY="3.0" />
 							</effect>
 						</FontIcon>
-						<Label styleClass="no-selection-label" text="Seleccione un directorio de entregas en el panel de la izquierda">
+						<Label contentDisplay="CENTER" styleClass="no-selection-label" text="Seleccione un directorio de entregas en el panel de la izquierda" textAlignment="CENTER">
 							<effect>
 								<DropShadow offsetX="5.0" offsetY="3.0" />
 							</effect>
 						</Label>
 					</children>
                <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                </padding>
 				</VBox>
 			</children>
