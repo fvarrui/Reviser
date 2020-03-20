@@ -11,7 +11,6 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
-import org.codehaus.plexus.util.cli.CommandLineException;
 
 import io.github.fvarrui.reviser.config.Config;
 import io.github.fvarrui.reviser.model.Submission;
@@ -114,7 +113,7 @@ public class MainController implements Initializable {
 			if (file.isFile()) {
 				try {
 					file = ZipUtils.uncompress(file, Config.submissionsDir);
-				} catch (IOException | CommandLineException e) {
+				} catch (Exception e) {
 					Dialogs.error("Error al importar un fichero de entregas", e);
 					return;
 				}
