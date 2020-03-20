@@ -9,13 +9,13 @@
 	<version>0.2.0</version>
 
 	<name>Reviser</name>
-	<description>Asistente para la corrección de actividades entregadas en un aula virtual Moodle.</description>
+	<description>Asistente para la corrección de entregas realizadas en un aula virtual Moodle.</description>
 
 	<properties>
 		<maven.compiler.target>11</maven.compiler.target>
 		<maven.compiler.source>11</maven.compiler.source>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<exec.mainClass>fvarrui.reviser.Main</exec.mainClass>
+		<exec.mainClass>io.github.fvarrui.reviser.Main</exec.mainClass>
 	</properties>
 
 	<dependencies>
@@ -117,9 +117,9 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>fvarrui.maven</groupId>
+				<groupId>io.github.fvarrui</groupId>
 				<artifactId>javapackager</artifactId>
-				<version>0.8.9</version>
+				<version>0.9.4</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
