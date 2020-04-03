@@ -100,14 +100,19 @@ public class SubmissionController implements Initializable {
 		}
 		
 		App.primaryStage.setOnCloseRequest(e -> {
-			try {
-				if (this.resultsFile != null && this.results.get() != null)
-					this.results.get().save(resultsFile);
-			} catch (JsonSyntaxException | JsonIOException | IOException e1) {
-				Dialogs.error("Error al guardar los resultados", e1);
-			}
+			saveResults();
 		});
 
+	}
+
+	public void saveResults() {
+		try {
+			System.out.println("guardando resultados al salir en " + resultsFile);
+			if (this.resultsFile != null && this.results.get() != null)
+				this.results.get().save(resultsFile);
+		} catch (JsonSyntaxException | JsonIOException | IOException e1) {
+			Dialogs.error("No se pudieron guardar los resultados en el fichero '" + resultsFile + "'", e1);
+		}
 	}
 
 	private void onSubmissionChanged(ObservableValue<? extends Submission> o, Submission ov, Submission nv) {
@@ -117,11 +122,7 @@ public class SubmissionController implements Initializable {
 		System.out.println("cambiando desde " + desde + " a " + hasta);
 		
 		if (ov != null) {
-			try {
-				results.get().save(resultsFile);
-			} catch (JsonSyntaxException | JsonIOException | IOException e) {
-				Dialogs.error("No se pudieron guardar los resultados en el fichero '" + resultsFile + "'", e);
-			}
+			saveResults();
 		}
 		
 		if (nv != null) {
@@ -146,11 +147,14 @@ public class SubmissionController implements Initializable {
 			title.set("");
 	
 			// unsets results
+			resultsFile = null;
 			results.set(null);
 	
-			// unbinds 
+			// unbinds results view
 			resultsController.setSubmissionsDir(null);
 			resultsController.resultsProperty().unbind();
+			
+			// unbinds form designer view
 			formDesignerController.resultsProperty().unbind();
 			
 		}

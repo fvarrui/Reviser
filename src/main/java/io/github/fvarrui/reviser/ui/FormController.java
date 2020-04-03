@@ -173,7 +173,7 @@ public class FormController implements Initializable {
 			App.console.println(event.getSource().getException());
 			result.get().fail(event.getSource().getException().getMessage());
 		});
-		SubmissionController.me.showConsole();
+//		SubmissionController.me.showConsole(); // FIXME temporarily disabled 
 		new Thread(task).start();
 	}
 

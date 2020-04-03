@@ -41,6 +41,12 @@ public class CsvUtils {
 				.withSeparator(SEPARATOR)
 				.build();
 		List<CsvStudent> students = cb.parse();
+		
+		students.forEach(s -> {
+			s.setName(s.getName().trim());
+			s.setSurname(s.getSurname().trim());
+		});
+		
 	    reader.close();
 	    
 	    return students;

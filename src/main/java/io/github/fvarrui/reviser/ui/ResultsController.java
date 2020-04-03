@@ -85,6 +85,7 @@ public class ResultsController implements Initializable {
 			evaluatedColumn.setCellValueFactory(v -> v.getValue().evaluatedProperty());
 			
 			feedbackColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+			emailColumn.setCellFactory(TextFieldTableCell.forTableColumn());
 			evaluatedColumn.setCellFactory(CheckBoxTableCell.forTableColumn(evaluatedColumn));
 
 			// divides table width between the columns
@@ -101,7 +102,7 @@ public class ResultsController implements Initializable {
 			// form controller bindings
 			formController.submissionsDirProperty().bind(submissionsDir);
 			formController.resultProperty().bind(resultsTable.getSelectionModel().selectedItemProperty());
-
+			
 		} catch (IOException e) {
 
 			e.printStackTrace();
@@ -112,12 +113,13 @@ public class ResultsController implements Initializable {
 	}
 
 	private void onResultsChanged(ObservableValue<? extends Results> o, Results ov, Results nv) {
+		resultsTable.getSelectionModel().clearSelection();
 		if (ov != null) {
 			resultsTable.itemsProperty().unbind();
 			formController.formProperty().unbind();
-			resultsTable.getSelectionModel().clearSelection();
 		}
 		if (nv != null) {
+			resultsTable.getItems().clear();
 			resultsTable.itemsProperty().bind(nv.resultsProperty());
 			formController.formProperty().bind(nv.formProperty());
 		}

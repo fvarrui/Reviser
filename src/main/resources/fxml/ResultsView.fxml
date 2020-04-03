@@ -16,7 +16,7 @@
 						<TableView fx:id="resultsTable" editable="true" layoutX="287.0" layoutY="31.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 							<columns>
 								<TableColumn fx:id="nameColumn" editable="false" resizable="false" text="Nombre" />
-								<TableColumn fx:id="emailColumn" editable="false" resizable="false" text="E-mail" />
+								<TableColumn fx:id="emailColumn" editable="true" resizable="false" text="E-mail" />
 								<TableColumn fx:id="directoryColumn" editable="false" resizable="false" text="Directorio" />
 								<TableColumn fx:id="feedbackColumn" editable="true" text="Comentario" />
 								<TableColumn fx:id="evaluatedColumn" editable="true" resizable="false" text="Evaluado" />
