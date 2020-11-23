@@ -91,6 +91,7 @@ public class DesignerController implements Initializable {
 	private void onResultsChanged(ObservableValue<? extends Results> o, Results ov, Results nv) {
 		if (ov != null) {
 			formTable.itemsProperty().unbind();
+			formTable.itemsProperty().get().clear();
 		}
 		if (nv != null) {
 			formTable.itemsProperty().bind(nv.getForm().criteriaProperty());

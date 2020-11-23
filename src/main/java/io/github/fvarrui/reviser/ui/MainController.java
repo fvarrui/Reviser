@@ -29,6 +29,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SplitPane;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
@@ -109,37 +112,41 @@ public class MainController implements Initializable {
 
 		File file = Dialogs.chooseFileOrFolder();
 		if (file != null) {
-
-			if (file.isFile()) {
-				try {
-					file = ZipUtils.uncompress(file, Config.submissionsDir);
-				} catch (Exception e) {
-					Dialogs.error("Error al importar un fichero de entregas", e);
-					return;
-				}
-			} else if (file.isDirectory()) {
-				try {
-					File destination = new File(Config.submissionsDir, file.getName());
-					copyDirectory(file, destination);
-					if (Dialogs.confirm("Importar directorio de entregas", "Eliminar directorio original",
-							"¿Desea eliminar el directorio '" + file.getAbsolutePath() + "'?")) {
-						deleteDirectory(file);
-					}
-					file = destination;
-				} catch (IOException e) {
-					Dialogs.error("Error al importar un directorio de entregas", e);
-					return;
-				}
-			}
-
-			Submission s = new Submission(file);
-			submissions.add(new Submission(file));
-			submissionsList.getSelectionModel().select(s);
-
-			Platform.runLater(() -> submissionsList.requestFocus());
-
+			importSubmission(file);
 		}
 
+	}
+
+	private boolean importSubmission(File file) {
+		if (file.isFile()) {
+			try {
+				file = ZipUtils.uncompress(file, Config.submissionsDir);
+			} catch (Exception e) {
+				Dialogs.error("Error al importar un fichero de entregas", e);
+				return false;
+			}
+		} else if (file.isDirectory()) {
+			try {
+				File destination = new File(Config.submissionsDir, file.getName());
+				copyDirectory(file, destination);
+				if (Dialogs.confirm("Importar directorio de entregas", "Eliminar directorio original",
+						"¿Desea eliminar el directorio '" + file.getAbsolutePath() + "'?")) {
+					deleteDirectory(file);
+				}
+				file = destination;
+			} catch (IOException e) {
+				Dialogs.error("Error al importar un directorio de entregas", e);
+				return false;
+			}
+		}
+
+		Submission s = new Submission(file);
+		submissions.add(new Submission(file));
+		submissionsList.getSelectionModel().select(s);
+
+		Platform.runLater(() -> submissionsList.requestFocus());
+		
+		return true;
 	}
 
 	@FXML
@@ -161,5 +168,25 @@ public class MainController implements Initializable {
 				Dialogs.error("Error al eliminar la entrega '" + title + "'.", e);
 			}
 	}
+	
+    @FXML
+    void onSubmissionsListDragDropped(DragEvent event) {
+        Dragboard db = event.getDragboard();
+        boolean success = false;
+        if (db.hasFiles()) {
+        	db.getFiles().forEach(f -> importSubmission(f));
+            success = true;
+        }
+        event.setDropCompleted(success);
+        event.consume();
+    }
+
+    @FXML
+    void onSubmissionsListDragOver(DragEvent event) {
+        if (event.getGestureSource() != submissionsList && event.getDragboard().hasFiles()) {
+            event.acceptTransferModes(TransferMode.COPY);
+        }
+        event.consume();
+    }
 
 }

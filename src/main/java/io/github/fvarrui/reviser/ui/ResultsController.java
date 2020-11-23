@@ -116,7 +116,10 @@ public class ResultsController implements Initializable {
 		resultsTable.getSelectionModel().clearSelection();
 		if (ov != null) {
 			resultsTable.itemsProperty().unbind();
+			resultsTable.itemsProperty().get().clear();
+			
 			formController.formProperty().unbind();
+			
 		}
 		if (nv != null) {
 			resultsTable.getItems().clear();

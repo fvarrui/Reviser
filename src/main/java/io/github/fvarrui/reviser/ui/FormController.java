@@ -138,11 +138,15 @@ public class FormController implements Initializable {
 
 	private void onResultChanged(ObservableValue<? extends Result> o, Result ov, Result nv) {
 		if (ov != null) {
+			
 			grades.stream().forEach(g -> g.valueProperty().removeListener(listener));
 			grades.unbind();
+			grades.get().clear();
+			
 			name.unbind();
 			score.unbind();
 			evaluated.unbindBidirectional(ov.evaluatedProperty());
+			
 		}
 		if (nv != null) {
 			grades.bind(nv.gradesProperty());
@@ -151,7 +155,6 @@ public class FormController implements Initializable {
 			score.bind(nv.scoreProperty());
 			evaluated.bindBidirectional(nv.evaluatedProperty());
 		} else {
-			grades.clear();
 			name.set("");
 			score.set(0);
 			evaluated.set(false);
@@ -173,7 +176,7 @@ public class FormController implements Initializable {
 			App.console.println(event.getSource().getException());
 			result.get().fail(event.getSource().getException().getMessage());
 		});
-//		SubmissionController.me.showConsole(); // FIXME temporarily disabled 
+		SubmissionController.me.showConsole(); 
 		new Thread(task).start();
 	}
 

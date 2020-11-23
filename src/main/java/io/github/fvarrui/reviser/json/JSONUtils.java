@@ -1,9 +1,8 @@
 package io.github.fvarrui.reviser.json;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.FileUtils;
 import org.hildan.fxgson.FxGson;
@@ -32,7 +31,8 @@ public class JSONUtils {
 	 * @throws IOException
 	 */
 	public static <T> T loadFromJson(File jsonFile, Class<T> type) throws JsonSyntaxException, JsonIOException, IOException {
-		return gson.fromJson(new FileReader(jsonFile, Charset.forName("UTF-8")), type);
+		String jsonString = FileUtils.readFileToString(jsonFile, StandardCharsets.UTF_8);
+		return gson.fromJson(jsonString, type);
 	}
 	
 	/**
@@ -45,7 +45,7 @@ public class JSONUtils {
 	 */
 	public static void jsonToFile(Object object, File jsonFile) throws JsonSyntaxException, JsonIOException, IOException {
 		String jsonString = gson.toJson(object, object.getClass());
-		FileUtils.writeStringToFile(jsonFile, jsonString, Charset.forName("UTF-8"));
+		FileUtils.writeStringToFile(jsonFile, jsonString, StandardCharsets.UTF_8);
 	}
 	
 }

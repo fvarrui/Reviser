@@ -19,7 +19,7 @@
 	<items>
 		<BorderPane maxWidth="300.0" minWidth="300.0">
 			<center>
-				<ListView fx:id="submissionsList" BorderPane.alignment="CENTER" />
+				<ListView fx:id="submissionsList" onDragDropped="#onSubmissionsListDragDropped" onDragOver="#onSubmissionsListDragOver" BorderPane.alignment="CENTER" />
 			</center>
 			<padding>
 				<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
