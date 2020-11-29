@@ -1,10 +1,10 @@
 .console-text {
-	-fx-text-fill: white;
+	-fx-text-fill: black;
 	-fx-font-family: monospace;
 	-fx-font-size: 10pt;
 }
 .console-text .content {
-	-fx-background-color: black
+	-fx-background-color: white
 }
 
 .student-name {

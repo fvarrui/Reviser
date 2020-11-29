@@ -4,7 +4,10 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ResourceBundle;
+
+import org.apache.commons.io.FileUtils;
 
 import io.github.fvarrui.reviser.logic.Testing;
 import io.github.fvarrui.reviser.model.Grade;
@@ -40,6 +43,10 @@ import javafx.scene.layout.VBox;
 import javafx.util.converter.NumberStringConverter;
 
 public class FormController implements Initializable {
+	
+	// controllers
+	
+	private ConsoleController consoleController;
 	
 	// model
 	
@@ -137,23 +144,28 @@ public class FormController implements Initializable {
 	}
 
 	private void onResultChanged(ObservableValue<? extends Result> o, Result ov, Result nv) {
+		System.out.println("onResultChanged(ov=" + ov + "/nv=" + nv + ")");
+		
 		if (ov != null) {
 			
 			grades.stream().forEach(g -> g.valueProperty().removeListener(listener));
-			grades.unbind();
-			grades.get().clear();
+			grades.set(null);
 			
 			name.unbind();
 			score.unbind();
 			evaluated.unbindBidirectional(ov.evaluatedProperty());
 			
 		}
+		
 		if (nv != null) {
-			grades.bind(nv.gradesProperty());
+			
+			grades.set(nv.getGrades());
 			grades.stream().forEach(g -> g.valueProperty().addListener(listener));
+			
 			name.bind(nv.nameProperty());
 			score.bind(nv.scoreProperty());
 			evaluated.bindBidirectional(nv.evaluatedProperty());
+			
 		} else {
 			name.set("");
 			score.set(0);
@@ -168,10 +180,15 @@ public class FormController implements Initializable {
 		Task<Void> task = new Task<Void>() {
 			@Override
 			protected Void call() throws Exception {
-				Testing.run("", new File(getSubmissionsDir(), getResult().getDirectory()));
+				File inputFile = new File(getSubmissionsDir(), "input.txt");
+				String input = inputFile.exists() ? FileUtils.readFileToString(inputFile, StandardCharsets.UTF_8) : "";
+				Testing.run(input, new File(getSubmissionsDir(), getResult().getDirectory()));
 				return null;
 			}
 		};
+		task.setOnScheduled(event -> {
+			consoleController.clearConsole();
+		});
 		task.setOnFailed(event -> {
 			App.console.println(event.getSource().getException());
 			result.get().fail(event.getSource().getException().getMessage());
@@ -195,6 +212,12 @@ public class FormController implements Initializable {
 		} catch (IOException e1) {
 			Dialogs.error("Error al abrir la carpeta '" + folder + "' en el explorador de archivos del sistema", e1);
 		}
+	}
+	
+	@FXML
+	private void onPerfect(ActionEvent e) {
+		getResult().setEvaluated(true);
+		getResult().getGrades().forEach(g -> g.setValue(100));
 	}
 
 	// getters and setters
@@ -237,6 +260,10 @@ public class FormController implements Initializable {
 
 	public final void setSubmissionsDir(final File submissionsDir) {
 		this.submissionsDirProperty().set(submissionsDir);
+	}
+	
+	public void setConsoleController(ConsoleController consoleController) {
+		this.consoleController = consoleController;
 	}
 
 }

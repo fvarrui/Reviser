@@ -26,12 +26,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
 
 public class SubmissionController implements Initializable {
 	
@@ -79,9 +77,11 @@ public class SubmissionController implements Initializable {
 		try {
 
 			// creates controllers
-			resultsController = new ResultsController();
 			formDesignerController = new DesignerController();
 			consoleController = new ConsoleController();
+			resultsController = new ResultsController();
+			
+			resultsController.getFormController().setConsoleController(consoleController);
 
 			// set tabs content
 			resultsTab.setContent(resultsController.getView());

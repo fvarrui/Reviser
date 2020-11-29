@@ -155,5 +155,9 @@ public class ResultsController implements Initializable {
 	public final void setResults(final Results results) {
 		this.resultsProperty().set(results);
 	}
+	
+	public FormController getFormController() {
+		return formController;
+	}
 
 }

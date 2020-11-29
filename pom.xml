@@ -87,13 +87,13 @@
 		<dependency>
 			<groupId>org.kordamp.ikonli</groupId>
 			<artifactId>ikonli-javafx</artifactId>
-			<version>11.3.5</version>
+			<version>12.0.0</version>
 		</dependency>
 		<dependency>
 			<!-- available icons list: http://kordamp.org/ikonli/cheat-sheet-fontawesome5.html -->
 			<groupId>org.kordamp.ikonli</groupId>
 			<artifactId>ikonli-fontawesome5-pack</artifactId>
-			<version>11.3.5</version>
+			<version>12.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.junrar</groupId>
@@ -124,7 +124,7 @@
 			<plugin>
 				<groupId>io.github.fvarrui</groupId>
 				<artifactId>javapackager</artifactId>
-				<version>1.2.0</version>
+				<version>1.4.1</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -135,6 +135,7 @@
 							<bundleJre>true</bundleJre>
 							<organizationName>Francisco Vargas Ruiz</organizationName>
 							<organizationUrl>https://github.com/fvarrui</organizationUrl>
+							<createZipball>true</createZipball>
 						</configuration>
 					</execution>
 				</executions>
