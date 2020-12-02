@@ -3,6 +3,7 @@ package io.github.fvarrui.reviser.logic;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
@@ -60,22 +61,45 @@ public class Testing {
 		if (submittedFile.getName().equals("onlinetext.html")) {
 			
 			App.console.println("--- El envío es texto en línea: " + submittedFile.getName());
-			
-			String repoUrl = URLUtils.extractUrl(submittedFile);
 
-			App.console.println("--- URL extraída de la entrega: " + repoUrl);
+			// comprueba si la entrega es una URL 
+			String url = URLUtils.extractUrl(submittedFile);
+			if (url != null) { 
 			
-			submittedFile.delete();
-			
-			// clone git repo
-			App.console.println("--- Clonando repositorio GIT desde " + repoUrl + " en " + submittedFile.getParentFile());
-			try {				
-				submittedFile = GitUtils.clone(repoUrl, submittedFile.getParentFile());
-			} catch (Exception e) {
-				System.out.println("Error cloning project: " + e.getMessage());
-				throw e;
+				App.console.println("--- URL extraída de la entrega: " + url);
+
+				// comprueba si la URL es un repo de GitHub
+				if (url.startsWith("https://github.com")) {
+					
+					// si es un repo de github, lo clona
+					
+					App.console.println("--- La entrega es un repositorio de GitHub");
+					App.console.println("--- Clonando repositorio GIT desde " + url + " en " + submittedFile.getParentFile() + "...");
+					
+					try {				
+						
+						// clone git repo
+						submittedFile = GitUtils.clone(url, submittedFile.getParentFile());
+						
+						// elimina el fichero del envío
+						submittedFile.delete();
+						
+					} catch (Exception e) {
+						App.console.println("Error cloning project: " + e.getMessage());
+						throw e;
+					}			
+					
+				} else {
+
+					App.console.println("--- Abriendo URL en el navegador ...");
+					
+					// si no es un repo, abre la URL en el navegador predeterminado
+					Desktop.getDesktop().browse(URLUtils.toURL(url).toURI());
+					
+				}
+				
 			}
-			
+						
 		}
 		
 		// busca el proyecto maven de forma recursiva

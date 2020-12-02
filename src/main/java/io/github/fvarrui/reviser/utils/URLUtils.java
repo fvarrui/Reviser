@@ -2,6 +2,8 @@ package io.github.fvarrui.reviser.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,6 +45,28 @@ public class URLUtils {
 			e.printStackTrace();
 		}
 		return null;		
+	}
+	
+	/**
+	 * Check if is a valid URL
+	 * @param urlString url to be checked
+	 * @return true if is a valid URL
+	 */
+	public static boolean isUrl(String urlString) {
+		return toURL(urlString) != null; 
+	}
+	
+	/**
+	 * Converts a string to an URL
+	 * @param urlString string containing an URL
+	 * @return URL
+	 */
+	public static URL toURL(String urlString) {
+		try {
+			return new URL(urlString);
+		} catch (MalformedURLException e) {
+			return null;
+		}
 	}
 
 }
