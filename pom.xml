@@ -124,7 +124,7 @@
 			<plugin>
 				<groupId>io.github.fvarrui</groupId>
 				<artifactId>javapackager</artifactId>
-				<version>1.4.1</version>
+				<version>1.4.2</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -132,10 +132,14 @@
 							<goal>package</goal>
 						</goals>
 						<configuration>
+							<version>amd64</version>
 							<bundleJre>true</bundleJre>
 							<organizationName>Francisco Vargas Ruiz</organizationName>
 							<organizationUrl>https://github.com/fvarrui</organizationUrl>
 							<createZipball>true</createZipball>
+							<winConfig>
+								<generateMsi>false</generateMsi>
+							</winConfig>
 						</configuration>
 					</execution>
 				</executions>
