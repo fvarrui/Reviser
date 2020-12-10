@@ -67,7 +67,7 @@ public class Testing {
 			if (url != null) { 
 			
 				App.console.println("--- URL extraída de la entrega: " + url);
-
+				
 				// comprueba si la URL es un repo de GitHub
 				if (url.startsWith("https://github.com")) {
 					
@@ -78,11 +78,13 @@ public class Testing {
 					
 					try {				
 						
+						File originalFile = submittedFile;
+						
 						// clone git repo
 						submittedFile = GitUtils.clone(url, submittedFile.getParentFile());
 						
 						// elimina el fichero del envío
-						submittedFile.delete();
+						originalFile.delete();
 						
 					} catch (Exception e) {
 						App.console.println("Error cloning project: " + e.getMessage());
@@ -112,9 +114,9 @@ public class Testing {
 
 			App.console.println("--- Encontrado fichero pom.xml en el proyecto. Se trata de un repositorio Maven: " + mavenProject.getName());
 			
-			if (Arrays.asList(mavenProject.list()).contains(".git")) {
-				App.console.println("--- Haciendo pull al repositorio GIT en " + mavenProject.getName());
-				GitUtils.pull(mavenProject);
+			if (Arrays.asList(submittedFile.list()).contains(".git")) {
+				App.console.println("--- Haciendo pull al repositorio GIT en " + submittedFile.getName());
+				GitUtils.pull(submittedFile);
 			}
 			
 			App.console.println("--- Compilando y ejecutando con Maven: " + mavenProject.getName());

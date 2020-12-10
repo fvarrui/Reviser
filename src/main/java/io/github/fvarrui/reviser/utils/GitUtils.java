@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.PullCommand;
 
 public class GitUtils {
 
@@ -15,7 +16,8 @@ public class GitUtils {
 	public static void pull(File repoDir) throws Exception {
 				
 		Git repo = Git.open(repoDir);
-		repo.pull();
+		PullCommand pull = repo.pull();
+		pull.call();
 		repo.getRepository().close();
 		
 	}
