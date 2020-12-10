@@ -18,9 +18,9 @@ jobs:
       run: mvn -B package
     - uses: actions/upload-artifact@v2
       with:
-        name: Installer
-        path: target/Reviser_amd64.exe
+        name: Windows Installer
+        path: target/Reviser*.exe
     - uses: actions/upload-artifact@v2
       with:
-        name: Portable
-        path: target/Reviser-amd64-windows.zip
+        name: Windows Portable App
+        path: target/Reviser*.zip
