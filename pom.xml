@@ -6,7 +6,7 @@
 
 	<groupId>fvarrui.reviser</groupId>
 	<artifactId>Reviser</artifactId>
-	<version>0.3.0</version>
+	<version>0.4.0</version>
 
 	<name>Reviser</name>
 	<description>Asistente para la corrección de entregas realizadas en un aula virtual Moodle.</description>
@@ -70,6 +70,11 @@
 			<version>2.6</version>
 		</dependency>
 		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.8.0</version>
+		</dependency>
+		<dependency>
 			<groupId>org.codehaus.plexus</groupId>
 			<artifactId>plexus-utils</artifactId>
 			<version>3.3.0</version>
@@ -109,6 +114,11 @@
 			<groupId>net.lingala.zip4j</groupId>
 			<artifactId>zip4j</artifactId>
 			<version>2.2.7</version>
+		</dependency>
+		<dependency>
+			<groupId>io.github.java-diff-utils</groupId>
+			<artifactId>java-diff-utils</artifactId>
+			<version>4.5</version>
 		</dependency>
 	</dependencies>
 
