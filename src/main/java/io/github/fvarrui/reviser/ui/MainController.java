@@ -14,7 +14,7 @@ import org.apache.commons.io.FileUtils;
 
 import io.github.fvarrui.reviser.config.Config;
 import io.github.fvarrui.reviser.model.Submission;
-import io.github.fvarrui.reviser.utils.ZipUtils;
+import io.github.fvarrui.reviser.utils.CompressionUtils;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
@@ -120,7 +120,7 @@ public class MainController implements Initializable {
 	private boolean importSubmission(File file) {
 		if (file.isFile()) {
 			try {
-				file = ZipUtils.uncompress(file, Config.submissionsDir);
+				file = CompressionUtils.decompress(file, Config.submissionsDir);
 			} catch (Exception e) {
 				Dialogs.error("Error al importar un fichero de entregas", e);
 				return false;

@@ -40,7 +40,7 @@ public class MessageConsumer extends AnimationTimer {
 	}
 	
 	public void println(Throwable t) {
-		print(ExceptionUtils.getStackTrace(t) + "\n");
+		println(ExceptionUtils.getStackTrace(t));
 	}
 
 }

@@ -9,10 +9,10 @@ import java.util.ResourceBundle;
 
 import org.apache.commons.io.FileUtils;
 
-import io.github.fvarrui.reviser.logic.Testing;
 import io.github.fvarrui.reviser.model.Grade;
 import io.github.fvarrui.reviser.model.GradingForm;
 import io.github.fvarrui.reviser.model.Result;
+import io.github.fvarrui.reviser.test.Testing;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ListProperty;

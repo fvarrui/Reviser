@@ -31,7 +31,6 @@ public class MavenUtils {
 		request.setGoals(Collections.singletonList(goal));
 
 		InvocationOutputHandler handler = line -> {
-//			if (line.startsWith("[INFO]") || line.startsWith("[WARNING]") || line.startsWith("[WARN]")) return;
 			App.console.println(line);
 		};
 		

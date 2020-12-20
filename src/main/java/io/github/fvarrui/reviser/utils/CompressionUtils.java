@@ -3,6 +3,8 @@ package io.github.fvarrui.reviser.utils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZFile;
@@ -14,22 +16,28 @@ import com.github.junrar.exception.RarException;
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 
-public class ZipUtils {
+public class CompressionUtils {
 	
-	public static File uncompress(File compressedFile, File destination) throws IOException {
+	private static final List<String> COMPRESSED_FORMATS = Arrays.asList("zip", "7z", "rar");
+
+	public static boolean isCompressedFile(File file) {
+		return COMPRESSED_FORMATS.contains(FilenameUtils.getExtension(file.getName().toLowerCase()));
+	}
+
+	public static File decompress(File compressedFile, File destination) throws IOException {
 		destination = new File(destination, FilenameUtils.getBaseName(compressedFile.getName()));
 		extract(compressedFile, destination);
 		return destination;
 	}
 	
-	public static File uncompress(File compressedFile, boolean createParentFolder) throws IOException {
+	public static File decompress(File compressedFile, boolean createParentFolder) throws IOException {
 		File destination = createParentFolder ? new File(compressedFile.getParentFile(), FilenameUtils.getBaseName(compressedFile.getName())) : compressedFile.getParentFile();
 		extract(compressedFile, destination);
 		return destination;
 	}
 	
-	public static File uncompress(File compressedFile) throws IOException {
-		return uncompress(compressedFile, false);
+	public static File decompress(File compressedFile) throws IOException {
+		return decompress(compressedFile, false);
 	}
 
 	private static void extract(File source, File destination) throws IOException, IllegalArgumentException {

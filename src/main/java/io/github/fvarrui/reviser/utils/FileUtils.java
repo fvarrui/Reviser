@@ -28,4 +28,10 @@ public class FileUtils {
 		
 	}
 
+	public static File rename(File file, String newName) {
+		File newFile = new File(file.getParent(), newName); 
+		file.renameTo(newFile);
+		return newFile;
+	}
+
 }
