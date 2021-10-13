@@ -187,13 +187,13 @@ public class FormController implements Initializable {
 			}
 		};
 		task.setOnScheduled(event -> {
+//			SubmissionController.me.showConsole();
 			consoleController.clearConsole();
 		});
 		task.setOnFailed(event -> {
 			App.console.println(event.getSource().getException());
 			result.get().fail(event.getSource().getException().getMessage());
 		});
-		SubmissionController.me.showConsole(); 
 		new Thread(task).start();
 	}
 
