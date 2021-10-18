@@ -7,13 +7,13 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane fx:id="view" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="view" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
 	<center>
 		<SplitPane dividerPositions="0.5" orientation="VERTICAL" BorderPane.alignment="CENTER">
 			<items>
 				<AnchorPane minHeight="0.0" minWidth="0.0">
 					<children>
-						<TableView fx:id="resultsTable" editable="true" layoutX="287.0" layoutY="31.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+						<TableView fx:id="submissionsTable" editable="true" layoutX="287.0" layoutY="31.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 							<columns>
 								<TableColumn fx:id="nameColumn" editable="false" resizable="false" text="Nombre" />
 								<TableColumn fx:id="emailColumn" editable="true" resizable="false" text="E-mail" />
@@ -30,7 +30,7 @@
 				</AnchorPane>
 				<AnchorPane minHeight="0.0" minWidth="0.0">
 					<children>
-						<BorderPane fx:id="formPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+						<BorderPane fx:id="gradingPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
 					</children>
 				</AnchorPane>
 			</items>

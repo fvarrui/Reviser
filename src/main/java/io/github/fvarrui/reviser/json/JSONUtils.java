@@ -30,7 +30,7 @@ public class JSONUtils {
 	 * @throws JsonIOException
 	 * @throws IOException
 	 */
-	public static <T> T loadFromJson(File jsonFile, Class<T> type) throws JsonSyntaxException, JsonIOException, IOException {
+	public static <T> T readJsonFromFile(File jsonFile, Class<T> type) throws JsonSyntaxException, JsonIOException, IOException {
 		String jsonString = FileUtils.readFileToString(jsonFile, StandardCharsets.UTF_8);
 		return gson.fromJson(jsonString, type);
 	}
@@ -43,7 +43,7 @@ public class JSONUtils {
 	 * @throws JsonIOException
 	 * @throws IOException
 	 */
-	public static void jsonToFile(Object object, File jsonFile) throws JsonSyntaxException, JsonIOException, IOException {
+	public static void writeJsonToFile(Object object, File jsonFile) throws JsonSyntaxException, JsonIOException, IOException {
 		String jsonString = gson.toJson(object, object.getClass());
 		FileUtils.writeStringToFile(jsonFile, jsonString, StandardCharsets.UTF_8);
 	}

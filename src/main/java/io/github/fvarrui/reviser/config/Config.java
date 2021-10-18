@@ -7,7 +7,7 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
 import io.github.fvarrui.reviser.json.JSONUtils;
-import io.github.fvarrui.reviser.ui.Dialogs;
+import io.github.fvarrui.reviser.ui.utils.Dialogs;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -20,7 +20,7 @@ import javafx.geometry.Point2D;
 public class Config {
 
 	public static final File configDir = new File(System.getProperty("user.home"), ".Reviser");
-	public static final File submissionsDir = new File(configDir, "submissions");
+	public static final File exercisesDir = new File(configDir, "exercises");
 	public static final File configFile = new File(configDir, "config.json");
 
 	private ObjectProperty<Dimension2D> stageSize = new SimpleObjectProperty<>();
@@ -38,12 +38,12 @@ public class Config {
 		if (!configDir.exists()) {
 			configDir.mkdir();
 		}
-		if (!submissionsDir.exists()) {
-			submissionsDir.mkdir();
+		if (!exercisesDir.exists()) {
+			exercisesDir.mkdir();
 		}
 		if (configFile.exists()) {
 			try {
-				config = JSONUtils.loadFromJson(configFile, Config.class);
+				config = JSONUtils.readJsonFromFile(configFile, Config.class);
 			} catch (JsonSyntaxException | JsonIOException | IOException e) {
 				Dialogs.error("No se pudo cargar la configuración desde el fichero '" + configFile + "'.", e);
 			}
@@ -54,7 +54,7 @@ public class Config {
 
 	public static void save() {
 		try {
-			JSONUtils.jsonToFile(config, configFile);
+			JSONUtils.writeJsonToFile(config, configFile);
 		} catch (JsonSyntaxException | JsonIOException | IOException e) {
 			Dialogs.error("No se pudo guardar la configuración en el fichero '" + configFile + "'.", e);
 		}

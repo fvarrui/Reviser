@@ -16,7 +16,7 @@
 		<TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE">
 			<tabs>
 				<Tab fx:id="resultsTab" text="Resultados" />
-				<Tab fx:id="formDesignerTab" text="Diseñar formulario" />
+				<Tab fx:id="designerTab" text="Diseñar formulario" />
 				<Tab fx:id="consoleTab" text="Consola" />
 			</tabs>
 		</TabPane>
@@ -29,13 +29,13 @@
 						<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 					</padding>
 					<children>
-						<Label fx:id="titleLabel" maxWidth="1.7976931348623157E308" styleClass="submission-title" text="&lt;Título de la entrega&gt;" HBox.hgrow="ALWAYS" />
-                  <Button fx:id="removeButton" layoutX="176.0" layoutY="15.0" mnemonicParsing="false" onAction="#onRemoveSubmission" prefHeight="32.0" prefWidth="40.0">
+						<Label fx:id="titleLabel" maxWidth="1.7976931348623157E308" styleClass="submission-title" text="&lt;Título del ejercicio&gt;" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="removeButton" layoutX="176.0" layoutY="15.0" mnemonicParsing="false" onAction="#onRemoveExercise" prefHeight="32.0" prefWidth="40.0">
                      <graphic>
                         <FontIcon iconLiteral="far-trash-alt" iconSize="18" />
                      </graphic>
                      <tooltip>
-                        <Tooltip text="Eliminar todas las entregas de esta tarea" />
+                        <Tooltip text="Eliminar la tarea" />
                      </tooltip>
                   </Button>
 						<Button fx:id="evaluateAllButton" layoutX="176.0" layoutY="15.0" mnemonicParsing="false" onAction="#onEvaluateAll" prefHeight="32.0" prefWidth="40.0">

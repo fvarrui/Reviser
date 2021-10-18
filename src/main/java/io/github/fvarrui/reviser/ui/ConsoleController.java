@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import io.github.fvarrui.reviser.ui.utils.MessageConsumer;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
@@ -15,6 +16,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 
 public class ConsoleController implements Initializable {
+	
+	public static ConsoleController me;
 
 	// model
 	
@@ -39,6 +42,8 @@ public class ConsoleController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
+		me = this;
 		
 		App.console = new MessageConsumer(consoleText);
 		App.console.start();

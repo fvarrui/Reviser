@@ -1,6 +1,7 @@
 package io.github.fvarrui.reviser.ui;
 
 import io.github.fvarrui.reviser.config.Config;
+import io.github.fvarrui.reviser.ui.utils.MessageConsumer;
 import javafx.application.Application;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;

@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class Criterion {
+	
 	private LongProperty id = new SimpleLongProperty();
 	private StringProperty name = new SimpleStringProperty();
 	private DoubleProperty weight = new SimpleDoubleProperty();

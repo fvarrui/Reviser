@@ -15,8 +15,8 @@ import com.opencsv.exceptions.CsvException;
 import io.github.fvarrui.reviser.csv.CsvResult;
 import io.github.fvarrui.reviser.csv.CsvStudent;
 import io.github.fvarrui.reviser.csv.CsvUtils;
-import io.github.fvarrui.reviser.model.Results;
-import io.github.fvarrui.reviser.model.Submission;
+import io.github.fvarrui.reviser.model.Exercise;
+import io.github.fvarrui.reviser.ui.utils.Dialogs;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -31,66 +31,61 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 
-public class SubmissionController implements Initializable {
-	
-	public static SubmissionController me;
+public class ExerciseController implements Initializable {
+
+	public static ExerciseController me;
 
 	// controllers
 
-	private ResultsController resultsController;
-	private DesignerController formDesignerController;
+	private SubmissionsController resultsController;
+	private DesignerController designerController;
 	private ConsoleController consoleController;
 
 	// model
 
-	private File resultsFile;
-
 	private StringProperty title = new SimpleStringProperty("");
-	private ObjectProperty<Results> results = new SimpleObjectProperty<>(new Results());
-	private ObjectProperty<Submission> submission = new SimpleObjectProperty<>();
+	private ObjectProperty<Exercise> exercise = new SimpleObjectProperty<>();
 
 	// view
-	
+
 	@FXML
 	private BorderPane view;
 
 	@FXML
 	private TabPane tabPane;
-	
+
 	@FXML
 	private Label titleLabel;
 
 	@FXML
-	private Tab resultsTab, formDesignerTab, consoleTab;
+	private Tab resultsTab, designerTab, consoleTab;
 
-	public SubmissionController() throws IOException {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/SubmissionView.fxml"));
+	public ExerciseController() throws IOException {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ExerciseView.fxml"));
 		loader.setController(this);
 		loader.load();
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
+
 		me = this;
-		
+
 		try {
 
 			// creates controllers
-			formDesignerController = new DesignerController();
+			designerController = new DesignerController();
 			consoleController = new ConsoleController();
-			resultsController = new ResultsController();
-			
-			resultsController.getFormController().setConsoleController(consoleController);
+			resultsController = new SubmissionsController();
 
 			// set tabs content
 			resultsTab.setContent(resultsController.getView());
-			formDesignerTab.setContent(formDesignerController.getView());
+			designerTab.setContent(designerController.getView());
 			consoleTab.setContent(consoleController.getView());
 
 			// add listener when submissions dir changed
-			submission.addListener((o, ov, nv) -> onSubmissionChanged(o, ov, nv));
-			
+			exercise.addListener((o, ov, nv) -> onExerciseChanged(o, ov, nv));
+
 			// binds
 			titleLabel.textProperty().bind(title);
 
@@ -100,65 +95,56 @@ public class SubmissionController implements Initializable {
 			System.exit(1);
 
 		}
-		
+
 		App.primaryStage.setOnCloseRequest(e -> {
-			saveResults();
+			saveExercise();
 		});
 
 	}
 
-	public void saveResults() {
+	public void saveExercise() {
 		try {
-			System.out.println("guardando resultados al salir en " + resultsFile);
-			if (this.resultsFile != null && this.results.get() != null)
-				this.results.get().save(resultsFile);
+			System.out.println("guardando ejercicio al salir");
+			getExercise().save();
 		} catch (JsonSyntaxException | JsonIOException | IOException e1) {
-			Dialogs.error("No se pudieron guardar los resultados en el fichero '" + resultsFile + "'", e1);
+			Dialogs.error("No se pudo guardar el ejercicio '" + getExercise() + "'", e1);
 		}
 	}
 
-	private void onSubmissionChanged(ObservableValue<? extends Submission> o, Submission ov, Submission nv) {
-		
+	private void onExerciseChanged(ObservableValue<? extends Exercise> o, Exercise ov, Exercise nv) {
+
 		String desde = (ov != null && ov.getDirectory() != null) ? ov.getDirectory().getName() : "-";
 		String hasta = (nv != null && nv.getDirectory() != null) ? nv.getDirectory().getName() : "-";
 		System.out.println("cambiando desde " + desde + " a " + hasta);
-		
+
 		if (ov != null) {
-			saveResults();
+			saveExercise();
 		}
-		
+
 		if (nv != null) {
-			
+
 			// sets title
 			title.set(nv.getDirectory().getName());
-	
-			// loads results from json if exists, or creates from scratch
-			resultsFile = new File(nv.getDirectory(), "results.json");
-			results.set(Results.load(resultsFile, nv.getDirectory()));
-	
+
 			// binds results view
-			resultsController.setSubmissionsDir(nv.getDirectory());
-			resultsController.resultsProperty().bind(results);
-	
+			resultsController.exerciseProperty().bind(exercise);
+
 			// binds form designer view
-			formDesignerController.resultsProperty().bind(results);
-			
+			designerController.exerciseProperty().bind(exercise);
+
 		} else {
-			
+
 			// unsets title
 			title.set("");
-	
-			// unsets results
-			resultsFile = null;
-			results.set(null);
-	
+
+			exercise.set(null);
+
 			// unbinds results view
-			resultsController.setSubmissionsDir(null);
-			resultsController.resultsProperty().unbind();
-			
+			resultsController.exerciseProperty().unbind();
+
 			// unbinds form designer view
-			formDesignerController.resultsProperty().unbind();
-			
+			designerController.exerciseProperty().unbind();
+
 		}
 
 	}
@@ -166,18 +152,18 @@ public class SubmissionController implements Initializable {
 	@FXML
 	private void onOpenExplorer(ActionEvent e) {
 		try {
-			Desktop.getDesktop().open(getSubmission().getDirectory());
+			Desktop.getDesktop().open(getExercise().getDirectory());
 		} catch (IOException e1) {
-			Dialogs.error("Error al abrir la carpeta '" + getSubmission().getDirectory() + "' en el explorador de archivos del sistema", e1);
+			Dialogs.error("Error al abrir la carpeta '" + getExercise().getDirectory() + "' en el explorador de archivos del sistema", e1);
 		}
 	}
 
 	@FXML
 	private void onExportResults(ActionEvent e) {
-		File resultsFile = Dialogs.saveFile("Exportar resultados en CSV para Moodle", getSubmission().getDirectory().getName(), "Fichero CSV", "*.csv");
+		File resultsFile = Dialogs.saveFile("Exportar resultados en CSV para Moodle", getExercise().getDirectory().getName(), "Fichero CSV", "*.csv");
 		if (resultsFile != null)
 			try {
-				List<CsvResult> results = this.results.get().getResults().stream()
+				List<CsvResult> results = this.exercise.get().getSubmissions().stream()
 						.map(r -> new CsvResult(r.getScore(), r.getName(), r.getFullFeedback(), r.getEmail()))
 						.collect(Collectors.toList());
 				CsvUtils.resultsToCsv(results, resultsFile);
@@ -192,22 +178,22 @@ public class SubmissionController implements Initializable {
 		if (studentsFile != null)
 			try {
 				List<CsvStudent> students = CsvUtils.csvToStudents(studentsFile);
-				results.get().updateFromStudents(students);
+				getExercise().updateFromStudents(students);
 			} catch (IOException | CsvException e1) {
 				Dialogs.error("El fichero CSV no se ha podido abrir", e1);
 			}
 	}
-	
+
 	@FXML
 	private void onEvaluateAll(ActionEvent e) {
 		if (Dialogs.confirm("Evaluar todas las entregas", "Marcando todas las entregas como evaluadas.", "¿Desea continuar?")) {
-			results.get().evaluateAll(true);
+			getExercise().evaluateAll(true);
 		}
 	}
-	
+
 	@FXML
-	private void onRemoveSubmission(ActionEvent e) {
-		App.mainController.removeSubmission(getSubmission());
+	private void onRemoveExercise(ActionEvent e) {
+		App.mainController.removeExercise(exercise.get());
 	}
 
 	public void showConsole() {
@@ -218,16 +204,16 @@ public class SubmissionController implements Initializable {
 		return view;
 	}
 
-	public final ObjectProperty<Submission> submissionProperty() {
-		return this.submission;
+	public final ObjectProperty<Exercise> exerciseProperty() {
+		return this.exercise;
+	}
+	
+	public final Exercise getExercise() {
+		return this.exerciseProperty().get();
 	}
 
-	public final Submission getSubmission() {
-		return this.submissionProperty().get();
-	}
-
-	public final void setSubmission(final Submission submission) {
-		this.submissionProperty().set(submission);
+	public final void setExercise(final Exercise exercise) {
+		this.exerciseProperty().set(exercise);
 	}
 
 }

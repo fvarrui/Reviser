@@ -19,6 +19,7 @@ public class Grade {
 
 	@Expose(serialize = false)
 	private DoubleProperty weightedValue = new SimpleDoubleProperty();
+	
 	private LongProperty criterionId = new SimpleLongProperty();
 	private DoubleProperty value = new SimpleDoubleProperty();
 	private StringProperty feedback = new SimpleStringProperty();

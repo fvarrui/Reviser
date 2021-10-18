@@ -4,15 +4,13 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.ResourceBundle;
-
-import org.apache.commons.io.FileUtils;
 
 import io.github.fvarrui.reviser.model.Grade;
 import io.github.fvarrui.reviser.model.GradingForm;
-import io.github.fvarrui.reviser.model.Result;
-import io.github.fvarrui.reviser.test.Testing;
+import io.github.fvarrui.reviser.model.Submission;
+import io.github.fvarrui.reviser.ui.tasks.RunSubmissionTask;
+import io.github.fvarrui.reviser.ui.utils.Dialogs;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ListProperty;
@@ -26,7 +24,6 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -42,19 +39,15 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.util.converter.NumberStringConverter;
 
-public class FormController implements Initializable {
-	
-	// controllers
-	
-	private ConsoleController consoleController;
+public class GradingController implements Initializable {
 	
 	// model
 	
-	private ChangeListener<Number> listener = (o, ov, nv) -> getResult().updateScore();
+	private ChangeListener<Number> listener = (o, ov, nv) -> getSubmission().updateScore();
 
 	private ObjectProperty<File> submissionsDir = new SimpleObjectProperty<>();
 	private ObjectProperty<GradingForm> form = new SimpleObjectProperty<>();
-	private ObjectProperty<Result> result = new SimpleObjectProperty<>();
+	private ObjectProperty<Submission> submission = new SimpleObjectProperty<>();
 
 	private StringProperty name = new SimpleStringProperty();
 	private BooleanProperty evaluated = new SimpleBooleanProperty();
@@ -99,8 +92,8 @@ public class FormController implements Initializable {
     @FXML
     private CheckBox evaluatedCheck;
 
-	public FormController() throws IOException {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/FormView.fxml"));
+	public GradingController() throws IOException {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GradingView.fxml"));
 		loader.setController(this);
 		loader.load();
 	}
@@ -108,7 +101,7 @@ public class FormController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		result.addListener((o, ov, nv) -> onResultChanged(o, ov, nv));
+		submission.addListener((o, ov, nv) -> onResultChanged(o, ov, nv));
 		
 		// binds 
 		gradesTable.itemsProperty().bind(grades);
@@ -117,7 +110,7 @@ public class FormController implements Initializable {
 		evaluatedCheck.selectedProperty().bindBidirectional(evaluated);
 		
 		// disables run and clear buttons when no result selected
-		view.disableProperty().bind(result.isNull());
+		view.disableProperty().bind(submission.isNull());
 		gradesTable.disableProperty().bind(evaluated);
 		clearButton.disableProperty().bind(evaluated);
 		runButton.disableProperty().bind(evaluated);
@@ -143,7 +136,7 @@ public class FormController implements Initializable {
 
 	}
 
-	private void onResultChanged(ObservableValue<? extends Result> o, Result ov, Result nv) {
+	private void onResultChanged(ObservableValue<? extends Submission> o, Submission ov, Submission nv) {
 		System.out.println("onResultChanged(ov=" + ov + "/nv=" + nv + ")");
 		
 		if (ov != null) {
@@ -177,36 +170,29 @@ public class FormController implements Initializable {
 
 	@FXML
 	private void onRun(ActionEvent e) {
-		Task<Void> task = new Task<Void>() {
-			@Override
-			protected Void call() throws Exception {
-				File inputFile = new File(getSubmissionsDir(), "input.txt");
-				String input = inputFile.exists() ? FileUtils.readFileToString(inputFile, StandardCharsets.UTF_8) : "";
-				Testing.run(input, new File(getSubmissionsDir(), getResult().getDirectory()));
-				return null;
-			}
-		};
+		File inputFile = new File(getSubmissionsDir(), "input.txt");
+		RunSubmissionTask task = new RunSubmissionTask(inputFile, new File(getSubmissionsDir(), getSubmission().getDirectory()));
 		task.setOnScheduled(event -> {
-//			SubmissionController.me.showConsole();
-			consoleController.clearConsole();
+			ExerciseController.me.showConsole();
+			ConsoleController.me.clearConsole();
 		});
 		task.setOnFailed(event -> {
 			App.console.println(event.getSource().getException());
-			result.get().fail(event.getSource().getException().getMessage());
+			getSubmission().fail(event.getSource().getException().getMessage());
 		});
-		new Thread(task).start();
+		task.start();
 	}
 
 	@FXML
 	private void onClearScore(ActionEvent e) {
-		if (Dialogs.confirm(App.TITLE, "Limpiar las puntuaciones y los comentarios de '" + result.get().getName() + "'.", "¿Está seguro?")) {
-			result.get().resetScore();
+		if (Dialogs.confirm(App.TITLE, "Limpiar las puntuaciones y los comentarios de '" + submission.get().getName() + "'.", "¿Está seguro?")) {
+			getSubmission().resetScore();
 		}
 	}
 	
 	@FXML
 	private void onOpenExplorer(ActionEvent e) {
-		File folder = new File(getSubmissionsDir(), getResult().getDirectory());
+		File folder = new File(getSubmissionsDir(), getSubmission().getDirectory());
 		try {
 			Desktop.getDesktop().open(folder);
 		} catch (IOException e1) {
@@ -216,8 +202,8 @@ public class FormController implements Initializable {
 	
 	@FXML
 	private void onPerfect(ActionEvent e) {
-		getResult().setEvaluated(true);
-		getResult().getGrades().forEach(g -> g.setValue(100));
+		getSubmission().setEvaluated(true);
+		getSubmission().getGrades().forEach(g -> g.setValue(100));
 	}
 
 	// getters and setters
@@ -238,16 +224,16 @@ public class FormController implements Initializable {
 		this.formProperty().set(form);
 	}
 
-	public final ObjectProperty<Result> resultProperty() {
-		return this.result;
+	public final ObjectProperty<Submission> submissionProperty() {
+		return this.submission;
 	}
 
-	public final Result getResult() {
-		return this.resultProperty().get();
+	public final Submission getSubmission() {
+		return this.submissionProperty().get();
 	}
 
-	public final void setResult(final Result result) {
-		this.resultProperty().set(result);
+	public final void setSubmission(final Submission submission) {
+		this.submissionProperty().set(submission);
 	}
 
 	public final ObjectProperty<File> submissionsDirProperty() {
@@ -260,10 +246,6 @@ public class FormController implements Initializable {
 
 	public final void setSubmissionsDir(final File submissionsDir) {
 		this.submissionsDirProperty().set(submissionsDir);
-	}
-	
-	public void setConsoleController(ConsoleController consoleController) {
-		this.consoleController = consoleController;
 	}
 
 }

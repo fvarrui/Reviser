@@ -19,7 +19,7 @@
 	<items>
 		<BorderPane maxWidth="300.0" minWidth="300.0">
 			<center>
-				<ListView fx:id="submissionsList" onDragDropped="#onSubmissionsListDragDropped" onDragOver="#onSubmissionsListDragOver" BorderPane.alignment="CENTER" />
+				<ListView fx:id="exercisesList" onDragDropped="#onExercisesListDragDropped" onDragOver="#onExercisesListDragOver" BorderPane.alignment="CENTER" />
 			</center>
 			<padding>
 				<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -34,7 +34,7 @@
                   <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-						<Button fx:id="importButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onImportSubmission" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+						<Button fx:id="importButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onImportExercise" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
 							<graphic>
 								<FontIcon iconLiteral="far-file-archive" iconSize="24" />
 							</graphic>
@@ -42,12 +42,12 @@
 								<Tooltip text="Importar una entrega" />
 							</tooltip>
 						</Button>
-						<Button fx:id="refreshButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onRefreshSubmissions" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+						<Button fx:id="refreshButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onRefreshExercises" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
 							<graphic>
       								<FontIcon iconLiteral="fas-retweet" iconSize="24" />
 							</graphic>
 							<tooltip>
-								<Tooltip text="Refrescar entregas" />
+								<Tooltip text="Recargar ejercicios" />
 							</tooltip>
 						</Button>
                </children>
@@ -59,7 +59,7 @@
 		</BorderPane>
 		<StackPane>
 			<children>
-				<BorderPane fx:id="submissionPane" />
+				<BorderPane fx:id="exercisePane" />
 				<VBox fx:id="noSelectionPane" alignment="CENTER" spacing="15.0" styleClass="no-selection-pane">
 					<children>
 						<FontIcon iconColor="ORANGE" iconLiteral="fas-exclamation-circle" iconSize="64">

@@ -1,25 +1,25 @@
 package io.github.fvarrui.reviser.ui;
 
-import static org.apache.commons.io.FileUtils.copyDirectory;
-import static org.apache.commons.io.FileUtils.deleteDirectory;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
+import org.controlsfx.dialog.ProgressDialog;
 
 import io.github.fvarrui.reviser.config.Config;
-import io.github.fvarrui.reviser.model.Submission;
-import io.github.fvarrui.reviser.utils.CompressionUtils;
+import io.github.fvarrui.reviser.model.Exercise;
+import io.github.fvarrui.reviser.ui.tasks.ImportExerciseTask;
+import io.github.fvarrui.reviser.ui.utils.Dialogs;
+import io.github.fvarrui.reviser.ui.utils.FileListCell;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
@@ -39,12 +39,12 @@ public class MainController implements Initializable {
 
 	// controllers
 
-	private SubmissionController submissionController;
+	private ExerciseController exerciseController;
 
 	// model
 
-	private ListProperty<Submission> submissions = new SimpleListProperty<>(FXCollections.observableArrayList());
-	private ObjectProperty<Submission> selectedSubmission = new SimpleObjectProperty<>();
+	private ListProperty<File> exercises = new SimpleListProperty<>(FXCollections.observableArrayList());
+	private ObjectProperty<File> selectedExercise = new SimpleObjectProperty<>();
 
 	// view
 
@@ -52,7 +52,7 @@ public class MainController implements Initializable {
 	private SplitPane view;
 
 	@FXML
-	private ListView<Submission> submissionsList;
+	private ListView<File> exercisesList;
 
 	@FXML
 	private Button importButton;
@@ -61,7 +61,7 @@ public class MainController implements Initializable {
 	private Button refreshButton;
 
 	@FXML
-	private BorderPane submissionPane;
+	private BorderPane exercisePane;
 
 	@FXML
 	private VBox noSelectionPane;
@@ -78,20 +78,25 @@ public class MainController implements Initializable {
 		try {
 
 			// creates and binds controllers
-			submissionController = new SubmissionController();
-			submissionController.submissionProperty().bind(selectedSubmission);
+			exerciseController = new ExerciseController();
 
 			// set submission controller view
-			submissionPane.setCenter(submissionController.getView());
+			exercisePane.setCenter(exerciseController.getView());
+			
+			// renderes
+			exercisesList.setCellFactory((ListView<File> param) -> new FileListCell());
 
 			// binds
-			selectedSubmission.bind(submissionsList.getSelectionModel().selectedItemProperty());
-			noSelectionPane.visibleProperty().bind(selectedSubmission.isNull());
-			submissionPane.visibleProperty().bind(selectedSubmission.isNotNull());
-			submissionsList.setItems(new SortedList<>(submissions, Submission::compareTo));
+			selectedExercise.bind(exercisesList.getSelectionModel().selectedItemProperty());
+			noSelectionPane.visibleProperty().bind(selectedExercise.isNull());
+			exercisePane.visibleProperty().bind(selectedExercise.isNotNull());
+			exercisesList.setItems(new SortedList<>(exercises));
+			
+			// listeners
+			selectedExercise.addListener((o, ov, nv) -> onSelectedExerciseChanged(o, ov, nv));
 
-			// refresh submissions
-			refreshSubmissions();
+			// refresh exercises
+			refreshExercises();
 
 		} catch (IOException e) {
 
@@ -102,79 +107,78 @@ public class MainController implements Initializable {
 
 	}
 
-	public void refreshSubmissions() {
-		submissions.setAll(Arrays.asList(Config.submissionsDir.listFiles()).stream().filter(f -> f.isDirectory())
-				.map(f -> new Submission(f)).collect(Collectors.toList()));
+	private void onSelectedExerciseChanged(ObservableValue<? extends File> o, File ov, File nv) {
+		exerciseController.setExercise(Exercise.load(nv));
+	}
+
+	public void refreshExercises() {
+		exercises.setAll(Arrays.asList(Config.exercisesDir.listFiles(f -> f.isDirectory() && new File(f, Exercise.EXERCISE_FILENAME).exists())));
 	}
 
 	@FXML
-	private void onImportSubmission(ActionEvent event) {
+	private void onImportExercise(ActionEvent event) {
 
 		File file = Dialogs.chooseFileOrFolder();
 		if (file != null) {
-			importSubmission(file);
+			importExercise(file);
 		}
 
 	}
 
-	private boolean importSubmission(File file) {
-		if (file.isFile()) {
-			try {
-				file = CompressionUtils.decompress(file, Config.submissionsDir);
-			} catch (Exception e) {
-				Dialogs.error("Error al importar un fichero de entregas", e);
-				return false;
-			}
-		} else if (file.isDirectory()) {
-			try {
-				File destination = new File(Config.submissionsDir, file.getName());
-				copyDirectory(file, destination);
-				if (Dialogs.confirm("Importar directorio de entregas", "Eliminar directorio original",
-						"¿Desea eliminar el directorio '" + file.getAbsolutePath() + "'?")) {
-					deleteDirectory(file);
-				}
-				file = destination;
-			} catch (IOException e) {
-				Dialogs.error("Error al importar un directorio de entregas", e);
-				return false;
-			}
-		}
-
-		Submission s = new Submission(file);
-		submissions.add(new Submission(file));
-		submissionsList.getSelectionModel().select(s);
-
-		Platform.runLater(() -> submissionsList.requestFocus());
+	private void importExercise(final File file) {
 		
-		return true;
+		ImportExerciseTask task = new ImportExerciseTask(file);
+		task.setOnScheduled(event -> {
+			ExerciseController.me.showConsole();
+			ConsoleController.me.clearConsole();
+		});
+		task.setOnSucceeded(event -> {
+			exercises.add(task.getExerciseDir());
+			exercisesList.getSelectionModel().select(task.getExerciseDir());
+			Platform.runLater(() -> {
+				exercisesList.requestFocus();
+			});
+		});
+		task.setOnFailed(event -> {
+			event.getSource().getException().printStackTrace();
+			Dialogs.error("Error procesando entregas", event.getSource().getException());
+		});
+		task.start();
+
+		ProgressDialog progressDialog = new ProgressDialog(task);
+		progressDialog.initOwner(App.primaryStage);
+		progressDialog.setTitle("Importando ejercicio...");
+		progressDialog.setHeaderText(file.getName());
+		progressDialog.showAndWait();		
+		
 	}
 
 	@FXML
-	private void onRefreshSubmissions(ActionEvent event) {
-		refreshSubmissions();
+	private void onRefreshExercises(ActionEvent event) {
+		refreshExercises();
 	}
 
 	public SplitPane getView() {
 		return view;
 	}
 
-	public void removeSubmission(Submission s) {
+	public void removeExercise(Exercise s) {
 		String title = s.getDirectory().getName();
-		if (Dialogs.confirm("Eliminar entregas", "Se van a eliminar todas las entregas de la tarea '" + title + "'.", "¿Desea continuar?"))
+		if (Dialogs.confirm("Eliminar ejercicio", "Se va a eliminar el ejercicio '" + title + "' con todas las entregas.", "¿Desea continuar?"))
 			try {
-				submissions.get().remove(s);
+				exercises.get().remove(s.getDirectory());
 				FileUtils.deleteDirectory(s.getDirectory());
 			} catch (IOException e) {
-				Dialogs.error("Error al eliminar la entrega '" + title + "'.", e);
+				Dialogs.error("Error al eliminar el ejercicio '" + title + "'.", e);
 			}
 	}
 	
     @FXML
-    void onSubmissionsListDragDropped(DragEvent event) {
+    void onExercisesListDragDropped(DragEvent event) {
         Dragboard db = event.getDragboard();
         boolean success = false;
         if (db.hasFiles()) {
-        	db.getFiles().forEach(f -> importSubmission(f));
+        	db.getFiles().forEach(f -> importExercise(f));
             success = true;
         }
         event.setDropCompleted(success);
@@ -182,8 +186,8 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    void onSubmissionsListDragOver(DragEvent event) {
-        if (event.getGestureSource() != submissionsList && event.getDragboard().hasFiles()) {
+    void onExercisesListDragOver(DragEvent event) {
+        if (event.getGestureSource() != exercisesList && event.getDragboard().hasFiles()) {
             event.acceptTransferModes(TransferMode.COPY);
         }
         event.consume();

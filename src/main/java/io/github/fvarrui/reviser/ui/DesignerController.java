@@ -6,7 +6,8 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 import io.github.fvarrui.reviser.model.Criterion;
-import io.github.fvarrui.reviser.model.Results;
+import io.github.fvarrui.reviser.model.Exercise;
+import io.github.fvarrui.reviser.ui.utils.Dialogs;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -31,7 +32,7 @@ public class DesignerController implements Initializable {
 
 	private StringProperty name = new SimpleStringProperty();
 	private StringProperty weight = new SimpleStringProperty();
-	private ObjectProperty<Results> results = new SimpleObjectProperty<>();
+	private ObjectProperty<Exercise> exercise = new SimpleObjectProperty<>();
 
 	// view
 
@@ -68,7 +69,7 @@ public class DesignerController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		results.addListener((o, ov, nv) -> onResultsChanged(o, ov, nv));
+		exercise.addListener((o, ov, nv) -> onExerciseChanged(o, ov, nv));
 
 		nameColumn.setCellValueFactory(v -> v.getValue().nameProperty());
 		weightColumn.setCellValueFactory(v -> v.getValue().weightProperty());
@@ -88,7 +89,7 @@ public class DesignerController implements Initializable {
 		weight.bindBidirectional(weightText.textProperty());
 	}
 
-	private void onResultsChanged(ObservableValue<? extends Results> o, Results ov, Results nv) {
+	private void onExerciseChanged(ObservableValue<? extends Exercise> o, Exercise ov, Exercise nv) {
 		if (ov != null) {
 			formTable.itemsProperty().unbind();
 			formTable.itemsProperty().get().clear();
@@ -126,7 +127,7 @@ public class DesignerController implements Initializable {
 		criterion.setId(getNewId());
 		criterion.setName(name.get());
 		criterion.setWeight(weight);
-		results.get().getForm().getCriteria().add(criterion);
+		exercise.get().getForm().getCriteria().add(criterion);
 
 		this.name.set("");
 		this.weight.set("");
@@ -136,12 +137,12 @@ public class DesignerController implements Initializable {
 	@FXML
 	private void onRemoveCriterion(ActionEvent e) {
 
-		results.get().getForm().getCriteria().remove(formTable.getSelectionModel().getSelectedItem());
+		exercise.get().getForm().getCriteria().remove(formTable.getSelectionModel().getSelectedItem());
 
 	}
 
 	private Long getNewId() {
-		Optional<Long> max = results.get().getForm().getCriteria().stream().map(c -> c.getId()).max(Long::compare);
+		Optional<Long> max = exercise.get().getForm().getCriteria().stream().map(c -> c.getId()).max(Long::compare);
 		return max.isPresent() ? max.get() + 1 : 1;
 	}
 
@@ -149,16 +150,18 @@ public class DesignerController implements Initializable {
 		return view;
 	}
 
-	public final ObjectProperty<Results> resultsProperty() {
-		return this.results;
+	public final ObjectProperty<Exercise> exerciseProperty() {
+		return this.exercise;
 	}
+	
 
-	public final Results getResults() {
-		return this.resultsProperty().get();
+	public final Exercise getExercise() {
+		return this.exerciseProperty().get();
 	}
+	
 
-	public final void setResults(final Results results) {
-		this.resultsProperty().set(results);
+	public final void setExercise(final Exercise exercise) {
+		this.exerciseProperty().set(exercise);
 	}
 
 }

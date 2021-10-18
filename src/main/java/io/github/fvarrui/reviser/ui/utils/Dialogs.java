@@ -1,4 +1,4 @@
-package io.github.fvarrui.reviser.ui;
+package io.github.fvarrui.reviser.ui.utils;
 
 import java.io.File;
 import java.util.Optional;
@@ -7,6 +7,7 @@ import org.controlsfx.dialog.CommandLinksDialog;
 import org.controlsfx.dialog.CommandLinksDialog.CommandLinksButtonType;
 
 import io.github.fvarrui.reviser.config.Config;
+import io.github.fvarrui.reviser.ui.App;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;

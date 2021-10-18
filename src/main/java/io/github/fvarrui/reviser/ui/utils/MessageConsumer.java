@@ -1,4 +1,4 @@
-package io.github.fvarrui.reviser.ui;
+package io.github.fvarrui.reviser.ui.utils;
 
 import java.util.ArrayList;
 import java.util.List;
