@@ -4,7 +4,7 @@ Asistente para la corrección de actividades entregadas a través de un aula vir
 
 - Ejecutar proyectos Maven o abrir otro tipo de entregas (documentos de texto, imágenes, ...) con la aplicación asociada disponible en nuestro equipo. 
 
-> Funciona tanto si la entrega ha sido la URL del repositorio Git del proyecto o se ha subido un fichero comprimido (ZIP, RAR* o 7Z \*) conteniendo la carpeta del proyecto.
+> Funciona tanto si la entrega ha sido la URL del repositorio Git del proyecto o se ha subido un fichero comprimido (ZIP, RAR* o 7Z) conteniendo la carpeta del proyecto.
 
 - Definir los criterios de calificación así como calificar los proyectos de forma sencilla. 
 
