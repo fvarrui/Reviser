@@ -108,7 +108,7 @@ public class MainController implements Initializable {
 	}
 
 	private void onSelectedExerciseChanged(ObservableValue<? extends File> o, File ov, File nv) {
-		exerciseController.setExercise(Exercise.load(nv));
+		exerciseController.setExercise(nv != null ? Exercise.load(nv) : null);
 	}
 
 	public void refreshExercises() {

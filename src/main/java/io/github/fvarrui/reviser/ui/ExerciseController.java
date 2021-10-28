@@ -37,7 +37,7 @@ public class ExerciseController implements Initializable {
 
 	// controllers
 
-	private SubmissionsController resultsController;
+	private SubmissionsController submissionsController;
 	private DesignerController designerController;
 	private ConsoleController consoleController;
 
@@ -76,10 +76,10 @@ public class ExerciseController implements Initializable {
 			// creates controllers
 			designerController = new DesignerController();
 			consoleController = new ConsoleController();
-			resultsController = new SubmissionsController();
+			submissionsController = new SubmissionsController();
 
 			// set tabs content
-			resultsTab.setContent(resultsController.getView());
+			resultsTab.setContent(submissionsController.getView());
 			designerTab.setContent(designerController.getView());
 			consoleTab.setContent(consoleController.getView());
 
@@ -97,28 +97,30 @@ public class ExerciseController implements Initializable {
 		}
 
 		App.primaryStage.setOnCloseRequest(e -> {
-			saveExercise();
+			saveExercise(getExercise());
 		});
 
 	}
 
-	public void saveExercise() {
+	public void saveExercise(Exercise exercise) {
 		try {
-			System.out.println("guardando ejercicio al salir");
-			getExercise().save();
+			if (exercise != null) {
+				exercise.save();
+			}
 		} catch (JsonSyntaxException | JsonIOException | IOException e1) {
-			Dialogs.error("No se pudo guardar el ejercicio '" + getExercise() + "'", e1);
+			Dialogs.error("No se pudo guardar el ejercicio '" + exercise + "'", e1);
 		}
 	}
 
 	private void onExerciseChanged(ObservableValue<? extends Exercise> o, Exercise ov, Exercise nv) {
 
-		String desde = (ov != null && ov.getDirectory() != null) ? ov.getDirectory().getName() : "-";
-		String hasta = (nv != null && nv.getDirectory() != null) ? nv.getDirectory().getName() : "-";
+		String desde = (ov != null && ov.getDirectory() != null) ? ov.getDirectory().getName() : "<ninguno>";
+		String hasta = (nv != null && nv.getDirectory() != null) ? nv.getDirectory().getName() : "<ninguno>";
 		System.out.println("cambiando desde " + desde + " a " + hasta);
 
+		// saves old exercise
 		if (ov != null) {
-			saveExercise();
+			saveExercise(ov);
 		}
 
 		if (nv != null) {
@@ -127,10 +129,10 @@ public class ExerciseController implements Initializable {
 			title.set(nv.getDirectory().getName());
 
 			// binds results view
-			resultsController.exerciseProperty().bind(exercise);
+			submissionsController.setExercise(nv);
 
 			// binds form designer view
-			designerController.exerciseProperty().bind(exercise);
+			designerController.setExercise(nv);
 
 		} else {
 
@@ -140,10 +142,10 @@ public class ExerciseController implements Initializable {
 			exercise.set(null);
 
 			// unbinds results view
-			resultsController.exerciseProperty().unbind();
+			submissionsController.setExercise(null);
 
 			// unbinds form designer view
-			designerController.exerciseProperty().unbind();
+			designerController.setExercise(null);
 
 		}
 

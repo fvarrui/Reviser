@@ -13,7 +13,7 @@ public class FileUtils {
 	 * @return
 	 */
 	public static File find(File file, String name) {
-		if (file.isFile() && file.getName().equals(name)) {
+		if (file.getName().equals(name)) {
 			return file;
 		} else if (file.isDirectory()) {
 			File [] list = file.listFiles();
@@ -25,7 +25,6 @@ public class FileUtils {
 			}
 		}
 		return null;
-		
 	}
 
 	public static File rename(File file, String newName) {

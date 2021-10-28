@@ -38,7 +38,7 @@ public class CsvStudent {
 	}
 
 	public String getFullname() {
-		return getName() + " " + getSurname();
+		return getName().trim() + " " + getSurname().trim();
 	}
 
 	@Override

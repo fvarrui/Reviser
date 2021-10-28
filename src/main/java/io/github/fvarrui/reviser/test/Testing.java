@@ -36,13 +36,24 @@ public class Testing {
 	private static void test(String input, File submittedFile) throws Exception {
 
 		App.console.println("--- Ejecutando: " + submittedFile.getName());
+
+		// busca el directorio .git de forma recursiva 
+		File gitFolder = FileUtils.find(submittedFile, ".git");
+		if (gitFolder != null) {
+			
+			// hace un "git pull" si es un repo Git
+			File repoFolder = gitFolder.getParentFile();
+			App.console.println("--- Haciendo pull al repositorio GIT en " + repoFolder.getName());
+			GitUtils.pull(repoFolder);
+			
+		}
 		
 		// busca el proyecto maven de forma recursiva
 		File pomFile = FileUtils.find(submittedFile, "pom.xml");
-		
-		// se trata de un proyecto Maven
 		if (pomFile != null) {
-			
+		
+			// hace "mvn compile exec:java" si es un proyecto Maven
+			App.console.println("--- Encontrado fichero pom.xml en el proyecto. Se trata de un repositorio Maven: " + pomFile.getParentFile().getName());			
 			testMaven(input, submittedFile, pomFile);
 			
 		} else {
@@ -56,18 +67,9 @@ public class Testing {
 	}
 
 	private static void testMaven(String input, File submittedFile, File pomFile) throws Exception {
-		File mavenProject = pomFile.getParentFile();
-
-		App.console.println("--- Encontrado fichero pom.xml en el proyecto. Se trata de un repositorio Maven: " + mavenProject.getName());
-		
-		if (Arrays.asList(submittedFile.list()).contains(".git")) {
-			App.console.println("--- Haciendo pull al repositorio GIT en " + submittedFile.getName());
-			GitUtils.pull(submittedFile);
-		}
-		
+		File mavenProject = pomFile.getParentFile();		
 		App.console.println("--- Compilando y ejecutando con Maven: " + mavenProject.getName());
 		MavenUtils.compileAndExec(mavenProject, input);
-		
 	}
 
 	private static void open(File file) throws IOException {

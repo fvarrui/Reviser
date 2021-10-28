@@ -149,10 +149,9 @@ public class Exercise {
 	public void updateFromStudents(List<CsvStudent> students) {
 		getSubmissions().stream()
 			.forEach(r -> {
-				Optional<CsvStudent> student = students.stream().filter(s -> s.getFullname().equals(r.getName())).findFirst();		
-				if (student.isPresent()) {
-					r.setEmail(student.get().getEmail());
-				}
+				students.stream()
+					.filter(s -> s.getFullname().equals(r.getName().trim()))
+					.forEach(s -> r.setEmail(s.getEmail()));
 			});
 	}
 	
@@ -166,10 +165,12 @@ public class Exercise {
 	
 	public void save() throws JsonSyntaxException, JsonIOException, IOException {
 		File exerciseFile = new File(getDirectory(), EXERCISE_FILENAME);		
+		System.out.println("saving exercise ... " + exerciseFile);
 		JSONUtils.writeJsonToFile(this, exerciseFile);
 	}
 	
 	public static Exercise load(File submissionsDir) {
+		System.out.println("loading exercise ... " + submissionsDir);
 		File exerciseFile = new File(submissionsDir, EXERCISE_FILENAME);
 		Exercise exercise = null;
 		try {
