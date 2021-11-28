@@ -168,9 +168,6 @@
 							<organizationName>Francisco Vargas Ruiz</organizationName>
 							<organizationUrl>https://github.com/fvarrui</organizationUrl>
 							<createZipball>true</createZipball>
-							<winConfig>
-								<generateMsi>false</generateMsi>
-							</winConfig>
 						</configuration>
 					</execution>
 				</executions>
