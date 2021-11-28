@@ -164,6 +164,7 @@
 						</goals>
 						<configuration>
 							<bundleJre>true</bundleJre>
+							<customizedJre>false</customizedJre>
 							<organizationName>Francisco Vargas Ruiz</organizationName>
 							<organizationUrl>https://github.com/fvarrui</organizationUrl>
 							<createZipball>true</createZipball>
