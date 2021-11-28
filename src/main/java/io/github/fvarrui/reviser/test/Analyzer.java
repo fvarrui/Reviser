@@ -6,21 +6,22 @@ import java.util.Arrays;
 
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
 
+import io.github.fvarrui.reviser.model.Submission;
 import io.github.fvarrui.reviser.utils.CompressionUtils;
 import io.github.fvarrui.reviser.utils.FileUtils;
 import io.github.fvarrui.reviser.utils.GitUtils;
 import io.github.fvarrui.reviser.utils.URLUtils;
 
-public class Processing {
+public class Analyzer {
+	
+	public static Class<? extends Submission> analyze(File submissionDir) throws Exception {
 
-	public static void processAll(File submissionDir) throws Exception {
-
-		System.out.println("Procesando todos los ficheros de la entrega: " + submissionDir.getName());
+		System.out.println("Analizando todos los ficheros de la entrega: " + submissionDir.getName());
 
 		try {
 			
 			for (File submittedFile : Arrays.asList(submissionDir.listFiles())) {
-				process(submittedFile);
+				analyzeFile(submittedFile);
 			}
 			
 		} catch (InvalidRemoteException e) {
@@ -30,10 +31,12 @@ public class Processing {
 
 		}
 		System.out.println("¡Completado!");
+		
+		return Submission.class;
 
 	}
 
-	private static void process(File submittedFile) throws Exception {
+	private static void analyzeFile(File submittedFile) throws Exception {
 
 		System.out.println("Procesando entrega: " + submittedFile.getName() + " ... ");
 
@@ -116,5 +119,6 @@ public class Processing {
 
 		System.out.println("Fichero extraído: " + submittedFile.getName());
 	}
+
 
 }

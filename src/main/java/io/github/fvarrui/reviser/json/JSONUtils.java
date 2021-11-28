@@ -17,6 +17,7 @@ public class JSONUtils {
 			FxGson
 				.fullBuilder()
 				.addSerializationExclusionStrategy(new SerializationExclusionEstratregy())
+				.registerTypeAdapter(File.class, new FileAdapter())
 				.setPrettyPrinting()
 				.create();
 

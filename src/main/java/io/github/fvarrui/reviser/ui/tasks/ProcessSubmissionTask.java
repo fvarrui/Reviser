@@ -1,17 +1,15 @@
 package io.github.fvarrui.reviser.ui.tasks;
 
-import java.io.File;
-
-import io.github.fvarrui.reviser.test.Processing;
+import io.github.fvarrui.reviser.model.Submission;
 import javafx.concurrent.Task;
 
 public class ProcessSubmissionTask extends Task<Void> {
 	
-	private File submissionDir;
+	private Submission submission;
 	
-	public ProcessSubmissionTask(File submissionDir) {
+	public ProcessSubmissionTask(Submission submission) {
 		super();
-		this.submissionDir = submissionDir;
+		this.submission = submission;
 	}
 	
 	@Override
@@ -19,9 +17,9 @@ public class ProcessSubmissionTask extends Task<Void> {
 	
 		updateProgress(-1, 0);
 		
-		updateMessage("Procesando todos los ficheros de la entrega: " + submissionDir.getName());
+		updateMessage("Procesando todos los ficheros de la entrega: " + submission.getDirectory());
 		
-		Processing.processAll(submissionDir);
+		submission.process();
 		
 		updateMessage("¡Completado!");
 

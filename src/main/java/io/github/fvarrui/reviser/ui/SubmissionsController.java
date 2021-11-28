@@ -8,6 +8,7 @@ import io.github.fvarrui.reviser.model.Exercise;
 import io.github.fvarrui.reviser.model.Submission;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -55,6 +56,9 @@ public class SubmissionsController implements Initializable {
 	private TableColumn<Submission, Boolean> evaluatedColumn;
 
 	@FXML
+	private TableColumn<Submission, String> typeColumn;
+
+	@FXML
 	private BorderPane gradingPane;
 
 	public SubmissionsController() throws IOException {
@@ -81,18 +85,20 @@ public class SubmissionsController implements Initializable {
 			feedbackColumn.setCellValueFactory(v -> v.getValue().feedbackProperty());
 			scoreColumn.setCellValueFactory(v -> v.getValue().scoreProperty());
 			evaluatedColumn.setCellValueFactory(v -> v.getValue().evaluatedProperty());
+			typeColumn.setCellValueFactory(v -> new SimpleStringProperty(v.getValue().getClass().getSimpleName()));
 
 			feedbackColumn.setCellFactory(TextFieldTableCell.forTableColumn());
 			emailColumn.setCellFactory(TextFieldTableCell.forTableColumn());
 			evaluatedColumn.setCellFactory(CheckBoxTableCell.forTableColumn(evaluatedColumn));
 
 			// divides table width between the columns
-			nameColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.20));
-			emailColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.20));
+			nameColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.17));
+			emailColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.17));
 			directoryColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.20));
 			feedbackColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.20));
 			scoreColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.075));
 			evaluatedColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.075));
+			typeColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.08));
 
 			// set grading form
 			gradingPane.setCenter(gradingController.getView());

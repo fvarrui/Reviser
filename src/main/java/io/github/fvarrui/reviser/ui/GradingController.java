@@ -171,7 +171,7 @@ public class GradingController implements Initializable {
 	@FXML
 	private void onRun(ActionEvent e) {
 		File inputFile = new File(getSubmissionsDir(), "input.txt");
-		RunSubmissionTask task = new RunSubmissionTask(inputFile, new File(getSubmissionsDir(), getSubmission().getDirectory()));
+		RunSubmissionTask task = new RunSubmissionTask(inputFile, getSubmission());
 		task.setOnScheduled(event -> {
 			ExerciseController.me.showConsole();
 			ConsoleController.me.clearConsole();

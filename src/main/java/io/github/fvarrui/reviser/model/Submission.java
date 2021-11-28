@@ -1,20 +1,27 @@
 package io.github.fvarrui.reviser.model;
 
+import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.gson.annotations.Expose;
 
+import io.github.fvarrui.reviser.test.Processor;
+import io.github.fvarrui.reviser.test.Tester;
 import javafx.beans.Observable;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -25,6 +32,9 @@ public class Submission {
 	@Expose(serialize = false)
 	private IntegerProperty score = new SimpleIntegerProperty(0);
 
+	@Expose(serialize = false)
+	private ObjectProperty<File> parent = new SimpleObjectProperty<>();
+
 	private StringProperty name = new SimpleStringProperty();
 	private StringProperty feedback = new SimpleStringProperty();
 	private StringProperty email = new SimpleStringProperty();
@@ -33,6 +43,11 @@ public class Submission {
 	private BooleanProperty evaluated = new SimpleBooleanProperty();
 
 	public Submission() {}
+
+	public Submission(File submissionDirectory) {
+		setDirectory(submissionDirectory.getName());
+		setParent(submissionDirectory.getParentFile());
+	}
 
 	public final IntegerProperty scoreProperty() {
 		return this.score;
@@ -117,12 +132,30 @@ public class Submission {
 	public final void setEvaluated(final boolean evaluated) {
 		this.evaluatedProperty().set(evaluated);
 	}
+	
+	public final ObjectProperty<File> parentProperty() {
+		return this.parent;
+	}
+	
+	public final File getParent() {
+		return this.parentProperty().get();
+	}
+	
+	public final void setParent(final File parent) {
+		this.parentProperty().set(parent);
+	}
+	
+	public File getPath() {
+		return new File(getParent(), getDirectory());
+	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) return true;
+		if (this == obj)
+			return true;
 		Submission submission = (Submission) obj;
-		if (obj == null) return false;
+		if (obj == null)
+			return false;
 		return submission.getName().equals(getName());
 	}
 
@@ -152,37 +185,43 @@ public class Submission {
 		double score = getGrades().stream().mapToDouble(Grade::getWeightedValue).sum();
 		setScore((int) Math.round(score));
 	}
-	
+
 	public void resetScore() {
 		getGrades().stream().forEach(Grade::clear);
 		updateScore();
 		setFeedback("");
 		setEvaluated(false);
 	}
-	
+
 	public void fail(String feedback) {
 		System.out.println("fail de " + getName() + " feedback " + feedback);
 		setFeedback(feedback);
 		setEvaluated(true);
 	}
-	
+
 	public boolean gradesHasFeedback() {
 		return getGrades().stream().anyMatch(g -> g.getFeedback() != null && !g.getFeedback().isEmpty());
 	}
-	
+
 	public boolean gradesHasValue() {
-		return getGrades().stream().anyMatch(g -> g.getValue() > 0);		
+		return getGrades().stream().anyMatch(g -> g.getValue() > 0);
 	}
-	
+
 	public String getFullFeedback() {
 		if (!gradesHasFeedback() && !gradesHasValue()) {
 			return getFeedback();
 		}
-		List<String> feedback = getGrades()
-				.stream()
-				.map(Grade::toString)
-				.collect(Collectors.toList());
+		List<String> feedback = getGrades().stream().map(Grade::toString).collect(Collectors.toList());
 		return "<p>" + StringUtils.join(feedback, "</p><p>") + "</p>";
+	}
+	
+	public void process() throws Exception {
+		Processor.processAll(getPath());
+	}
+	
+	public void test(File input) throws Exception {
+		String inputString = input.exists() ? FileUtils.readFileToString(input, StandardCharsets.UTF_8) : "";		
+		Tester.testAll(inputString, getPath());
 	}
 
 }

@@ -11,6 +11,7 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import io.github.fvarrui.reviser.config.Config;
+import io.github.fvarrui.reviser.model.Submission;
 import io.github.fvarrui.reviser.utils.CompressionUtils;
 import javafx.concurrent.Task;
 
@@ -46,7 +47,8 @@ public class ImportExerciseTask extends Task<File> {
 		List<ProcessSubmissionTask> processingThreads = 
 				Arrays.asList(exerciseDir.listFiles())
 						.stream()
-						.map(d -> new ProcessSubmissionTask(d))
+						.map(Submission::new)
+						.map(ProcessSubmissionTask::new)
 						.collect(Collectors.toList());
 		
 		updateMessage("Procesando entregas");

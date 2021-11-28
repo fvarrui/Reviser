@@ -1,29 +1,24 @@
 package io.github.fvarrui.reviser.ui.tasks;
 
 import java.io.File;
-import java.nio.charset.StandardCharsets;
 
-import org.apache.commons.io.FileUtils;
-
-import io.github.fvarrui.reviser.test.Processing;
-import io.github.fvarrui.reviser.test.Testing;
+import io.github.fvarrui.reviser.model.Submission;
 import javafx.concurrent.Task;
 
 public class RunSubmissionTask extends Task<Void> {
 	
 	private File inputFile;
-	private File submissionDir;
+	private Submission submission;
 	
-	public RunSubmissionTask(File inputFile, File submissionDir) {
+	public RunSubmissionTask(File inputFile, Submission submission) {
 		this.inputFile = inputFile;
-		this.submissionDir = submissionDir;
+		this.submission = submission;
 	}
 
 	@Override
 	protected Void call() throws Exception {
-		String input = inputFile.exists() ? FileUtils.readFileToString(inputFile, StandardCharsets.UTF_8) : "";
-		Processing.processAll(submissionDir);
-		Testing.testAll(input, submissionDir);	
+		submission.process();
+		submission.test(inputFile);
 		return null;
 	}
 	

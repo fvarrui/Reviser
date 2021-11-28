@@ -17,6 +17,7 @@ import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -27,8 +28,14 @@ public class Exercise {
 
 	@Expose(serialize = false)
 	private ObjectProperty<File> directory = new SimpleObjectProperty<>();
+	
 	private ListProperty<Submission> submissions = new SimpleListProperty<>(FXCollections.observableArrayList(r -> new Observable[]{ r.nameProperty(), r.emailProperty(), r.feedbackProperty(), r.scoreProperty(), r.evaluatedProperty() }));
 	private ObjectProperty<GradingForm> form = new SimpleObjectProperty<>();
+	
+	public Exercise() {
+		super();
+		directory.addListener(this::onDirectoryChanged);
+	}
 
 	public final ListProperty<Submission> submissionsProperty() {
 		return this.submissions;
@@ -150,7 +157,7 @@ public class Exercise {
 		getSubmissions().stream()
 			.forEach(r -> {
 				students.stream()
-					.filter(s -> s.getFullname().equals(r.getName().trim()))
+					.filter(s -> s.getFullname().equals(r.getName().trim().replaceAll(" +", " ")))
 					.forEach(s -> r.setEmail(s.getEmail()));
 			});
 	}
@@ -184,6 +191,10 @@ public class Exercise {
 		exercise.configListener();
 		exercise.populateGrades();
 		return exercise;
+	}
+	
+	private void onDirectoryChanged(ObservableValue<? extends File> o, File ov, File nv) {
+		getSubmissions().stream().forEach(s -> s.setParent(nv));
 	}
 	
 	@Override

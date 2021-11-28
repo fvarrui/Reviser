@@ -12,7 +12,7 @@ import io.github.fvarrui.reviser.utils.FileUtils;
 import io.github.fvarrui.reviser.utils.GitUtils;
 import io.github.fvarrui.reviser.utils.MavenUtils;
 
-public class Testing {
+public class Tester {
 	
 	public static void testAll(String input, File submissionsDir) throws Exception {
 		
