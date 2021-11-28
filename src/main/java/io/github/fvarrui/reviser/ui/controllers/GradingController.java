@@ -1,4 +1,4 @@
-package io.github.fvarrui.reviser.ui;
+package io.github.fvarrui.reviser.ui.controllers;
 
 import java.awt.Desktop;
 import java.io.File;
@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import io.github.fvarrui.reviser.model.Grade;
 import io.github.fvarrui.reviser.model.GradingForm;
 import io.github.fvarrui.reviser.model.Submission;
+import io.github.fvarrui.reviser.ui.Reviser;
 import io.github.fvarrui.reviser.ui.tasks.RunSubmissionTask;
 import io.github.fvarrui.reviser.ui.utils.Dialogs;
 import javafx.beans.property.BooleanProperty;
@@ -177,7 +178,7 @@ public class GradingController implements Initializable {
 			ConsoleController.me.clearConsole();
 		});
 		task.setOnFailed(event -> {
-			App.console.println(event.getSource().getException());
+			Reviser.console.println(event.getSource().getException());
 			getSubmission().fail(event.getSource().getException().getMessage());
 		});
 		task.start();
@@ -185,7 +186,7 @@ public class GradingController implements Initializable {
 
 	@FXML
 	private void onClearScore(ActionEvent e) {
-		if (Dialogs.confirm(App.TITLE, "Limpiar las puntuaciones y los comentarios de '" + submission.get().getName() + "'.", "¿Está seguro?")) {
+		if (Dialogs.confirm(Reviser.TITLE, "Limpiar las puntuaciones y los comentarios de '" + submission.get().getName() + "'.", "¿Está seguro?")) {
 			getSubmission().resetScore();
 		}
 	}

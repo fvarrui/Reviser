@@ -1,6 +1,9 @@
 package io.github.fvarrui.reviser.ui;
 
+import java.util.ResourceBundle;
+
 import io.github.fvarrui.reviser.config.Config;
+import io.github.fvarrui.reviser.ui.controllers.MainController;
 import io.github.fvarrui.reviser.ui.utils.MessageConsumer;
 import javafx.application.Application;
 import javafx.geometry.Dimension2D;
@@ -9,7 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-public class App extends Application {
+public class Reviser extends Application {
 	
 	public static final String TITLE = "Reviser";
 
@@ -34,7 +37,7 @@ public class App extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
-		App.primaryStage = primaryStage;
+		Reviser.primaryStage = primaryStage;
 
 		restoreStage();
 		
@@ -42,7 +45,7 @@ public class App extends Application {
 		
 		Scene scene = new Scene(mainController.getView(), 900, 700);
 
-		primaryStage.setTitle(TITLE);
+		primaryStage.setTitle(TITLE + " " + ResourceBundle.getBundle("version").getString("reviser.version"));
 		primaryStage.getIcons().add(new Image("/images/logo-16x16.png"));
 		primaryStage.getIcons().add(new Image("/images/logo-24x24.png"));
 		primaryStage.getIcons().add(new Image("/images/logo-32x32.png"));

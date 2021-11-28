@@ -1,9 +1,10 @@
-package io.github.fvarrui.reviser.ui;
+package io.github.fvarrui.reviser.ui.controllers;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import io.github.fvarrui.reviser.ui.Reviser;
 import io.github.fvarrui.reviser.ui.utils.MessageConsumer;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -45,8 +46,8 @@ public class ConsoleController implements Initializable {
 		
 		me = this;
 		
-		App.console = new MessageConsumer(consoleText);
-		App.console.start();
+		Reviser.console = new MessageConsumer(consoleText);
+		Reviser.console.start();
 		
 		console.bindBidirectional(consoleText.textProperty());
 		clearButton.disableProperty().bind(console.isEmpty());

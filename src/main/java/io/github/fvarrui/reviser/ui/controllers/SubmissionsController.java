@@ -1,4 +1,4 @@
-package io.github.fvarrui.reviser.ui;
+package io.github.fvarrui.reviser.ui.controllers;
 
 import java.io.IOException;
 import java.net.URL;
@@ -27,7 +27,7 @@ public class SubmissionsController implements Initializable {
 
 	// model
 
-	private ObjectProperty<Exercise> exercise = new SimpleObjectProperty<>(new Exercise());
+	private ObjectProperty<Exercise> exercise = new SimpleObjectProperty<>();
 
 	// view
 

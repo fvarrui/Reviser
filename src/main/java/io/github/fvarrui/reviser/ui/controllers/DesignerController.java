@@ -1,4 +1,4 @@
-package io.github.fvarrui.reviser.ui;
+package io.github.fvarrui.reviser.ui.controllers;
 
 import java.io.IOException;
 import java.net.URL;

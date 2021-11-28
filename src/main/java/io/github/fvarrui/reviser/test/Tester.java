@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 import org.apache.maven.shared.invoker.MavenInvocationException;
 
-import io.github.fvarrui.reviser.ui.App;
+import io.github.fvarrui.reviser.ui.Reviser;
 import io.github.fvarrui.reviser.utils.FileUtils;
 import io.github.fvarrui.reviser.utils.GitUtils;
 import io.github.fvarrui.reviser.utils.MavenUtils;
@@ -16,7 +16,7 @@ public class Tester {
 	
 	public static void testAll(String input, File submissionsDir) throws Exception {
 		
-		App.console.println("--- Ejecutando entrega: " + submissionsDir.getName());
+		Reviser.console.println("--- Ejecutando entrega: " + submissionsDir.getName());
 		try {
 			
 			for (File submissionDir : Arrays.asList(submissionsDir.listFiles())) {
@@ -35,7 +35,7 @@ public class Tester {
 
 	private static void test(String input, File submittedFile) throws Exception {
 
-		App.console.println("--- Ejecutando: " + submittedFile.getName());
+		Reviser.console.println("--- Ejecutando: " + submittedFile.getName());
 
 		// busca el directorio .git de forma recursiva 
 		File gitFolder = FileUtils.find(submittedFile, ".git");
@@ -43,7 +43,7 @@ public class Tester {
 			
 			// hace un "git pull" si es un repo Git
 			File repoFolder = gitFolder.getParentFile();
-			App.console.println("--- Haciendo pull al repositorio GIT en " + repoFolder.getName());
+			Reviser.console.println("--- Haciendo pull al repositorio GIT en " + repoFolder.getName());
 			GitUtils.pull(repoFolder);
 			
 		}
@@ -53,7 +53,7 @@ public class Tester {
 		if (pomFile != null) {
 		
 			// hace "mvn compile exec:java" si es un proyecto Maven
-			App.console.println("--- Encontrado fichero pom.xml en el proyecto. Se trata de un repositorio Maven: " + pomFile.getParentFile().getName());			
+			Reviser.console.println("--- Encontrado fichero pom.xml en el proyecto. Se trata de un repositorio Maven: " + pomFile.getParentFile().getName());			
 			testMaven(input, submittedFile, pomFile);
 			
 		} else {
@@ -62,18 +62,18 @@ public class Tester {
 			
 		}
 		
-		App.console.println("--- Test completado");
+		Reviser.console.println("--- Test completado");
 
 	}
 
 	private static void testMaven(String input, File submittedFile, File pomFile) throws Exception {
 		File mavenProject = pomFile.getParentFile();		
-		App.console.println("--- Compilando y ejecutando con Maven: " + mavenProject.getName());
+		Reviser.console.println("--- Compilando y ejecutando con Maven: " + mavenProject.getName());
 		MavenUtils.compileAndExec(mavenProject, input);
 	}
 
 	private static void open(File file) throws IOException {
-		App.console.println("--- Abriendo " + file.getName() + " ...");
+		Reviser.console.println("--- Abriendo " + file.getName() + " ...");
 		Desktop.getDesktop().open(file);
 	}
 

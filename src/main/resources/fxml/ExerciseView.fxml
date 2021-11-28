@@ -6,12 +6,15 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane fx:id="view" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="view" stylesheets="@../css/styles.css"
+	xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
 	<center>
 		<TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE">
 			<tabs>
@@ -24,21 +27,43 @@
 	<top>
 		<VBox BorderPane.alignment="CENTER">
 			<children>
-				<HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" spacing="5.0">
+				<HBox alignment="CENTER" layoutX="10.0" layoutY="10.0"
+					spacing="5.0">
 					<padding>
 						<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 					</padding>
 					<children>
-						<Label fx:id="titleLabel" maxWidth="1.7976931348623157E308" styleClass="submission-title" text="&lt;Título del ejercicio&gt;" HBox.hgrow="ALWAYS" />
-                  <Button fx:id="removeButton" layoutX="176.0" layoutY="15.0" mnemonicParsing="false" onAction="#onRemoveExercise" prefHeight="32.0" prefWidth="40.0">
-                     <graphic>
-                        <FontIcon iconLiteral="far-trash-alt" iconSize="18" />
-                     </graphic>
-                     <tooltip>
-                        <Tooltip text="Eliminar la tarea" />
-                     </tooltip>
-                  </Button>
-						<Button fx:id="evaluateAllButton" layoutX="176.0" layoutY="15.0" mnemonicParsing="false" onAction="#onEvaluateAll" prefHeight="32.0" prefWidth="40.0">
+						<Label fx:id="titleLabel" maxWidth="1.7976931348623157E308"
+							styleClass="submission-title" text="&lt;Título del ejercicio&gt;"
+							HBox.hgrow="ALWAYS" />
+						<Button fx:id="compareButton" layoutX="168.0"
+							layoutY="15.0" mnemonicParsing="false"
+							onAction="#onCompareSubmissions" prefHeight="32.0"
+							prefWidth="40.0">
+							<tooltip>
+								<Tooltip text="Eliminar la tarea" />
+							</tooltip>
+							<graphic>
+								<ImageView pickOnBounds="true" preserveRatio="true">
+									<image>
+										<Image url="@../images/vulture-16x16.png" />
+									</image>
+								</ImageView>
+							</graphic>
+						</Button>
+						<Button fx:id="removeButton" layoutX="176.0" layoutY="15.0"
+							mnemonicParsing="false" onAction="#onRemoveExercise"
+							prefHeight="32.0" prefWidth="40.0">
+							<graphic>
+								<FontIcon iconLiteral="far-trash-alt" iconSize="18" />
+							</graphic>
+							<tooltip>
+								<Tooltip text="Eliminar la tarea" />
+							</tooltip>
+						</Button>
+						<Button fx:id="evaluateAllButton" layoutX="176.0"
+							layoutY="15.0" mnemonicParsing="false" onAction="#onEvaluateAll"
+							prefHeight="32.0" prefWidth="40.0">
 							<graphic>
 								<FontIcon iconLiteral="far-check-square" iconSize="18" />
 							</graphic>
@@ -46,15 +71,19 @@
 								<Tooltip text="Marcas todas las entregas como evaluadas" />
 							</tooltip>
 						</Button>
-						<Button fx:id="openFolder" layoutX="176.0" layoutY="15.0" mnemonicParsing="false" onAction="#onOpenExplorer" prefHeight="32.0" prefWidth="40.0">
+						<Button fx:id="openFolder" layoutX="176.0" layoutY="15.0"
+							mnemonicParsing="false" onAction="#onOpenExplorer"
+							prefHeight="32.0" prefWidth="40.0">
 							<graphic>
 								<FontIcon iconLiteral="far-folder-open" iconSize="18" />
 							</graphic>
 							<tooltip>
-								<Tooltip text="Abrir carpeta en el explorador del sistema" />
+								<Tooltip
+									text="Abrir carpeta en el explorador del sistema" />
 							</tooltip>
 						</Button>
-						<Button fx:id="exportResults" mnemonicParsing="false" onAction="#onExportResults" prefHeight="32.0" prefWidth="40.0">
+						<Button fx:id="exportResults" mnemonicParsing="false"
+							onAction="#onExportResults" prefHeight="32.0" prefWidth="40.0">
 							<graphic>
 								<FontIcon iconLiteral="fas-file-export" iconSize="18" />
 							</graphic>
@@ -62,7 +91,8 @@
 								<Tooltip text="Exportar resultados a CSV" />
 							</tooltip>
 						</Button>
-						<Button fx:id="importEmails" mnemonicParsing="false" onAction="#onImportEmails" prefHeight="32.0" prefWidth="40.0">
+						<Button fx:id="importEmails" mnemonicParsing="false"
+							onAction="#onImportEmails" prefHeight="32.0" prefWidth="40.0">
 							<graphic>
 								<FontIcon iconLiteral="fas-at" iconSize="18" />
 							</graphic>

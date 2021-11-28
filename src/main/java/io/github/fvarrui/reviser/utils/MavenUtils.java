@@ -13,7 +13,7 @@ import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.Invoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
 
-import io.github.fvarrui.reviser.ui.App;
+import io.github.fvarrui.reviser.ui.Reviser;
 
 public class MavenUtils {
 
@@ -31,7 +31,7 @@ public class MavenUtils {
 		request.setGoals(Collections.singletonList(goal));
 
 		InvocationOutputHandler handler = line -> {
-			App.console.println(line);
+			Reviser.console.println(line);
 		};
 		
 		Invoker invoker = new DefaultInvoker();

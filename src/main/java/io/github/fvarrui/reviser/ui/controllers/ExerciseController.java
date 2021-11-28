@@ -1,4 +1,4 @@
-package io.github.fvarrui.reviser.ui;
+package io.github.fvarrui.reviser.ui.controllers;
 
 import java.awt.Desktop;
 import java.io.File;
@@ -16,6 +16,8 @@ import io.github.fvarrui.reviser.csv.CsvResult;
 import io.github.fvarrui.reviser.csv.CsvStudent;
 import io.github.fvarrui.reviser.csv.CsvUtils;
 import io.github.fvarrui.reviser.model.Exercise;
+import io.github.fvarrui.reviser.ui.Reviser;
+import io.github.fvarrui.reviser.ui.tasks.CompareSubmissionsTask;
 import io.github.fvarrui.reviser.ui.utils.Dialogs;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -96,7 +98,7 @@ public class ExerciseController implements Initializable {
 
 		}
 
-		App.primaryStage.setOnCloseRequest(e -> {
+		Reviser.primaryStage.setOnCloseRequest(e -> {
 			saveExercise(getExercise());
 		});
 
@@ -192,10 +194,23 @@ public class ExerciseController implements Initializable {
 			getExercise().evaluateAll(true);
 		}
 	}
+	
+	@FXML
+	private void onCompareSubmissions(ActionEvent e) {
+		CompareSubmissionsTask task = new CompareSubmissionsTask(getExercise().getSubmissions());
+		task.setOnScheduled(event -> {
+			ExerciseController.me.showConsole();
+			ConsoleController.me.clearConsole();
+		});
+		task.setOnFailed(event -> {
+			Reviser.console.println(event.getSource().getException());
+		});
+		task.start();	
+	}
 
 	@FXML
 	private void onRemoveExercise(ActionEvent e) {
-		App.mainController.removeExercise(exercise.get());
+		Reviser.mainController.removeExercise(exercise.get());
 	}
 
 	public void showConsole() {

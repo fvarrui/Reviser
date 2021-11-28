@@ -7,7 +7,7 @@ import org.controlsfx.dialog.CommandLinksDialog;
 import org.controlsfx.dialog.CommandLinksDialog.CommandLinksButtonType;
 
 import io.github.fvarrui.reviser.config.Config;
-import io.github.fvarrui.reviser.ui.App;
+import io.github.fvarrui.reviser.ui.Reviser;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
@@ -23,8 +23,8 @@ public class Dialogs {
 				new CommandLinksButtonType("Directorio de entregas", "Importar directamente un directorio de entregas.", true),				
 				new CommandLinksButtonType("Fichero de entregas", "Importar desde un fichero ZIP con las entregas descargadas de Moodle.", false)
 				);
-		dialog.initOwner(App.primaryStage);
-		dialog.setTitle(App.TITLE);
+		dialog.initOwner(Reviser.primaryStage);
+		dialog.setTitle(Reviser.TITLE);
 		dialog.setHeaderText("Seleccione desde donde quiere importar las entregas");
 		Optional<ButtonType> result = dialog.showAndWait();
 		if (result.get().getButtonData() == ButtonData.OK_DONE) {
@@ -39,7 +39,7 @@ public class Dialogs {
 		DirectoryChooser chooser = new DirectoryChooser();
 		chooser.setInitialDirectory(new File(Config.getConfig().getLastDirectory()));
 		chooser.setTitle(title);
-		File directory = chooser.showDialog(App.primaryStage);
+		File directory = chooser.showDialog(Reviser.primaryStage);
 		if (directory != null) Config.getConfig().setLastDirectory(directory.getParentFile().getAbsolutePath());		
 		return directory;
 	}
@@ -53,7 +53,7 @@ public class Dialogs {
 		    new ExtensionFilter(description, extension),
 		    new ExtensionFilter("Todos los ficheros", "*.*")
 		    );
-		File file = chooser.showOpenDialog(App.primaryStage);
+		File file = chooser.showOpenDialog(Reviser.primaryStage);
 		if (file != null) Config.getConfig().setLastDirectory(file.getParentFile().getAbsolutePath());
 		return file;
 	}
@@ -67,7 +67,7 @@ public class Dialogs {
 		    new ExtensionFilter(description, extension),
 		    new ExtensionFilter("Todos los ficheros", "*.*")
 		    );
-		File file = chooser.showSaveDialog(App.primaryStage);
+		File file = chooser.showSaveDialog(Reviser.primaryStage);
 		if (file != null) Config.getConfig().setLastDirectory(file.getParentFile().getAbsolutePath());
 		return file;
 	}
@@ -79,7 +79,7 @@ public class Dialogs {
 	public static boolean confirm(String title, String header, String content) {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
-		alert.initOwner(App.primaryStage);
+		alert.initOwner(Reviser.primaryStage);
 		alert.setTitle(title);
 		alert.setHeaderText(header);
 		alert.setContentText(content);
@@ -89,7 +89,7 @@ public class Dialogs {
 	
 	public static void error(String header, String content) {
 		Alert alert = new Alert(AlertType.ERROR);
-		alert.initOwner(App.primaryStage);
+		alert.initOwner(Reviser.primaryStage);
 		alert.setTitle("Error");
 		alert.setHeaderText(header);
 		alert.setContentText(content);
@@ -103,7 +103,7 @@ public class Dialogs {
 
 	public static void info(String title, String header) {
 		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.initOwner(App.primaryStage);
+		alert.initOwner(Reviser.primaryStage);
 		alert.setTitle(title);
 		alert.setHeaderText(header);
 		alert.showAndWait();

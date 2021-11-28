@@ -1,4 +1,4 @@
-package io.github.fvarrui.reviser.ui;
+package io.github.fvarrui.reviser.ui.controllers;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,6 +11,7 @@ import org.controlsfx.dialog.ProgressDialog;
 
 import io.github.fvarrui.reviser.config.Config;
 import io.github.fvarrui.reviser.model.Exercise;
+import io.github.fvarrui.reviser.ui.Reviser;
 import io.github.fvarrui.reviser.ui.tasks.ImportExerciseTask;
 import io.github.fvarrui.reviser.ui.utils.Dialogs;
 import io.github.fvarrui.reviser.ui.utils.FileListCell;
@@ -146,7 +147,7 @@ public class MainController implements Initializable {
 		task.start();
 
 		ProgressDialog progressDialog = new ProgressDialog(task);
-		progressDialog.initOwner(App.primaryStage);
+		progressDialog.initOwner(Reviser.primaryStage);
 		progressDialog.setTitle("Importando ejercicio...");
 		progressDialog.setHeaderText(file.getName());
 		progressDialog.showAndWait();		
