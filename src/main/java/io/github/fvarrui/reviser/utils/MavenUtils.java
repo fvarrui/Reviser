@@ -13,10 +13,11 @@ import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.Invoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
 
+import io.github.fvarrui.reviser.config.Config;
 import io.github.fvarrui.reviser.ui.Reviser;
 
 public class MavenUtils {
-
+	
 	/**
 	 * Runs specified goal in a Maven project 
 	 * @param projectDir Maven project directory
@@ -28,6 +29,7 @@ public class MavenUtils {
 		
 		InvocationRequest request = new DefaultInvocationRequest();
 		request.setPomFile(new File(projectDir, "pom.xml"));
+		request.setBaseDirectory(projectDir);
 		request.setGoals(Collections.singletonList(goal));
 
 		InvocationOutputHandler handler = line -> {
@@ -35,6 +37,7 @@ public class MavenUtils {
 		};
 		
 		Invoker invoker = new DefaultInvoker();
+		invoker.setMavenHome(new File(Config.getConfig().getMavenHome()));
 		if (in != null) invoker.setInputStream(in);
 		invoker.setOutputHandler(handler);
 		invoker.setErrorHandler(handler);

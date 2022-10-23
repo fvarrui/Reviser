@@ -18,6 +18,8 @@ import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
 
 public class Config {
+	
+	private static final String DEFAULT_MAVEN_HOME = System.getenv("MAVEN_HOME");
 
 	public static final File configDir = new File(System.getProperty("user.home"), ".Reviser");
 	public static final File exercisesDir = new File(configDir, "exercises");
@@ -27,6 +29,7 @@ public class Config {
 	private ObjectProperty<Point2D> stageCoords = new SimpleObjectProperty<>();
 	private BooleanProperty maximized = new SimpleBooleanProperty();
 	private StringProperty lastDirectory = new SimpleStringProperty(".");
+	private StringProperty mavenHome = new SimpleStringProperty(DEFAULT_MAVEN_HOME);
 
 	private static Config config;
 
@@ -44,6 +47,9 @@ public class Config {
 		if (configFile.exists()) {
 			try {
 				config = JSONUtils.readJsonFromFile(configFile, Config.class);
+				if (config.getMavenHome() == null) {
+					config.setMavenHome(System.getenv("MAVEN_HOME"));
+				}
 			} catch (JsonSyntaxException | JsonIOException | IOException e) {
 				Dialogs.error("No se pudo cargar la configuración desde el fichero '" + configFile + "'.", e);
 			}
@@ -106,6 +112,18 @@ public class Config {
 
 	public final void setLastDirectory(final String lastDirectory) {
 		this.lastDirectoryProperty().set(lastDirectory);
+	}
+
+	public final StringProperty mavenHomeProperty() {
+		return this.mavenHome;
+	}
+
+	public final String getMavenHome() {
+		return this.mavenHomeProperty().get();
+	}
+
+	public final void setMavenHome(final String mavenHome) {
+		this.mavenHomeProperty().set(mavenHome);
 	}
 
 }

@@ -13,12 +13,12 @@ import javafx.concurrent.Task;
 
 public class CompareSubmissionsTask extends Task<Void> {
 	
-	private static final double THRESHOLD = 80.0;
-	private static final double SIMILARITY = 75.0;
+	private static final double THRESHOLD = 75.0;
+	private static final double SIMILARITY = 85.0;
 
     private static final List<String> TEXT_FILES = Arrays.asList("java", "fxml", "xml", "gradle", "txt", "json", "meta", "html");
-    private static final List<String> BINARY_FILES = Arrays.asList("pdf", "png", "jpg", "jpeg");
-    private static final List<String> EXCLUDED_FILES = Arrays.asList(".*/target/.*", ".*/bin/.*", ".*/\\..*");
+    private static final List<String> BINARY_FILES = new ArrayList<>(); // Arrays.asList("pdf", "png", "jpg", "jpeg");
+    private static final List<String> EXCLUDED_FILES = Arrays.asList(".*/fotos/.*", ".*/docs/.*", ".*/target/.*", ".*/bin/.*", ".*/\\..*");
 
 	private List<Submission> submissions;
 	
