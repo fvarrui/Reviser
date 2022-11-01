@@ -8,7 +8,6 @@ import io.github.fvarrui.reviser.model.Exercise;
 import io.github.fvarrui.reviser.model.Submission;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -85,7 +84,7 @@ public class SubmissionsController implements Initializable {
 			feedbackColumn.setCellValueFactory(v -> v.getValue().feedbackProperty());
 			scoreColumn.setCellValueFactory(v -> v.getValue().scoreProperty());
 			evaluatedColumn.setCellValueFactory(v -> v.getValue().evaluatedProperty());
-			typeColumn.setCellValueFactory(v -> new SimpleStringProperty(v.getValue().getClass().getSimpleName()));
+			typeColumn.setCellValueFactory(v -> v.getValue().testerProperty().asString());
 
 			feedbackColumn.setCellFactory(TextFieldTableCell.forTableColumn());
 			emailColumn.setCellFactory(TextFieldTableCell.forTableColumn());

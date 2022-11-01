@@ -48,5 +48,10 @@ public class JSONUtils {
 		String jsonString = gson.toJson(object, object.getClass());
 		FileUtils.writeStringToFile(jsonFile, jsonString, StandardCharsets.UTF_8);
 	}
+
+	public static Gson getGson() {
+		return gson;
+	}
+
 	
 }

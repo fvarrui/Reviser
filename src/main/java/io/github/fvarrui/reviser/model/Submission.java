@@ -1,18 +1,16 @@
 package io.github.fvarrui.reviser.model;
 
 import java.io.File;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.gson.annotations.Expose;
 
-import io.github.fvarrui.reviser.test.Processor;
-import io.github.fvarrui.reviser.test.Tester;
+import io.github.fvarrui.reviser.processors.Processor;
+import io.github.fvarrui.reviser.testers.Tester;
 import javafx.beans.Observable;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -30,6 +28,9 @@ import javafx.collections.ObservableList;
 public class Submission {
 
 	@Expose(serialize = false)
+	private ObjectProperty<Tester> tester = new SimpleObjectProperty<>();
+
+	@Expose(serialize = false)
 	private IntegerProperty score = new SimpleIntegerProperty(0);
 
 	@Expose(serialize = false)
@@ -45,8 +46,10 @@ public class Submission {
 	public Submission() {}
 
 	public Submission(File submissionDirectory) {
+		this();
 		setDirectory(submissionDirectory.getName());
 		setParent(submissionDirectory.getParentFile());
+		analyze();
 	}
 
 	public final IntegerProperty scoreProperty() {
@@ -132,7 +135,7 @@ public class Submission {
 	public final void setEvaluated(final boolean evaluated) {
 		this.evaluatedProperty().set(evaluated);
 	}
-	
+
 	public final ObjectProperty<File> parentProperty() {
 		return this.parent;
 	}
@@ -140,9 +143,21 @@ public class Submission {
 	public final File getParent() {
 		return this.parentProperty().get();
 	}
-	
+
 	public final void setParent(final File parent) {
 		this.parentProperty().set(parent);
+	}
+	
+	public final ObjectProperty<Tester> testerProperty() {
+		return this.tester;
+	}
+	
+	public final Tester getTester() {
+		return this.testerProperty().get();
+	}
+	
+	public final void setTester(final Tester tester) {
+		this.testerProperty().set(tester);
 	}
 	
 	public File getPath() {
@@ -215,13 +230,21 @@ public class Submission {
 		return "<p>" + StringUtils.join(feedback, "</p><p>") + "</p>";
 	}
 	
-	public void process() throws Exception {
-		Processor.processAll(getPath());
-	}
-	
-	public void test(File input) throws Exception {
-		String inputString = input.exists() ? FileUtils.readFileToString(input, StandardCharsets.UTF_8) : "";		
-		Tester.testAll(inputString, getPath());
+	public void analyze() {
+		File submissionsDir = new File(getParent(), getDirectory());
+		tester.set(Tester.analyze(submissionsDir));
 	}
 
+	public void test(File ... input) throws Exception {
+		if (getTester() == null) {
+			analyze();
+		}
+		File submissionsDir = new File(getParent(), getDirectory());
+		getTester().runTest(submissionsDir);
+	}
+
+	public void process() throws Exception {
+		Processor.process(getPath());
+	}
+	
 }

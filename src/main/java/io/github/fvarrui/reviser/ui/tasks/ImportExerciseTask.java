@@ -53,15 +53,11 @@ public class ImportExerciseTask extends Task<File> {
 		
 		updateMessage("Procesando entregas");
 		ExecutorService s = Executors.newFixedThreadPool(processingThreads.size());
-		processingThreads.stream().forEach(p -> s.submit(p));
+		processingThreads.stream().forEach(s::submit);
 		s.shutdown();
 		while(!s.isTerminated()) ;
 		updateMessage("¡Todas las entregas procesadas!");
 		
-		return exerciseDir;
-	}
-	
-	public File getExerciseDir() {
 		return exerciseDir;
 	}
 	

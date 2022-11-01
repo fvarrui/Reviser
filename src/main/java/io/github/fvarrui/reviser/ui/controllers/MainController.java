@@ -7,11 +7,9 @@ import java.util.Arrays;
 import java.util.ResourceBundle;
 
 import org.apache.commons.io.FileUtils;
-import org.controlsfx.dialog.ProgressDialog;
 
 import io.github.fvarrui.reviser.config.Config;
 import io.github.fvarrui.reviser.model.Exercise;
-import io.github.fvarrui.reviser.ui.Reviser;
 import io.github.fvarrui.reviser.ui.tasks.ImportExerciseTask;
 import io.github.fvarrui.reviser.ui.utils.Dialogs;
 import io.github.fvarrui.reviser.ui.utils.FileListCell;
@@ -130,12 +128,12 @@ public class MainController implements Initializable {
 		
 		ImportExerciseTask task = new ImportExerciseTask(file);
 		task.setOnScheduled(event -> {
-			ExerciseController.me.showConsole();
+			ExerciseController.me.showResults();
 			ConsoleController.me.clearConsole();
 		});
 		task.setOnSucceeded(event -> {
-			exercises.add(task.getExerciseDir());
-			exercisesList.getSelectionModel().select(task.getExerciseDir());
+			exercises.add(task.getValue());
+			exercisesList.getSelectionModel().select(task.getValue());
 			Platform.runLater(() -> {
 				exercisesList.requestFocus();
 			});
@@ -146,11 +144,7 @@ public class MainController implements Initializable {
 		});
 		task.start();
 
-		ProgressDialog progressDialog = new ProgressDialog(task);
-		progressDialog.initOwner(Reviser.primaryStage);
-		progressDialog.setTitle("Importando ejercicio...");
-		progressDialog.setHeaderText(file.getName());
-		progressDialog.showAndWait();		
+		Dialogs.progress("Importando ejercicio...", file.getName(), task);
 		
 	}
 

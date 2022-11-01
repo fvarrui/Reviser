@@ -1,5 +1,7 @@
 package io.github.fvarrui.reviser.utils;
 
+import static io.github.fvarrui.reviser.utils.FileUtils.findFile;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -12,7 +14,19 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import com.microsoft.alm.secret.Token;
 import com.microsoft.alm.storage.windows.CredManagerBackedTokenStore;
 
+import io.github.fvarrui.reviser.ui.Reviser;
+
 public class GitUtils {
+	
+	public static void pullIfRepo(File directory) throws Exception {
+		File gitFolder = findFile(directory, ".git");
+		if (gitFolder != null) {
+			Reviser.console.println(directory + " es un repositorio Git");
+			File repoFolder = gitFolder.getParentFile();
+			Reviser.console.println("git pull!!!");
+			GitUtils.pull(repoFolder);
+		}	
+	}
 
 	/**
 	 * Runs "git pull" on a specified repo
@@ -20,7 +34,7 @@ public class GitUtils {
 	 * @throws Exception
 	 */
 	public static void pull(File repoDir) throws Exception {
-
+		
 		Git repo = Git.open(repoDir);
 
 		String uri = repo.getRepository().getConfig().getString("remote", "origin", "url");

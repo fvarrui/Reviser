@@ -82,7 +82,9 @@ public class CompressionUtils {
 
 	private static void unzip(File source, File destination) throws IOException {
 		try {
-			new ZipFile(source).extractAll(destination.getAbsolutePath());
+			ZipFile zipFile = new ZipFile(source);
+			zipFile.extractAll(destination.getAbsolutePath());
+			zipFile.close();
 		} catch (ZipException e) {
 			throw new IOException(e);
 		}

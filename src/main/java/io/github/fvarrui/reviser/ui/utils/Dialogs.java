@@ -4,10 +4,12 @@ import java.io.File;
 import java.util.Optional;
 
 import org.controlsfx.dialog.CommandLinksDialog;
+import org.controlsfx.dialog.ProgressDialog;
 import org.controlsfx.dialog.CommandLinksDialog.CommandLinksButtonType;
 
 import io.github.fvarrui.reviser.config.Config;
 import io.github.fvarrui.reviser.ui.Reviser;
+import javafx.concurrent.Worker;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
@@ -109,5 +111,12 @@ public class Dialogs {
 		alert.showAndWait();
 	}
 
+	public static void progress(String title, String header, Worker<?> task) {
+		ProgressDialog progressDialog = new ProgressDialog(task);
+		progressDialog.initOwner(Reviser.primaryStage);
+		progressDialog.setTitle(title);
+		progressDialog.setHeaderText(header);
+		progressDialog.show();
+	}
 
 }

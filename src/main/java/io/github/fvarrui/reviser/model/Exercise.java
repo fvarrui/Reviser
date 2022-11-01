@@ -139,7 +139,7 @@ public class Exercise {
 					submission = first.get();
 					submission.setDirectory(d.getName());
 				} else {
-					submission = new Submission();
+					submission = new Submission(d);
 					submission.setName(name);
 					submission.setDirectory(d.getName());
 					getSubmissions().add(submission);
@@ -186,7 +186,12 @@ public class Exercise {
 		exercise.initGradingForm();
 		exercise.configListener();
 		exercise.populateGrades();
+		exercise.analyzeSubmissions();
 		return exercise;
+	}
+	
+	public void analyzeSubmissions() {
+		getSubmissions().forEach(Submission::analyze);
 	}
 	
 	@Override

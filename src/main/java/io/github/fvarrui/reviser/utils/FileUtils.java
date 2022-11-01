@@ -3,6 +3,7 @@ package io.github.fvarrui.reviser.utils;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class FileUtils {
 	
@@ -12,15 +13,19 @@ public class FileUtils {
 	 * @param name Searched filename
 	 * @return
 	 */
-	public static File find(File file, String name) {
-		if (file.getName().equals(name)) {
+	public static File findFile(File file, String name) {
+		return findFile(file, f -> f.getName().equals(name));
+	}
+	
+	public static File findFile(File file, Predicate<File> predicate) {
+		if (predicate.test(file)) {
 			return file;
 		} else if (file.isDirectory()) {
 			File [] list = file.listFiles();
 			if (list == null) return null;
 			List<File> files = Arrays.asList(list);
 			for (File subfile : files) {
-				File found = find(subfile, name);
+				File found = findFile(subfile, predicate);
 				if (found != null) return found;
 			}
 		}

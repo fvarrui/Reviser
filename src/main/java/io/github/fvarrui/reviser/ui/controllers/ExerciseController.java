@@ -216,6 +216,10 @@ public class ExerciseController implements Initializable {
 	public void showConsole() {
 		tabPane.getSelectionModel().select(consoleTab);
 	}
+	
+	public void showResults() {
+		tabPane.getSelectionModel().select(resultsTab);
+	}
 
 	public BorderPane getView() {
 		return view;
