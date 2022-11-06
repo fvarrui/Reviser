@@ -20,8 +20,8 @@ public class Processor {
 		System.out.println("Procesando todos los ficheros de la entrega: " + submissionDir.getName());
 		try {
 			File destinationDir = new File(submissionDir, "files");
-			FileUtils.createFolder(destinationDir);
-			for (File submittedFile : Arrays.asList(submissionDir.listFiles())) {
+			FileUtils.createFolder(destinationDir, false);
+			for (File submittedFile : Arrays.asList(submissionDir.listFiles(pathname -> !pathname.equals(destinationDir)))) {
 				processFile(submittedFile, destinationDir);
 			}
 			System.out.println("¡Completado!");
@@ -39,16 +39,19 @@ public class Processor {
 		// el envío es un fichero comprimido
 		if (CompressionUtils.isCompressedFile(submittedFile)) {
 
-			System.out.println("El fichero está comprimido");
 			uncompress(submittedFile, destinationDir);
 
 		}
 		// el envío es texto en línea
 		else if (submittedFile.getName().equals("onlinetext.html")) {
 
-			System.out.println("El envío es texto en línea: " + submittedFile.getName());
 			processOnlineText(submittedFile, destinationDir);
 
+		} else {
+			
+			System.out.println("El envío es un fichero: " + submittedFile.getName());
+			FileUtils.moveFile(submittedFile, destinationDir);
+			
 		}
 
 		System.out.println("Procesamiento completado");
@@ -59,7 +62,7 @@ public class Processor {
 
 		// si la entrega es una URL, realiza un procesamiento extra
 
-		System.out.println("Buscando una URL en el fichero ...");
+		System.out.println("Buscando una URL en el fichero " + onlineTextFile.getName());
 		String url = URLUtils.extractUrl(onlineTextFile);
 
 		if (url != null) {
@@ -67,6 +70,10 @@ public class Processor {
 			System.out.println("URL encontrada: " + url);
 			processUrl(destinationDir, url);
 
+		} else {
+			
+			System.err.println("No se encontró ninguna URL");			
+			
 		}
 
 	}

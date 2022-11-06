@@ -15,8 +15,7 @@ public abstract class Tester {
 		new BashScript(),
 		new PowerShellScript(),
 		new Report(),
-		new Screenshots(),
-		DEFAULT_TESTER
+		new Screenshots()
 	);
 	
 	public void runTest(File submissionDir) throws Exception {
@@ -35,7 +34,7 @@ public abstract class Tester {
 		return TESTERS.stream()
 			.filter(tester -> tester.matches(submissionsDir))
 			.findFirst()
-			.orElse(null);
+			.orElse(DEFAULT_TESTER);
 	}
 	
 	@Override

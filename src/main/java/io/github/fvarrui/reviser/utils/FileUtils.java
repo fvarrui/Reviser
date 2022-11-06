@@ -44,10 +44,10 @@ public class FileUtils {
 		return new File(destinationDir, file.getName());
 	}
 
-	public static void createFolder(File destinationDir) throws IOException {
-		if (destinationDir.exists()) {
+	public static void createFolder(File destinationDir, boolean deleteIfExists) throws IOException {
+		if (deleteIfExists && destinationDir.exists()) {
 			org.apache.commons.io.FileUtils.deleteDirectory(destinationDir);
-		}
+		} 
 		destinationDir.mkdirs();
 	}
 

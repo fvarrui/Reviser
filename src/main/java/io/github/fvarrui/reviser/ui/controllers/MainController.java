@@ -166,11 +166,12 @@ public class MainController implements Initializable {
 	public void removeExercise(Exercise s) {
 		String title = s.getDirectory().getName();
 		if (Dialogs.confirm("Eliminar ejercicio", "Se va a eliminar el ejercicio '" + title + "' con todas las entregas.", "¿Desea continuar?")) {
-			
+
+			exercisesList.getSelectionModel().clearSelection();
+			exercises.get().remove(s.getDirectory());
+
 			RemoveExerciseTask task = new RemoveExerciseTask(s.getDirectory());	
 			task.setOnScheduled(event -> {
-				exercisesList.getSelectionModel().clearSelection();
-				exercises.get().remove(s.getDirectory());
 				Dialogs.progress("Eliminando ejercicio...", title, task);				
 			});
 			task.setOnFailed(event -> {

@@ -144,6 +144,15 @@ public class ExerciseController implements Initializable {
 	}
 
 	@FXML
+	private void onSave(ActionEvent e) {
+		try {
+			getExercise().save();
+		} catch (IOException e1) {
+			Dialogs.error("Error al guardar el ejercicio '" + getExercise().getDirectory() + "'", e1);
+		}
+	}
+
+	@FXML
 	private void onOpenExplorer(ActionEvent e) {
 		try {
 			Desktop.getDesktop().open(getExercise().getDirectory());
