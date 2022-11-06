@@ -22,7 +22,7 @@ public class SubmissionsController implements Initializable {
 
 	// controllers
 
-	private GradingController gradingController;
+	private GradingController gradingController = new GradingController();
 
 	// model
 
@@ -60,57 +60,53 @@ public class SubmissionsController implements Initializable {
 	@FXML
 	private BorderPane gradingPane;
 
-	public SubmissionsController() throws IOException {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/SubmissionsView.fxml"));
-		loader.setController(this);
-		loader.load();
+	public SubmissionsController() {
+		try { 
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/SubmissionsView.fxml"));
+			loader.setController(this);
+			loader.load();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		try {
+		// add listener when results changed
+		exercise.addListener((o, ov, nv) -> onExerciseChanged(o, ov, nv));
 
-			// creates controllers
-			gradingController = new GradingController();
+		// set cell value factories
+		nameColumn.setCellValueFactory(v -> v.getValue().nameProperty());
+		emailColumn.setCellValueFactory(v -> v.getValue().emailProperty());
+		directoryColumn.setCellValueFactory(v -> v.getValue().directoryProperty());
+		feedbackColumn.setCellValueFactory(v -> v.getValue().feedbackProperty());
+		scoreColumn.setCellValueFactory(v -> v.getValue().scoreProperty());
+		evaluatedColumn.setCellValueFactory(v -> v.getValue().evaluatedProperty());
+		typeColumn.setCellValueFactory(v -> v.getValue().testerProperty().asString());
+		
+		// set cell factories		
+		feedbackColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+		emailColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+		evaluatedColumn.setCellFactory(CheckBoxTableCell.forTableColumn(evaluatedColumn));
 
-			// add listener when results changed
-			exercise.addListener((o, ov, nv) -> onExerciseChanged(o, ov, nv));
+		// divides table width between the columns
+		nameColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.17));
+		emailColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.17));
+		directoryColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.20));
+		feedbackColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.20));
+		scoreColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.075));
+		evaluatedColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.075));
+		typeColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.08));
 
-			// set cell value factories
-			nameColumn.setCellValueFactory(v -> v.getValue().nameProperty());
-			emailColumn.setCellValueFactory(v -> v.getValue().emailProperty());
-			directoryColumn.setCellValueFactory(v -> v.getValue().directoryProperty());
-			feedbackColumn.setCellValueFactory(v -> v.getValue().feedbackProperty());
-			scoreColumn.setCellValueFactory(v -> v.getValue().scoreProperty());
-			evaluatedColumn.setCellValueFactory(v -> v.getValue().evaluatedProperty());
-			typeColumn.setCellValueFactory(v -> v.getValue().testerProperty().asString());
+		// set grading form
+		gradingPane.setCenter(gradingController.getView());
 
-			feedbackColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-			emailColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-			evaluatedColumn.setCellFactory(CheckBoxTableCell.forTableColumn(evaluatedColumn));
-
-			// divides table width between the columns
-			nameColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.17));
-			emailColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.17));
-			directoryColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.20));
-			feedbackColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.20));
-			scoreColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.075));
-			evaluatedColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.075));
-			typeColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.08));
-
-			// set grading form
-			gradingPane.setCenter(gradingController.getView());
-
-			// form controller bindings
-			gradingController.submissionProperty().bind(submissionsTable.getSelectionModel().selectedItemProperty());
-
-		} catch (IOException e) {
-
-			e.printStackTrace();
-			System.exit(1);
-
-		}
+		// form controller bindings
+		gradingController.submissionProperty().bind(submissionsTable.getSelectionModel().selectedItemProperty());
+		
+		// sort tableview by name
+		submissionsTable.getSortOrder().add(nameColumn);
 
 	}
 

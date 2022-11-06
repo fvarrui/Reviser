@@ -10,6 +10,7 @@ import io.github.fvarrui.reviser.model.Grade;
 import io.github.fvarrui.reviser.model.GradingForm;
 import io.github.fvarrui.reviser.model.Submission;
 import io.github.fvarrui.reviser.ui.Reviser;
+import io.github.fvarrui.reviser.ui.tasks.ProcessSubmissionTask;
 import io.github.fvarrui.reviser.ui.tasks.RunSubmissionTask;
 import io.github.fvarrui.reviser.ui.utils.Dialogs;
 import javafx.beans.property.BooleanProperty;
@@ -93,10 +94,14 @@ public class GradingController implements Initializable {
     @FXML
     private CheckBox evaluatedCheck;
 
-	public GradingController() throws IOException {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GradingView.fxml"));
-		loader.setController(this);
-		loader.load();
+	public GradingController() {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GradingView.fxml"));
+			loader.setController(this);
+			loader.load();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
@@ -113,7 +118,6 @@ public class GradingController implements Initializable {
 		// disables run and clear buttons when no result selected
 		view.disableProperty().bind(submission.isNull());
 		gradesTable.disableProperty().bind(evaluated);
-		clearButton.disableProperty().bind(evaluated);
 		runButton.disableProperty().bind(evaluated);
 		
 		// set cell value factories
@@ -205,6 +209,22 @@ public class GradingController implements Initializable {
 	private void onPerfect(ActionEvent e) {
 		getSubmission().setEvaluated(true);
 		getSubmission().getGrades().forEach(g -> g.setValue(100));
+	}
+	
+	@FXML
+	private void onProcess(ActionEvent e) {
+		ProcessSubmissionTask task = new ProcessSubmissionTask(getSubmission());
+		task.setOnScheduled(handler -> {
+			Dialogs.progress("Procesando entrega", getSubmission().getDirectory(), task);
+		});
+		task.start();
+	}
+		
+	@FXML
+	private void onAngry(ActionEvent e) {
+		getSubmission().setEvaluated(true);
+		getSubmission().setFeedback("¡Copiado!");
+		getSubmission().getGrades().forEach(g -> g.setValue(0));		
 	}
 
 	// getters and setters

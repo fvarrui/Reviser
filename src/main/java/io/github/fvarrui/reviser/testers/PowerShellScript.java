@@ -23,7 +23,7 @@ public class PowerShellScript extends Tester {
 	public void test(File submissionDir) throws Exception {
 		Reviser.console.println("Abriendo PowerShell en " + submissionDir);
 		new ProcessBuilder()
-				.command("powershell")
+				.command("cmd", "/c", "start /max powershell")
 				.directory(submissionDir)
 				.start();
 		Reviser.console.println("¡Completado!");

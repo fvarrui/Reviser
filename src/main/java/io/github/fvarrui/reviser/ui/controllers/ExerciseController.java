@@ -39,9 +39,9 @@ public class ExerciseController implements Initializable {
 
 	// controllers
 
-	private SubmissionsController submissionsController;
-	private DesignerController designerController;
-	private ConsoleController consoleController;
+	private SubmissionsController submissionsController = new SubmissionsController();
+	private DesignerController designerController = new DesignerController();
+	private ConsoleController consoleController = new ConsoleController();
 
 	// model
 
@@ -62,10 +62,14 @@ public class ExerciseController implements Initializable {
 	@FXML
 	private Tab resultsTab, designerTab, consoleTab;
 
-	public ExerciseController() throws IOException {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ExerciseView.fxml"));
-		loader.setController(this);
-		loader.load();
+	public ExerciseController() {
+		try { 
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ExerciseView.fxml"));
+			loader.setController(this);
+			loader.load();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
@@ -73,30 +77,16 @@ public class ExerciseController implements Initializable {
 
 		me = this;
 
-		try {
+		// set tabs content
+		resultsTab.setContent(submissionsController.getView());
+		designerTab.setContent(designerController.getView());
+		consoleTab.setContent(consoleController.getView());
 
-			// creates controllers
-			designerController = new DesignerController();
-			consoleController = new ConsoleController();
-			submissionsController = new SubmissionsController();
+		// add listener when submissions dir changed
+		exercise.addListener(this::onExerciseChanged);
 
-			// set tabs content
-			resultsTab.setContent(submissionsController.getView());
-			designerTab.setContent(designerController.getView());
-			consoleTab.setContent(consoleController.getView());
-
-			// add listener when submissions dir changed
-			exercise.addListener((o, ov, nv) -> onExerciseChanged(o, ov, nv));
-
-			// binds
-			titleLabel.textProperty().bind(title);
-
-		} catch (IOException e) {
-
-			e.printStackTrace();
-			System.exit(1);
-
-		}
+		// binds
+		titleLabel.textProperty().bind(title);
 
 		Reviser.primaryStage.setOnCloseRequest(e -> {
 			saveExercise(getExercise());

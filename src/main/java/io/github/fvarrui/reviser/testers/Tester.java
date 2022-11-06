@@ -8,13 +8,15 @@ import io.github.fvarrui.reviser.utils.GitUtils;
 
 public abstract class Tester {
 	
+	private static final Tester DEFAULT_TESTER = new Unknown();
+	
 	private static final List<Tester> TESTERS = Arrays.asList(
 		new Maven(),
 		new BashScript(),
 		new PowerShellScript(),
 		new Report(),
 		new Screenshots(),
-		new Unknown()
+		DEFAULT_TESTER
 	);
 	
 	public void runTest(File submissionDir) throws Exception {
@@ -27,6 +29,9 @@ public abstract class Tester {
 	public abstract void test(File submissionDir) throws Exception;
 	
 	public static Tester analyze(File submissionsDir) {
+		if (!submissionsDir.exists()) {
+			return DEFAULT_TESTER;
+		}
 		return TESTERS.stream()
 			.filter(tester -> tester.matches(submissionsDir))
 			.findFirst()

@@ -230,21 +230,24 @@ public class Submission {
 		return "<p>" + StringUtils.join(feedback, "</p><p>") + "</p>";
 	}
 	
+	public File getFilesDir() {
+		return new File(getPath(), "files");
+	}
+	
 	public void analyze() {
-		File submissionsDir = new File(getParent(), getDirectory());
-		tester.set(Tester.analyze(submissionsDir));
+		tester.set(Tester.analyze(getFilesDir()));
 	}
 
-	public void test(File ... input) throws Exception {
+	public void run(File ... input) throws Exception {
 		if (getTester() == null) {
 			analyze();
 		}
-		File submissionsDir = new File(getParent(), getDirectory());
-		getTester().runTest(submissionsDir);
+		getTester().runTest(getFilesDir());
 	}
 
 	public void process() throws Exception {
 		Processor.process(getPath());
+		analyze();
 	}
 	
 }

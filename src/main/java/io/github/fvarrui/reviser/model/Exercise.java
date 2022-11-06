@@ -133,14 +133,14 @@ public class Exercise {
 		for (File d : submissionsDir.listFiles()) {
 			if (d.isDirectory()) { 
 				final String name = d.getName().split("_")[0];
-				Optional<Submission> first = getSubmissions().stream().filter(r -> r.getName().equals(name)).findFirst();
+				Optional<Submission> first = getSubmissions().stream().filter(r -> r.getDirectory().equals(d.getName())).findFirst();
 				Submission submission = null;
 				if (first.isPresent()) {
 					submission = first.get();
 					submission.setDirectory(d.getName());
 				} else {
 					submission = new Submission(d);
-					submission.setName(name);
+					submission.setName(name.trim());
 					submission.setDirectory(d.getName());
 					getSubmissions().add(submission);
 				}

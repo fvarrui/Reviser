@@ -21,7 +21,7 @@ public class Screenshots extends Tester {
 	public boolean matches(File submissionDir) {
 		return Arrays.asList(submissionDir.listFiles())
 				.stream()
-				.allMatch(this::isScreenshot);
+				.anyMatch(this::isScreenshot);
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class Screenshots extends Tester {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-			});		
+			});
 		Reviser.console.println("¡Completo!");
 	}
 

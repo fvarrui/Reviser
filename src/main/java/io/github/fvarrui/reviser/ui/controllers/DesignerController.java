@@ -60,10 +60,14 @@ public class DesignerController implements Initializable {
 	@FXML
 	private Button removeButton;
 
-	public DesignerController() throws IOException {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DesignerView.fxml"));
-		loader.setController(this);
-		loader.load();
+	public DesignerController() {
+		try { 
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DesignerView.fxml"));
+			loader.setController(this);
+			loader.load();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override

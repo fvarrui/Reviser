@@ -18,7 +18,7 @@ import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
 
 public class Config {
-	
+
 	private static final String DEFAULT_MAVEN_HOME = System.getenv("MAVEN_HOME");
 
 	public static final File configDir = new File(System.getProperty("user.home"), ".Reviser");
@@ -30,6 +30,7 @@ public class Config {
 	private BooleanProperty maximized = new SimpleBooleanProperty();
 	private StringProperty lastDirectory = new SimpleStringProperty(".");
 	private StringProperty mavenHome = new SimpleStringProperty(DEFAULT_MAVEN_HOME);
+	private StringProperty gitHubToken = new SimpleStringProperty();
 
 	private static Config config;
 
@@ -124,6 +125,18 @@ public class Config {
 
 	public final void setMavenHome(final String mavenHome) {
 		this.mavenHomeProperty().set(mavenHome);
+	}
+
+	public final StringProperty gitHubTokenProperty() {
+		return this.gitHubToken;
+	}
+
+	public final String getGitHubToken() {
+		return this.gitHubTokenProperty().get();
+	}
+
+	public final void setGitHubToken(final String gitHubToken) {
+		this.gitHubTokenProperty().set(gitHubToken);
 	}
 
 }

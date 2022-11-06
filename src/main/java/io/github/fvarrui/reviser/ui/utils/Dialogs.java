@@ -24,7 +24,7 @@ public class Dialogs {
 		CommandLinksDialog dialog = new CommandLinksDialog(
 				new CommandLinksButtonType("Directorio de entregas", "Importar directamente un directorio de entregas.", true),				
 				new CommandLinksButtonType("Fichero de entregas", "Importar desde un fichero ZIP con las entregas descargadas de Moodle.", false)
-				);
+		);
 		dialog.initOwner(Reviser.primaryStage);
 		dialog.setTitle(Reviser.TITLE);
 		dialog.setHeaderText("Seleccione desde donde quiere importar las entregas");

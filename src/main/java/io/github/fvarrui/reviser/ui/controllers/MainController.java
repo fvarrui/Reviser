@@ -6,11 +6,11 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
-import org.apache.commons.io.FileUtils;
-
 import io.github.fvarrui.reviser.config.Config;
 import io.github.fvarrui.reviser.model.Exercise;
 import io.github.fvarrui.reviser.ui.tasks.ImportExerciseTask;
+import io.github.fvarrui.reviser.ui.tasks.LoadExerciseTask;
+import io.github.fvarrui.reviser.ui.tasks.RemoveExerciseTask;
 import io.github.fvarrui.reviser.ui.utils.Dialogs;
 import io.github.fvarrui.reviser.ui.utils.FileListCell;
 import javafx.application.Platform;
@@ -38,7 +38,7 @@ public class MainController implements Initializable {
 
 	// controllers
 
-	private ExerciseController exerciseController;
+	private ExerciseController exerciseController = new ExerciseController();
 
 	// model
 
@@ -65,49 +65,56 @@ public class MainController implements Initializable {
 	@FXML
 	private VBox noSelectionPane;
 
-	public MainController() throws IOException {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainView.fxml"));
-		loader.setController(this);
-		loader.load();
+	public MainController() {
+		try { 
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainView.fxml"));
+			loader.setController(this);
+			loader.load();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		try {
+		// set submission controller view
+		exercisePane.setCenter(exerciseController.getView());
+		
+		// renderes
+		exercisesList.setCellFactory((ListView<File> param) -> new FileListCell());
 
-			// creates and binds controllers
-			exerciseController = new ExerciseController();
+		// binds
+		selectedExercise.bind(exercisesList.getSelectionModel().selectedItemProperty());
+		noSelectionPane.visibleProperty().bind(selectedExercise.isNull());
+		exercisePane.visibleProperty().bind(selectedExercise.isNotNull());
+		exercisesList.setItems(new SortedList<>(exercises));
+		
+		// listeners
+		selectedExercise.addListener(this::onSelectedExerciseChanged);
 
-			// set submission controller view
-			exercisePane.setCenter(exerciseController.getView());
-			
-			// renderes
-			exercisesList.setCellFactory((ListView<File> param) -> new FileListCell());
-
-			// binds
-			selectedExercise.bind(exercisesList.getSelectionModel().selectedItemProperty());
-			noSelectionPane.visibleProperty().bind(selectedExercise.isNull());
-			exercisePane.visibleProperty().bind(selectedExercise.isNotNull());
-			exercisesList.setItems(new SortedList<>(exercises));
-			
-			// listeners
-			selectedExercise.addListener((o, ov, nv) -> onSelectedExerciseChanged(o, ov, nv));
-
-			// refresh exercises
-			refreshExercises();
-
-		} catch (IOException e) {
-
-			e.printStackTrace();
-			System.exit(1);
-
-		}
+		// refresh exercises
+		refreshExercises();
 
 	}
 
 	private void onSelectedExerciseChanged(ObservableValue<? extends File> o, File ov, File nv) {
-		exerciseController.setExercise(nv != null ? Exercise.load(nv) : null);
+		if (nv != null) {
+			LoadExerciseTask task = new LoadExerciseTask(nv);
+			task.setOnScheduled(event -> {
+				Dialogs.progress("Cargando ejercicio...", nv.getName(), task);				
+			});
+			task.setOnSucceeded(event -> {
+				exerciseController.setExercise(task.getValue());			
+			});
+			task.setOnFailed(event -> {
+				event.getSource().getException().printStackTrace();				
+				Dialogs.error("Error cargando el ejercicio '" + nv.getName() + "'.", task.getException());
+			});
+			task.start();
+		} else {
+			exerciseController.setExercise(null);
+		}
 	}
 
 	public void refreshExercises() {
@@ -130,6 +137,7 @@ public class MainController implements Initializable {
 		task.setOnScheduled(event -> {
 			ExerciseController.me.showResults();
 			ConsoleController.me.clearConsole();
+			Dialogs.progress("Importando ejercicio...", file.getName(), task);			
 		});
 		task.setOnSucceeded(event -> {
 			exercises.add(task.getValue());
@@ -143,8 +151,6 @@ public class MainController implements Initializable {
 			Dialogs.error("Error procesando entregas", event.getSource().getException());
 		});
 		task.start();
-
-		Dialogs.progress("Importando ejercicio...", file.getName(), task);
 		
 	}
 
@@ -159,13 +165,21 @@ public class MainController implements Initializable {
 
 	public void removeExercise(Exercise s) {
 		String title = s.getDirectory().getName();
-		if (Dialogs.confirm("Eliminar ejercicio", "Se va a eliminar el ejercicio '" + title + "' con todas las entregas.", "¿Desea continuar?"))
-			try {
+		if (Dialogs.confirm("Eliminar ejercicio", "Se va a eliminar el ejercicio '" + title + "' con todas las entregas.", "¿Desea continuar?")) {
+			
+			RemoveExerciseTask task = new RemoveExerciseTask(s.getDirectory());	
+			task.setOnScheduled(event -> {
+				exercisesList.getSelectionModel().clearSelection();
 				exercises.get().remove(s.getDirectory());
-				FileUtils.deleteDirectory(s.getDirectory());
-			} catch (IOException e) {
-				Dialogs.error("Error al eliminar el ejercicio '" + title + "'.", e);
-			}
+				Dialogs.progress("Eliminando ejercicio...", title, task);				
+			});
+			task.setOnFailed(event -> {
+				event.getSource().getException().printStackTrace();				
+				Dialogs.error("Error al eliminar el ejercicio '" + title + "'.", task.getException());
+			});
+			task.start();
+
+		}
 	}
 	
     @FXML

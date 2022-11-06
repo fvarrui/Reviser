@@ -11,59 +11,58 @@
 <?import javafx.scene.layout.HBox?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane fx:id="view" stylesheets="@../css/styles.css"
-	xmlns="http://javafx.com/javafx/11.0.1"
-	xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="view" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
 	<top>
-		<HBox alignment="CENTER" spacing="5.0"
-			BorderPane.alignment="CENTER">
+		<HBox alignment="CENTER" spacing="5.0" BorderPane.alignment="CENTER">
 			<children>
-				<Label fx:id="nameLabel" maxWidth="1.7976931348623157E308"
-					styleClass="student-name" text="Nombre y Apellidos"
-					HBox.hgrow="ALWAYS" />
-				<CheckBox fx:id="evaluatedCheck" mnemonicParsing="false"
-					text="Evaluado" />
-				<Button fx:id="perfectButton" layoutX="432.0" layoutY="10.0"
-					maxHeight="1.7976931348623157E308" mnemonicParsing="false"
-					onAction="#onPerfect" text="100">
+				<Label fx:id="nameLabel" maxWidth="1.7976931348623157E308" styleClass="student-name" text="Nombre y Apellidos" HBox.hgrow="ALWAYS" />
+				<CheckBox fx:id="evaluatedCheck" mnemonicParsing="false" text="Evaluado" />
+				<Button fx:id="perfectButton" layoutX="432.0" layoutY="10.0" maxHeight="1.7976931348623157E308" mnemonicParsing="false" onAction="#onPerfect" text="100">
 					<tooltip>
-						<Tooltip
-							text="Poner un 100 y marcar la tarea como evaluada" />
+						<Tooltip text="Poner un 100 y marcar la tarea como evaluada" />
 					</tooltip>
 					<graphic>
-						<FontIcon iconLiteral="fas-check-square" />
+						<FontIcon iconColor="#001e0b" iconLiteral="fas-thumbs-up" iconSize="15" />
 					</graphic>
 				</Button>
-				<Button fx:id="openButton" layoutX="468.0" layoutY="11.0"
-					maxHeight="1.7976931348623157E308" mnemonicParsing="false"
-					onAction="#onOpenExplorer" text="Abrir">
+            <Button fx:id="angryButton" contentDisplay="GRAPHIC_ONLY" layoutX="540.0" layoutY="10.0" maxHeight="1.7976931348623157E308" mnemonicParsing="false" onAction="#onAngry">
+               <tooltip>
+                  <Tooltip text="¡Copiado!" />
+               </tooltip>
+               <graphic>
+                  <FontIcon iconColor="RED" iconLiteral="far-angry" iconSize="15" />
+               </graphic>
+            </Button>
+				<Button fx:id="openButton" layoutX="468.0" layoutY="11.0" maxHeight="1.7976931348623157E308" mnemonicParsing="false" onAction="#onOpenExplorer">
 					<tooltip>
-						<Tooltip
-							text="Abrir la carpeta de la entrega en el explorador de archivos del sistema" />
+						<Tooltip text="Abrir la carpeta de la entrega en el explorador de archivos del sistema" />
 					</tooltip>
 					<graphic>
-						<FontIcon iconLiteral="fas-folder-open" />
+						<FontIcon iconLiteral="fas-folder-open" iconSize="15" />
 					</graphic>
 				</Button>
-				<Button fx:id="clearButton"
-					maxHeight="1.7976931348623157E308" mnemonicParsing="false"
-					onAction="#onClearScore" text="Limpiar">
+				<Button fx:id="clearButton" maxHeight="1.7976931348623157E308" mnemonicParsing="false" onAction="#onClearScore" text="Limpiar">
 					<tooltip>
-						<Tooltip
-							text="Poner a cero las puntuaciones y eliminar los comentarios" />
+						<Tooltip text="Poner a cero las puntuaciones y eliminar los comentarios" />
 					</tooltip>
 					<graphic>
-						<FontIcon iconLiteral="fas-broom" />
+						<FontIcon iconLiteral="fas-broom" iconSize="15" />
 					</graphic>
 				</Button>
-				<Button fx:id="runButton" defaultButton="true"
-					maxHeight="1.7976931348623157E308" mnemonicParsing="false"
-					onAction="#onRun" text="Ejecutar">
+            <Button fx:id="processButton" contentDisplay="GRAPHIC_ONLY" layoutX="496.0" layoutY="10.0" maxHeight="1.7976931348623157E308" mnemonicParsing="false" onAction="#onProcess" text="Procesar">
+               <tooltip>
+                  <Tooltip text="Poner a cero las puntuaciones y eliminar los comentarios" />
+               </tooltip>
+               <graphic>
+                  <FontIcon iconLiteral="fas-bolt" iconSize="15" />
+               </graphic>
+            </Button>
+				<Button fx:id="runButton" defaultButton="true" maxHeight="1.7976931348623157E308" mnemonicParsing="false" onAction="#onRun" text="Ejecutar">
 					<tooltip>
 						<Tooltip text="Iniciar el test" />
 					</tooltip>
 					<graphic>
-						<FontIcon iconLiteral="fas-play-circle" />
+						<FontIcon iconLiteral="fas-play-circle" iconSize="15" />
 					</graphic>
 				</Button>
 			</children>
@@ -76,8 +75,7 @@
 		<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 	</padding>
 	<bottom>
-		<HBox alignment="BASELINE_RIGHT" spacing="5.0"
-			BorderPane.alignment="CENTER">
+		<HBox alignment="BASELINE_RIGHT" spacing="5.0" BorderPane.alignment="CENTER">
 			<children>
 				<Label text="Puntuación:" />
 				<Label fx:id="gradeLabel" styleClass="score" text="0" />
@@ -88,19 +86,13 @@
 		</HBox>
 	</bottom>
 	<center>
-		<TableView fx:id="gradesTable" editable="true"
-			prefHeight="480.0" prefWidth="640.0" BorderPane.alignment="CENTER">
+		<TableView fx:id="gradesTable" editable="true" prefHeight="480.0" prefWidth="640.0" BorderPane.alignment="CENTER">
 			<columns>
-				<TableColumn fx:id="nameColumn" editable="false"
-					resizable="false" text="Criterio" />
-				<TableColumn fx:id="weightColumn" editable="false"
-					resizable="false" text="Peso" />
-				<TableColumn fx:id="weightedColumn" prefWidth="75.0"
-					text="Ponderada" />
-				<TableColumn fx:id="valueColumn" resizable="false"
-					text="Puntuación" />
-				<TableColumn fx:id="feedbackColumn" resizable="false"
-					text="Comentario" />
+				<TableColumn fx:id="nameColumn" editable="false" resizable="false" text="Criterio" />
+				<TableColumn fx:id="weightColumn" editable="false" resizable="false" text="Peso" />
+				<TableColumn fx:id="weightedColumn" prefWidth="75.0" text="Ponderada" />
+				<TableColumn fx:id="valueColumn" resizable="false" text="Puntuación" />
+				<TableColumn fx:id="feedbackColumn" resizable="false" text="Comentario" />
 			</columns>
 		</TableView>
 	</center>

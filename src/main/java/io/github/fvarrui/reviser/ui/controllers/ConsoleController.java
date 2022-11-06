@@ -35,10 +35,14 @@ public class ConsoleController implements Initializable {
 	@FXML
 	private Button clearButton;
 
-	public ConsoleController() throws IOException {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ConsoleView.fxml"));
-		loader.setController(this);
-		loader.load();
+	public ConsoleController() {
+		try { 
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ConsoleView.fxml"));
+			loader.setController(this);
+			loader.load();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
