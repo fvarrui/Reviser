@@ -178,7 +178,8 @@ public class GradingController implements Initializable {
 		File inputFile = new File(getSubmissionsDir(), "input.txt");
 		RunSubmissionTask task = new RunSubmissionTask(inputFile, getSubmission());
 		task.setOnScheduled(event -> {
-			ExerciseController.me.showConsole();
+			// TODO add checkbox to control if it has to show show console or not when running test 
+			// ExerciseController.me.showConsole();
 			ConsoleController.me.clearConsole();
 		});
 		task.setOnFailed(event -> {

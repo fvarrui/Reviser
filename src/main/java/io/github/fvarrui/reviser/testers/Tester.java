@@ -1,8 +1,7 @@
 package io.github.fvarrui.reviser.testers;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
+import java.util.stream.Stream;
 
 import io.github.fvarrui.reviser.utils.GitUtils;
 
@@ -10,13 +9,13 @@ public abstract class Tester {
 	
 	private static final Tester DEFAULT_TESTER = new Unknown();
 	
-	private static final List<Tester> TESTERS = Arrays.asList(
+	private static final Tester [] TESTERS = {
 		new Maven(),
 		new BashScript(),
 		new PowerShellScript(),
 		new Report(),
 		new Screenshots()
-	);
+	};
 	
 	public void runTest(File submissionDir) throws Exception {
 		GitUtils.pullIfRepo(submissionDir);
@@ -31,7 +30,7 @@ public abstract class Tester {
 		if (!submissionsDir.exists()) {
 			return DEFAULT_TESTER;
 		}
-		return TESTERS.stream()
+		return Stream.of(TESTERS)
 			.filter(tester -> tester.matches(submissionsDir))
 			.findFirst()
 			.orElse(DEFAULT_TESTER);

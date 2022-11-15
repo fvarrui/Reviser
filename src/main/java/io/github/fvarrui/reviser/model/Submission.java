@@ -245,8 +245,8 @@ public class Submission {
 		getTester().runTest(getFilesDir());
 	}
 
-	public void process() throws Exception {
-		Processor.process(getPath());
+	public void process(boolean force) throws Exception {
+		Processor.process(getPath(), force);
 		analyze();
 	}
 	

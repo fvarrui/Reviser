@@ -17,7 +17,7 @@ public class RunSubmissionTask extends Task<Void> {
 
 	@Override
 	protected Void call() throws Exception {
-		submission.process();
+		submission.process(false);
 		submission.run(inputFile);
 		return null;
 	}

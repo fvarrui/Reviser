@@ -16,13 +16,22 @@ import io.github.fvarrui.reviser.utils.URLUtils;
 
 public class Processor {
 
-	public static File process(File submissionDir) throws Exception {
-		System.out.println("Procesando todos los ficheros de la entrega: " + submissionDir.getName());
+	public static File process(File submissionDir, boolean force) throws Exception {
+		
+		System.out.println("Procesando entrega: " + submissionDir.getName());
 		try {
 			File destinationDir = new File(submissionDir, "files");
-			FileUtils.createFolder(destinationDir, false);
-			for (File submittedFile : Arrays.asList(submissionDir.listFiles(pathname -> !pathname.equals(destinationDir)))) {
-				processFile(submittedFile, destinationDir);
+			if (destinationDir.exists() && !force) {
+
+				System.out.println("La entrega ya fue procesada y el procesamiento no se ha forzado");
+				
+			} else {
+				
+				FileUtils.createFolder(destinationDir, false);
+				for (File submittedFile : Arrays.asList(submissionDir.listFiles(pathname -> !pathname.equals(destinationDir)))) {
+					processFile(submittedFile, destinationDir);
+				}
+				
 			}
 			System.out.println("¡Completado!");
 			return destinationDir;

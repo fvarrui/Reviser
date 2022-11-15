@@ -4,11 +4,11 @@ import static org.apache.commons.io.FileUtils.copyDirectory;
 import static org.apache.commons.io.FileUtils.deleteDirectory;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import io.github.fvarrui.reviser.config.Config;
 import io.github.fvarrui.reviser.model.Submission;
@@ -45,8 +45,7 @@ public class ImportExerciseTask extends Task<File> {
 		}
 		
 		List<ProcessSubmissionTask> processingThreads = 
-				Arrays.asList(exerciseDir.listFiles())
-						.stream()
+				Stream.of(exerciseDir.listFiles())
 						.map(Submission::new)
 						.map(ProcessSubmissionTask::new)
 						.collect(Collectors.toList());
