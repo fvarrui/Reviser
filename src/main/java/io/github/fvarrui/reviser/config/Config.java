@@ -31,6 +31,7 @@ public class Config {
 	private StringProperty lastDirectory = new SimpleStringProperty(".");
 	private StringProperty mavenHome = new SimpleStringProperty(DEFAULT_MAVEN_HOME);
 	private StringProperty gitHubToken = new SimpleStringProperty();
+	private BooleanProperty showConsole = new SimpleBooleanProperty(false);
 
 	private static Config config;
 
@@ -137,6 +138,18 @@ public class Config {
 
 	public final void setGitHubToken(final String gitHubToken) {
 		this.gitHubTokenProperty().set(gitHubToken);
+	}
+
+	public final BooleanProperty showConsoleProperty() {
+		return this.showConsole;
+	}
+
+	public final boolean isShowConsole() {
+		return this.showConsoleProperty().get();
+	}
+
+	public final void setShowConsole(final boolean showConsole) {
+		this.showConsoleProperty().set(showConsole);
 	}
 
 }

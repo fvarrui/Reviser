@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import io.github.fvarrui.reviser.config.Config;
 import io.github.fvarrui.reviser.model.Grade;
 import io.github.fvarrui.reviser.model.GradingForm;
 import io.github.fvarrui.reviser.model.Submission;
@@ -178,8 +179,9 @@ public class GradingController implements Initializable {
 		File inputFile = new File(getSubmissionsDir(), "input.txt");
 		RunSubmissionTask task = new RunSubmissionTask(inputFile, getSubmission());
 		task.setOnScheduled(event -> {
-			// TODO add checkbox to control if it has to show show console or not when running test 
-			// ExerciseController.me.showConsole();
+			if (Config.getConfig().isShowConsole()) {
+				ExerciseController.me.showConsole();
+			}
 			ConsoleController.me.clearConsole();
 		});
 		task.setOnFailed(event -> {

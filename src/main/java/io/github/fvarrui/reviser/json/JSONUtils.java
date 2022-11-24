@@ -11,6 +11,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
+import javafx.geometry.Dimension2D;
+import javafx.geometry.Point2D;
+
 public class JSONUtils {
 	
 	private static final Gson gson = 
@@ -18,6 +21,8 @@ public class JSONUtils {
 				.fullBuilder()
 				.addSerializationExclusionStrategy(new SerializationExclusionEstratregy())
 				.registerTypeAdapter(File.class, new FileAdapter())
+				.registerTypeAdapter(Point2D.class, new PointAdapter())
+				.registerTypeAdapter(Dimension2D.class, new DimensionAdapter())
 				.setPrettyPrinting()
 				.create();
 

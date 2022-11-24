@@ -24,14 +24,12 @@ public class Reviser extends Application {
 	@Override
 	public void init() throws Exception {
 		Config.load();
-		super.init();
 	}
 	
 	@Override
 	public void stop() throws Exception {
-		saveStage();
+		stageToConfig(primaryStage);
 		Config.save();
-		super.stop();
 	}
 
 	@Override
@@ -39,7 +37,7 @@ public class Reviser extends Application {
 		
 		Reviser.primaryStage = primaryStage;
 
-		restoreStage();
+		configToStage(primaryStage);
 		
 		mainController = new MainController();
 		
@@ -55,13 +53,13 @@ public class Reviser extends Application {
 		
 	}
 	
-	private void saveStage() {
+	private void stageToConfig(Stage stage) {
 		Config.getConfig().setStageCoords(new Point2D(primaryStage.getX(), primaryStage.getY()));
 		Config.getConfig().setStageSize(new Dimension2D(primaryStage.getWidth(), primaryStage.getHeight()));
 		Config.getConfig().setMaximized(primaryStage.isMaximized());
 	}
 	
-	private void restoreStage() {
+	private void configToStage(Stage primaryStage) {
 		if (Config.getConfig().getStageCoords() != null) {
 			primaryStage.setX(Config.getConfig().getStageCoords().getX());
 			primaryStage.setY(Config.getConfig().getStageCoords().getY());
