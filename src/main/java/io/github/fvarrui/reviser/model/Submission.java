@@ -11,6 +11,7 @@ import com.google.gson.annotations.Expose;
 
 import io.github.fvarrui.reviser.processors.Processor;
 import io.github.fvarrui.reviser.testers.Tester;
+import io.github.fvarrui.reviser.utils.GitUtils;
 import javafx.beans.Observable;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -42,6 +43,8 @@ public class Submission {
 	private StringProperty directory = new SimpleStringProperty();
 	private ListProperty<Grade> grades = new SimpleListProperty<>(FXCollections.observableArrayList(g -> new Observable[] { g.criterionIdProperty(), g.feedbackProperty(), g.valueProperty(), g.weightedValueProperty() }));
 	private BooleanProperty evaluated = new SimpleBooleanProperty();
+	private ObjectProperty<SubmissionType> type = new SimpleObjectProperty<>();
+	private StringProperty test = new SimpleStringProperty();  
 
 	public Submission() {}
 
@@ -163,6 +166,30 @@ public class Submission {
 	public File getPath() {
 		return new File(getParent(), getDirectory());
 	}
+	
+	public final ObjectProperty<SubmissionType> typeProperty() {
+		return this.type;
+	}
+
+	public final SubmissionType getType() {
+		return this.typeProperty().get();
+	}
+
+	public final void setType(final SubmissionType type) {
+		this.typeProperty().set(type);
+	}
+
+	public final StringProperty testProperty() {
+		return this.test;
+	}
+
+	public final String getTest() {
+		return this.testProperty().get();
+	}
+
+	public final void setTest(final String test) {
+		this.testProperty().set(test);
+	}
 
 	@Override
 	public boolean equals(Object obj) {
@@ -176,8 +203,17 @@ public class Submission {
 
 	@Override
 	public String toString() {
-		return "Submission [score=" + score + ", name=" + name + ", feedback=" + feedback + ", email=" + email
-				+ ", directory=" + directory + ", grades=" + grades + ", evaluated=" + evaluated + "]";
+		return "Submission [" + 
+					"score=" + getScore() + ", " + 
+					"name=" + getName() + ", " + 
+					"feedback=" + getFeedback() + ", " + 
+					"email=" + getEmail() + ", " + 
+					"directory=" + getDirectory() + ", " + 
+					"grades=" + getGrades() + ", " + 
+					"type=" + getType() + ", " + 
+					"test=" + getTest() + ", " + 
+					"evaluated=" + isEvaluated() + 
+		"]";
 	}
 
 	public Grade findGradeByCriterion(Long criterionId) {
@@ -215,11 +251,11 @@ public class Submission {
 	}
 
 	public boolean gradesHasFeedback() {
-		return getGrades().stream().anyMatch(g -> g.getFeedback() != null && !g.getFeedback().isEmpty());
+		return getGrades().stream().anyMatch(Grade::hasFeedback);
 	}
 
 	public boolean gradesHasValue() {
-		return getGrades().stream().anyMatch(g -> g.getValue() > 0);
+		return getGrades().stream().anyMatch(Grade::hasValue);
 	}
 
 	public String getFullFeedback() {
@@ -238,11 +274,12 @@ public class Submission {
 		tester.set(Tester.analyze(getFilesDir()));
 	}
 
-	public void run(File ... input) throws Exception {
+	public void run() throws Exception {
 		if (getTester() == null) {
 			analyze();
 		}
-		getTester().runTest(getFilesDir());
+		GitUtils.pullIfRepo(getFilesDir());
+		getTester().test(getFilesDir());
 	}
 
 	public void process(boolean force) throws Exception {

@@ -3,8 +3,6 @@ package io.github.fvarrui.reviser.testers;
 import java.io.File;
 import java.util.stream.Stream;
 
-import io.github.fvarrui.reviser.utils.GitUtils;
-
 public abstract class Tester {
 	
 	private static final Tester DEFAULT_TESTER = new Unknown();
@@ -16,11 +14,6 @@ public abstract class Tester {
 		new Report(),
 		new Screenshots()
 	};
-	
-	public void runTest(File submissionDir) throws Exception {
-		GitUtils.pullIfRepo(submissionDir);
-		test(submissionDir);
-	}
 	
 	public abstract boolean matches(File submissionDir);
 

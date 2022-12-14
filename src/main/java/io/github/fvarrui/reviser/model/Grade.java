@@ -111,6 +111,14 @@ public class Grade {
 	@Override
 	public String toString() {
 		return StringUtils.adjust(getCriterion().getName(), 30) + " [Peso: " + getCriterion().getWeight() + " Nota: " + getValue() + " Nota ponderada:" + getWeightedValue() + " Comentario: " + (getFeedback() != null ? getFeedback() : "") + "]";
-	}	
+	}
+	
+	public boolean hasFeedback() {
+		return getFeedback() != null && !getFeedback().isEmpty();
+	}
+	
+	public boolean hasValue() {
+		return getValue() > 0.0;
+	}
 
 }

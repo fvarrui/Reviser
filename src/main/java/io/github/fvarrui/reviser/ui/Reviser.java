@@ -70,9 +70,5 @@ public class Reviser extends Application {
 		}
 		primaryStage.setMaximized(Config.getConfig().isMaximized());
 	}
-	
-	public static void main(String[] args) {
-		launch(args);
-	}
 
 }

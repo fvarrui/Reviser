@@ -106,9 +106,9 @@ public class ExerciseController implements Initializable {
 
 	private void onExerciseChanged(ObservableValue<? extends Exercise> o, Exercise ov, Exercise nv) {
 
-		String desde = (ov != null && ov.getDirectory() != null) ? ov.getDirectory().getName() : "<ninguno>";
-		String hasta = (nv != null && nv.getDirectory() != null) ? nv.getDirectory().getName() : "<ninguno>";
-		System.out.println("cambiando desde " + desde + " a " + hasta);
+//		String desde = (ov != null && ov.getDirectory() != null) ? ov.getDirectory().getName() : "<ninguno>";
+//		String hasta = (nv != null && nv.getDirectory() != null) ? nv.getDirectory().getName() : "<ninguno>";
+//		System.out.println("cambiando desde " + desde + " a " + hasta);
 
 		// saves old exercise
 		if (ov != null) {

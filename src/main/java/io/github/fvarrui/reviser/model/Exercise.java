@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
@@ -17,6 +16,8 @@ import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -30,6 +31,7 @@ public class Exercise {
 	
 	private ListProperty<Submission> submissions = new SimpleListProperty<>(FXCollections.observableArrayList(r -> new Observable[]{ r.nameProperty(), r.emailProperty(), r.feedbackProperty(), r.scoreProperty(), r.evaluatedProperty() }));
 	private ObjectProperty<GradingForm> form = new SimpleObjectProperty<>();
+	private StringProperty test = new SimpleStringProperty();
 	
 	public final ListProperty<Submission> submissionsProperty() {
 		return this.submissions;
@@ -67,7 +69,19 @@ public class Exercise {
 		this.directoryProperty().set(directory);
 	}
 
-	public void populateGrades() {
+	public final StringProperty testProperty() {
+		return this.test;
+	}
+	
+	public final String getTest() {
+		return this.testProperty().get();
+	}
+
+	public final void setTest(final String test) {
+		this.testProperty().set(test);
+	}
+
+	private void populateGrades() {
 		
 		// associates grades to criteria and removes grades without criterion
 		for (Submission result : getSubmissions()) {
@@ -98,7 +112,7 @@ public class Exercise {
 		
 	}
 	
-	public void initGradingForm() {
+	private void initGradingForm() {
 		if (getForm() == null) {
 			
 			Criterion criterion = new Criterion(0L, "General", 100.0);
@@ -118,7 +132,7 @@ public class Exercise {
 		}		
 	}
 	
-	public void configListener() {
+	private void configListener() {
 		getForm().criteriaProperty().addListener((ListChangeListener.Change<? extends Criterion> c) -> {
 			c.next();
 			populateGrades();
@@ -128,25 +142,30 @@ public class Exercise {
 		}));
 	}
 	
-	public void updateSubmissions(File submissionsDir) {
+	private void updateSubmissions(File submissionsDir) {
 		if (submissionsDir == null) return;
 		for (File d : submissionsDir.listFiles()) {
 			if (d.isDirectory()) { 
-				final String name = d.getName().split("_")[0];
-				Optional<Submission> first = getSubmissions().stream().filter(r -> r.getDirectory().equals(d.getName())).findFirst();
-				Submission submission = null;
-				if (first.isPresent()) {
-					submission = first.get();
-					submission.setDirectory(d.getName());
-				} else {
+				String [] parts = d.getName().split("_");
+				final String name = parts[0];
+				final SubmissionType type = parts.length >= 4 ? SubmissionType.valueOf(parts[3].toUpperCase()) : SubmissionType.UNKNOWN;
+				Submission submission = findSubmissionByDirectory(d);
+				if (submission == null) {
 					submission = new Submission(d);
 					submission.setName(name.trim());
-					submission.setDirectory(d.getName());
 					getSubmissions().add(submission);
 				}
+				if (submission.getType() == null) {
+					submission.setType(type);					
+				}
+				submission.setDirectory(d.getName());
 				submission.setParent(submissionsDir);
 			}
 		}
+	}
+	
+	private Submission findSubmissionByDirectory(File d) {
+		return getSubmissions().stream().filter(r -> r.getDirectory().equals(d.getName())).findFirst().get();
 	}
 	
 	public void updateFromStudents(List<CsvStudent> students) {
@@ -168,12 +187,10 @@ public class Exercise {
 	
 	public void save() throws JsonSyntaxException, JsonIOException, IOException {
 		File exerciseFile = new File(getDirectory(), EXERCISE_FILENAME);		
-		System.out.println("saving exercise ... " + exerciseFile);
 		JSONUtils.writeJsonToFile(this, exerciseFile);
 	}
 	
 	public static Exercise load(File submissionsDir) {
-		System.out.println("loading exercise ... " + submissionsDir);
 		File exerciseFile = new File(submissionsDir, EXERCISE_FILENAME);
 		Exercise exercise = null;
 		try {

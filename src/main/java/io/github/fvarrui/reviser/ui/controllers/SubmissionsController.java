@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import io.github.fvarrui.reviser.model.Exercise;
 import io.github.fvarrui.reviser.model.Submission;
+import io.github.fvarrui.reviser.model.SubmissionType;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
@@ -55,7 +56,10 @@ public class SubmissionsController implements Initializable {
 	private TableColumn<Submission, Boolean> evaluatedColumn;
 
 	@FXML
-	private TableColumn<Submission, String> typeColumn;
+	private TableColumn<Submission, String> projectTypeColumn;
+
+	@FXML
+	private TableColumn<Submission, SubmissionType> submissionTypeColumn;
 
 	@FXML
 	private BorderPane gradingPane;
@@ -83,7 +87,8 @@ public class SubmissionsController implements Initializable {
 		feedbackColumn.setCellValueFactory(v -> v.getValue().feedbackProperty());
 		scoreColumn.setCellValueFactory(v -> v.getValue().scoreProperty());
 		evaluatedColumn.setCellValueFactory(v -> v.getValue().evaluatedProperty());
-		typeColumn.setCellValueFactory(v -> v.getValue().testerProperty().asString());
+		projectTypeColumn.setCellValueFactory(v -> v.getValue().testerProperty().asString());
+		submissionTypeColumn.setCellValueFactory(v -> v.getValue().typeProperty());
 		
 		// set cell factories		
 		feedbackColumn.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -92,12 +97,13 @@ public class SubmissionsController implements Initializable {
 
 		// divides table width between the columns
 		nameColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.17));
-		emailColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.17));
+		emailColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.12));
 		directoryColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.20));
 		feedbackColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.20));
 		scoreColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.075));
-		evaluatedColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.075));
-		typeColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.08));
+		evaluatedColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.05));
+		projectTypeColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.08));
+		submissionTypeColumn.prefWidthProperty().bind(submissionsTable.widthProperty().multiply(0.08));
 
 		// set grading form
 		gradingPane.setCenter(gradingController.getView());
@@ -105,9 +111,6 @@ public class SubmissionsController implements Initializable {
 		// form controller bindings
 		gradingController.submissionProperty().bind(submissionsTable.getSelectionModel().selectedItemProperty());
 		
-		// sort tableview by name
-		submissionsTable.getSortOrder().add(nameColumn);
-
 	}
 
 	private void onExerciseChanged(ObservableValue<? extends Exercise> o, Exercise ov, Exercise nv) {
@@ -123,6 +126,11 @@ public class SubmissionsController implements Initializable {
 			submissionsTable.itemsProperty().bind(nv.submissionsProperty());
 			gradingController.formProperty().bind(nv.formProperty());
 			gradingController.submissionsDirProperty().bind(nv.directoryProperty());
+			
+			// sort tableview by name
+			submissionsTable.getSortOrder().clear();
+			submissionsTable.getSortOrder().add(nameColumn);
+			
 		}
 	}
 

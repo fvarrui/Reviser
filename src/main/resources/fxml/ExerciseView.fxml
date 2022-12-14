@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane fx:id="view" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="view" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
 	<center>
 		<TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE">
 			<tabs>
@@ -34,7 +34,7 @@
 						<Label fx:id="titleLabel" maxWidth="1.7976931348623157E308" styleClass="submission-title" text="&lt;Título del ejercicio&gt;" HBox.hgrow="ALWAYS" />
 						<Button fx:id="compareButton" layoutX="168.0" layoutY="15.0" mnemonicParsing="false" onAction="#onCompareSubmissions" prefHeight="32.0" prefWidth="40.0">
 							<tooltip>
-								<Tooltip text="Eliminar la tarea" />
+								<Tooltip text="Comparar todas las entregas" />
 							</tooltip>
 							<graphic>
 								<ImageView pickOnBounds="true" preserveRatio="true">
@@ -49,7 +49,7 @@
 								<FontIcon iconLiteral="far-trash-alt" iconSize="18" />
 							</graphic>
 							<tooltip>
-								<Tooltip text="Eliminar la tarea" />
+								<Tooltip text="Eliminar ejercicio" />
 							</tooltip>
 						</Button>
 						<Button fx:id="evaluateAllButton" layoutX="176.0" layoutY="15.0" mnemonicParsing="false" onAction="#onEvaluateAll" prefHeight="32.0" prefWidth="40.0">

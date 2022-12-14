@@ -143,7 +143,6 @@ public class GradingController implements Initializable {
 	}
 
 	private void onResultChanged(ObservableValue<? extends Submission> o, Submission ov, Submission nv) {
-		System.out.println("onResultChanged(ov=" + ov + "/nv=" + nv + ")");
 		
 		if (ov != null) {
 			
@@ -176,8 +175,7 @@ public class GradingController implements Initializable {
 
 	@FXML
 	private void onRun(ActionEvent e) {
-		File inputFile = new File(getSubmissionsDir(), "input.txt");
-		RunSubmissionTask task = new RunSubmissionTask(inputFile, getSubmission());
+		RunSubmissionTask task = new RunSubmissionTask(getSubmission());
 		task.setOnScheduled(event -> {
 			if (Config.getConfig().isShowConsole()) {
 				ExerciseController.me.showConsole();
@@ -189,6 +187,12 @@ public class GradingController implements Initializable {
 			getSubmission().fail(event.getSource().getException().getMessage());
 		});
 		task.start();
+	}
+	
+	@FXML
+	private void onTest(ActionEvent e) {
+		// TODO run test
+		Reviser.console.print("Running test on " + getSubmission().getDirectory());
 	}
 
 	@FXML
