@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Objects;
 
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
 
@@ -28,7 +29,7 @@ public class Processor {
 			} else {
 				
 				FileUtils.createFolder(destinationDir, false);
-				for (File submittedFile : Arrays.asList(submissionDir.listFiles(pathname -> !pathname.equals(destinationDir)))) {
+				for (File submittedFile : Objects.requireNonNull(submissionDir.listFiles(pathname -> !pathname.equals(destinationDir)))) {
 					processFile(submittedFile, destinationDir);
 				}
 				
@@ -127,7 +128,6 @@ public class Processor {
 		
 	}
 	
-	@SuppressWarnings("serial")
 	private static void downloadPrivateResource(String url, File destinationDir, String token) throws Exception {
 
 		String filename = URLUtils.getFile(url);

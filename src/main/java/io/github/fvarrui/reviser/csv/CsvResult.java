@@ -16,8 +16,7 @@ public class CsvResult {
 	@CsvBindByName
 	private String email;
 
-	public CsvResult() {
-	}
+	public CsvResult() {}
 
 	public CsvResult(Integer score, String name, String feedback, String email) {
 		this.score = score;

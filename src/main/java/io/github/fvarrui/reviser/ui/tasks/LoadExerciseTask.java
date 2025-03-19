@@ -7,7 +7,7 @@ import javafx.concurrent.Task;
 
 public class LoadExerciseTask extends Task<Exercise> {
 
-	private File exerciseDir;
+	private final File exerciseDir;
 
 	public LoadExerciseTask(File exerciseDir) {
 		super();

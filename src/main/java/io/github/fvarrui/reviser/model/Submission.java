@@ -37,14 +37,14 @@ public class Submission {
 	@Expose(serialize = false)
 	private ObjectProperty<File> parent = new SimpleObjectProperty<>();
 
-	private StringProperty name = new SimpleStringProperty();
-	private StringProperty feedback = new SimpleStringProperty();
-	private StringProperty email = new SimpleStringProperty();
-	private StringProperty directory = new SimpleStringProperty();
-	private ListProperty<Grade> grades = new SimpleListProperty<>(FXCollections.observableArrayList(g -> new Observable[] { g.criterionIdProperty(), g.feedbackProperty(), g.valueProperty(), g.weightedValueProperty() }));
-	private BooleanProperty evaluated = new SimpleBooleanProperty();
-	private ObjectProperty<SubmissionType> type = new SimpleObjectProperty<>();
-	private StringProperty test = new SimpleStringProperty();  
+	private final StringProperty name = new SimpleStringProperty();
+	private final StringProperty feedback = new SimpleStringProperty();
+	private final StringProperty email = new SimpleStringProperty();
+	private final StringProperty directory = new SimpleStringProperty();
+	private final ListProperty<Grade> grades = new SimpleListProperty<>(FXCollections.observableArrayList(g -> new Observable[] { g.criterionIdProperty(), g.feedbackProperty(), g.valueProperty(), g.weightedValueProperty() }));
+	private final BooleanProperty evaluated = new SimpleBooleanProperty();
+	private final ObjectProperty<SubmissionType> type = new SimpleObjectProperty<>();
+	private final StringProperty test = new SimpleStringProperty();
 
 	public Submission() {}
 
@@ -195,10 +195,9 @@ public class Submission {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		Submission submission = (Submission) obj;
-		if (obj == null)
+		if (!(obj instanceof Submission submission))
 			return false;
-		return submission.getName().equals(getName());
+        return submission.getName().equals(getName());
 	}
 
 	@Override
@@ -218,17 +217,15 @@ public class Submission {
 
 	public Grade findGradeByCriterion(Long criterionId) {
 		Optional<Grade> grade = getGrades().stream().filter(g -> g.getCriterionId() == criterionId).findFirst();
-		if (grade.isPresent())
-			return grade.get();
-		return null;
-	}
+        return grade.orElse(null);
+    }
 
 	private double getTotalWeight() {
 		return getGrades().stream().map(Grade::getCriterion).mapToDouble(Criterion::getWeight).sum();
 	}
 
 	public void updateGrades() {
-		getGrades().stream().forEach(g -> g.updateWeightedValue(getTotalWeight()));
+		getGrades().forEach(g -> g.updateWeightedValue(getTotalWeight()));
 	}
 
 	public void updateScore() {
@@ -238,7 +235,7 @@ public class Submission {
 	}
 
 	public void resetScore() {
-		getGrades().stream().forEach(Grade::clear);
+		getGrades().forEach(Grade::clear);
 		updateScore();
 		setFeedback("");
 		setEvaluated(false);
@@ -262,7 +259,7 @@ public class Submission {
 		if (!gradesHasFeedback() && !gradesHasValue()) {
 			return getFeedback();
 		}
-		List<String> feedback = getGrades().stream().map(Grade::toString).collect(Collectors.toList());
+		List<String> feedback = getGrades().stream().map(Grade::toString).toList();
 		return "<p>" + StringUtils.join(feedback, "</p><p>") + "</p>";
 	}
 	

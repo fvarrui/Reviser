@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
@@ -29,9 +30,9 @@ public class Exercise {
 	@Expose(serialize = false)
 	private ObjectProperty<File> directory = new SimpleObjectProperty<>();
 	
-	private ListProperty<Submission> submissions = new SimpleListProperty<>(FXCollections.observableArrayList(r -> new Observable[]{ r.nameProperty(), r.emailProperty(), r.feedbackProperty(), r.scoreProperty(), r.evaluatedProperty() }));
-	private ObjectProperty<GradingForm> form = new SimpleObjectProperty<>();
-	private StringProperty test = new SimpleStringProperty();
+	private final ListProperty<Submission> submissions = new SimpleListProperty<>(FXCollections.observableArrayList(r -> new Observable[]{ r.nameProperty(), r.emailProperty(), r.feedbackProperty(), r.scoreProperty(), r.evaluatedProperty() }));
+	private final ObjectProperty<GradingForm> form = new SimpleObjectProperty<>();
+	private final StringProperty test = new SimpleStringProperty();
 	
 	public final ListProperty<Submission> submissionsProperty() {
 		return this.submissions;
@@ -122,7 +123,7 @@ public class Exercise {
 			setForm(form);
 			
 			// migrate data from old version to new version
-			getSubmissions().stream().forEach(r -> {
+			getSubmissions().forEach(r -> {
 				Grade grade = new Grade(criterion);
 				grade.setValue(r.getScore());
 				grade.setFeedback(r.getFeedback());
@@ -137,14 +138,14 @@ public class Exercise {
 			c.next();
 			populateGrades();
 		});
-		getForm().getCriteria().stream().forEach(c -> c.weightProperty().addListener((o, ov, nv) -> {
+		getForm().getCriteria().forEach(c -> c.weightProperty().addListener((o, ov, nv) -> {
 			this.updateScores();
 		}));
 	}
 	
 	private void updateSubmissions(File submissionsDir) {
 		if (submissionsDir == null) return;
-		for (File d : submissionsDir.listFiles()) {
+		for (File d : Objects.requireNonNull(submissionsDir.listFiles())) {
 			if (d.isDirectory()) { 
 				String [] parts = d.getName().split("_");
 				final String name = parts[0];
@@ -165,11 +166,13 @@ public class Exercise {
 	}
 	
 	private Submission findSubmissionByDirectory(File d) {
-		return getSubmissions().stream().filter(r -> r.getDirectory().equals(d.getName())).findFirst().get();
-	}
+return getSubmissions().stream()
+		        .filter(r -> r.getDirectory().equals(d.getName()))
+		        .findFirst()
+		        .orElse(null);	}
 	
 	public void updateFromStudents(List<CsvStudent> students) {
-		getSubmissions().stream()
+		getSubmissions()
 			.forEach(r -> {
 				students.stream()
 					.filter(s -> s.getFullname().equals(r.getName().trim().replaceAll(" +", " ")))
@@ -178,11 +181,11 @@ public class Exercise {
 	}
 	
 	public void updateScores() {
-		getSubmissions().stream().forEach(Submission::updateScore);
+		getSubmissions().forEach(Submission::updateScore);
 	}
 	
 	public void evaluateAll(boolean newValue) {
-		getSubmissions().stream().forEach(r -> r.setEvaluated(newValue));
+		getSubmissions().forEach(r -> r.setEvaluated(newValue));
 	}
 	
 	public void save() throws JsonSyntaxException, JsonIOException, IOException {

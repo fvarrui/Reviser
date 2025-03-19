@@ -43,8 +43,10 @@ public class CsvStudent {
 
 	@Override
 	public boolean equals(Object obj) {
-		CsvStudent student = (CsvStudent) obj;
-		return student.getFullname().equals(getFullname());
+		if (!(obj instanceof CsvStudent student)) {
+			return false;
+		}
+        return student.getFullname().equals(getFullname());
 	}
 
 	@Override

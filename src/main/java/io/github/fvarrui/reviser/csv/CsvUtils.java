@@ -5,7 +5,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import com.opencsv.bean.CsvToBean;
@@ -22,7 +22,7 @@ public class CsvUtils {
 	private static final char SEPARATOR = ',';
 
 	public static void resultsToCsv(List<CsvResult> results, File csvFile) throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
-	    Writer writer = new FileWriter(csvFile, Charset.forName("UTF-8"));
+	    Writer writer = new FileWriter(csvFile, StandardCharsets.UTF_8);
 	    StatefulBeanToCsv<CsvResult> sbc = new StatefulBeanToCsvBuilder<CsvResult>(writer)
 	    		.withSeparator(SEPARATOR)
 	    		.build();
@@ -35,7 +35,7 @@ public class CsvUtils {
 		HeaderColumnNameMappingStrategy<CsvStudent> ms = new HeaderColumnNameMappingStrategy<>();
 		ms.setType(CsvStudent.class);
 				
-		FileReader reader = new FileReader(csvFile, Charset.forName("UTF-8"));
+		FileReader reader = new FileReader(csvFile, StandardCharsets.UTF_8);
 		CsvToBean<CsvStudent> cb = new CsvToBeanBuilder<CsvStudent>(reader)
 				.withMappingStrategy(ms)
 				.withSeparator(SEPARATOR)
@@ -43,8 +43,8 @@ public class CsvUtils {
 		List<CsvStudent> students = cb.parse();
 		
 		students.forEach(s -> {
-			s.setName(s.getName().trim());
-			s.setSurname(s.getSurname().trim());
+			s.setName(s.getName() != null ? s.getName().trim() : "");
+			s.setSurname(s.getSurname() != null ? s.getSurname().trim() : "");
 		});
 		
 	    reader.close();

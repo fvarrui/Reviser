@@ -23,11 +23,11 @@ public class SubmissionsController implements Initializable {
 
 	// controllers
 
-	private GradingController gradingController = new GradingController();
+	private final GradingController gradingController = new GradingController();
 
 	// model
 
-	private ObjectProperty<Exercise> exercise = new SimpleObjectProperty<>();
+	private final ObjectProperty<Exercise> exercise = new SimpleObjectProperty<>();
 
 	// view
 
@@ -78,7 +78,7 @@ public class SubmissionsController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 
 		// add listener when results changed
-		exercise.addListener((o, ov, nv) -> onExerciseChanged(o, ov, nv));
+		exercise.addListener(this::onExerciseChanged);
 
 		// set cell value factories
 		nameColumn.setCellValueFactory(v -> v.getValue().nameProperty());

@@ -25,13 +25,13 @@ public class Config {
 	public static final File exercisesDir = new File(configDir, "exercises");
 	public static final File configFile = new File(configDir, "config.json");
 
-	private ObjectProperty<Dimension2D> stageSize = new SimpleObjectProperty<>();
-	private ObjectProperty<Point2D> stageCoords = new SimpleObjectProperty<>();
-	private BooleanProperty maximized = new SimpleBooleanProperty();
-	private StringProperty lastDirectory = new SimpleStringProperty(".");
-	private StringProperty mavenHome = new SimpleStringProperty(DEFAULT_MAVEN_HOME);
-	private StringProperty gitHubToken = new SimpleStringProperty();
-	private BooleanProperty showConsole = new SimpleBooleanProperty(false);
+	private final ObjectProperty<Dimension2D> stageSize = new SimpleObjectProperty<>();
+	private final ObjectProperty<Point2D> stageCoords = new SimpleObjectProperty<>();
+	private final BooleanProperty maximized = new SimpleBooleanProperty();
+	private final StringProperty lastDirectory = new SimpleStringProperty(".");
+	private final StringProperty mavenHome = new SimpleStringProperty(DEFAULT_MAVEN_HOME);
+	private final StringProperty gitHubToken = new SimpleStringProperty();
+	private final BooleanProperty showConsole = new SimpleBooleanProperty(false);
 
 	private static Config config;
 

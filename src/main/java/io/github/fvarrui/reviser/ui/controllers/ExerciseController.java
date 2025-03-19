@@ -39,14 +39,14 @@ public class ExerciseController implements Initializable {
 
 	// controllers
 
-	private SubmissionsController submissionsController = new SubmissionsController();
-	private DesignerController designerController = new DesignerController();
-	private ConsoleController consoleController = new ConsoleController();
+	private final SubmissionsController submissionsController = new SubmissionsController();
+	private final DesignerController designerController = new DesignerController();
+	private final ConsoleController consoleController = new ConsoleController();
 
 	// model
 
-	private StringProperty title = new SimpleStringProperty("");
-	private ObjectProperty<Exercise> exercise = new SimpleObjectProperty<>();
+	private final StringProperty title = new SimpleStringProperty("");
+	private final ObjectProperty<Exercise> exercise = new SimpleObjectProperty<>();
 
 	// view
 
@@ -181,6 +181,7 @@ public class ExerciseController implements Initializable {
 		if (studentsFile != null)
 			try {
 				List<CsvStudent> students = CsvUtils.csvToStudents(studentsFile);
+				System.out.println(students);
 				getExercise().updateFromStudents(students);
 			} catch (IOException | CsvException e1) {
 				Dialogs.error("El fichero CSV no se ha podido abrir", e1);
